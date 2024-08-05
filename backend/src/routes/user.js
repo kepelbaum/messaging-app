@@ -10,11 +10,11 @@ router.get("/", async (req, res) => {
   return res.send(users);
 });
 
-router.get("/:userId", async (req, res) => {
-  const user = await req.context.models.Messenger.findById(
-    req.params.userId
-  ).select("-password");
-  return res.send(user);
+router.get("/:user", async (req, res) => {
+  const user = await req.context.models.Messenger.findOne({
+    username: user,
+  }).select("-password");
+  return res.send(user); //revisit for hiding chats
 });
 
 app.post(
@@ -24,7 +24,7 @@ app.post(
     .isLength({ min: 1 })
     .withMessage("Please enter a display name."),
   body("username").custom(async (value) => {
-    const user = await models.Messenger.findOne({
+    const user = await req.context.models.Messenger.findOne({
       username: value.toLowerCase(),
     }).exec();
     if (user) {
@@ -53,9 +53,11 @@ app.post(
         password: req.body.password,
         displayName: req.body.displayName,
       };
-      const newuser = await models.Messenger.create(user).catch((err) => {
-        res.send(err);
-      });
+      const newuser = await req.context.models.Messenger.create(user).catch(
+        (err) => {
+          res.send(err);
+        }
+      );
       res.json({ result: "Account created." });
     }
   }
