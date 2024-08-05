@@ -12,9 +12,9 @@ router.get("/", async (req, res) => {
 
 router.get("/:user", async (req, res) => {
   const user = await req.context.models.Messenger.findOne({
-    username: user,
+    username: req.params.user,
   }).select("-password");
-  return res.send(user); //revisit for hiding chats
+  return res.json({ result: user }); //revisit for hiding chats
 });
 
 router.post(
@@ -64,7 +64,7 @@ router.post(
 );
 
 router.put(
-  "/:userId",
+  "/",
   body("password")
     .isLength({ min: 5 })
     .withMessage("Password has to be at least 5 symbols long"),
@@ -87,15 +87,9 @@ router.put(
               username: authData.user.username,
               password: authData.user.password,
             });
-            const use = await req.context.models.Messenger.findById(
-              req.params.userId,
-            );
-            if (
-              acc.username === use.username &&
-              acc.password === use.password
-            ) {
+            if (acc) {
               const user = await req.context.models.Messenger.findByIdAndUpdate(
-                req.params.userId,
+                acc._id,
                 {
                   password: req.body.password,
                   friends: req.body.friends,
@@ -103,7 +97,7 @@ router.put(
                   displayName: req.body.displayName,
                 },
               );
-              return res.json({ message: "Password updated" });
+              return res.json({ message: "Settings updated" });
             } else {
               res.sendStatus(401);
             }
