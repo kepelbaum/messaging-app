@@ -13,15 +13,22 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-  }
-  friends: [{
-    type: mongoose.Schema.Types.ObjectId, ref: 'Messenger', default: [],
-  }],
-  chats: [{
-    type: mongoose.Schema.Types.ObjectId, ref: 'Chat', default: [],
-  }]
+  },
+  friends: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      default: [],
+    },
+  ],
+  chats: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Chat",
+      default: [],
+    },
+  ],
 });
 
-const User = mongoose.model("Messenger", userSchema);
+const Messenger = mongoose.model("Messenger", userSchema);
 
 export default Messenger;

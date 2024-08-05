@@ -17,19 +17,19 @@ router.get("/:user", async (req, res) => {
   return res.send(user); //revisit for hiding chats
 });
 
-app.post(
+router.post(
   "/",
   body("username").isLength({ min: 1 }).withMessage("Please enter a username."),
   body("displayName")
     .isLength({ min: 1 })
     .withMessage("Please enter a display name."),
-  body("username").custom(async (value) => {
+  body("username").custom(async (value, { req }) => {
     const user = await req.context.models.Messenger.findOne({
       username: value.toLowerCase(),
     }).exec();
     if (user) {
       throw new Error(
-        'Username "' + value.toLowerCase() + '" is already taken.'
+        'Username "' + value.toLowerCase() + '" is already taken.',
       );
       return false;
     } else {
@@ -56,11 +56,11 @@ app.post(
       const newuser = await req.context.models.Messenger.create(user).catch(
         (err) => {
           res.send(err);
-        }
+        },
       );
       res.json({ result: "Account created." });
     }
-  }
+  },
 );
 
 router.put(
@@ -88,7 +88,7 @@ router.put(
               password: authData.user.password,
             });
             const use = await req.context.models.Messenger.findById(
-              req.params.userId
+              req.params.userId,
             );
             if (
               acc.username === use.username &&
@@ -101,7 +101,7 @@ router.put(
                   friends: req.body.friends,
                   chats: req.body.chats,
                   displayName: req.body.displayName,
-                }
+                },
               );
               return res.json({ message: "Password updated" });
             } else {
@@ -112,7 +112,7 @@ router.put(
         }
       });
     }
-  }
+  },
 );
 
 //delete purposefully not implemented not to complicate anything related to existing chats

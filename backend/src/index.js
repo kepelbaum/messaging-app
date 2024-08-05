@@ -4,6 +4,7 @@ import express from "express";
 import models, { connectDb } from "./models";
 import routes from "./routes";
 import { verifyToken } from "./modules/verifytoken.js";
+const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 
 const eraseDatabaseOnSync = true;
@@ -49,6 +50,27 @@ app.get("/", verifyToken, (req, res) => {
       fullVerify();
     }
   });
+});
+
+app.post("/login", async (req, res, next) => {
+  const user = {
+    username: req.body.username,
+    password: req.body.password,
+  };
+
+  const check = await models.Messenger.findOne({
+    username: user.username,
+    password: user.password,
+  });
+  if (check) {
+    jwt.sign({ user }, "secretkey", { expiresIn: "10h" }, (err, token) => {
+      res.json({
+        token,
+      });
+    });
+  } else {
+    res.json({ result: "Wrong username and/or password." });
+  }
 });
 
 //   app.get('/session', (req, res) => {
@@ -174,47 +196,47 @@ app.use((error, req, res, next) => {
 });
 
 connectDb().then(async () => {
-  if (eraseDatabaseOnSync) {
-    await Promise.all([
-      models.User.deleteMany({}),
-      models.Message.deleteMany({}),
-    ]);
-    createUsersWithMessages();
-  }
+  // if (eraseDatabaseOnSync) {
+  //   await Promise.all([
+  //     models.User.deleteMany({}),
+  //     models.Message.deleteMany({}),
+  //   ]);
+  //   createUsersWithMessages();
+  // }
 
   app.listen(process.env.PORT, () =>
     console.log(`Example app listening on port ${process.env.PORT}!`),
   );
 });
 
-const createUsersWithMessages = async () => {
-  const user1 = new models.User({
-    username: "rwieruch",
-  });
+// const createUsersWithMessages = async () => {
+//   const user1 = new models.User({
+//     username: "rwieruch",
+//   });
 
-  const user2 = new models.User({
-    username: "ddavids",
-  });
+//   const user2 = new models.User({
+//     username: "ddavids",
+//   });
 
-  const message1 = new models.Message({
-    text: "Published the Road to learn React",
-    user: user1.id,
-  });
+//   const message1 = new models.Message({
+//     text: "Published the Road to learn React",
+//     user: user1.id,
+//   });
 
-  const message2 = new models.Message({
-    text: "Happy to release ...",
-    user: user2.id,
-  });
+//   const message2 = new models.Message({
+//     text: "Happy to release ...",
+//     user: user2.id,
+//   });
 
-  const message3 = new models.Message({
-    text: "Published a complete ...",
-    user: user2.id,
-  });
+//   const message3 = new models.Message({
+//     text: "Published a complete ...",
+//     user: user2.id,
+//   });
 
-  await message1.save();
-  await message2.save();
-  await message3.save();
+//   await message1.save();
+//   await message2.save();
+//   await message3.save();
 
-  await user1.save();
-  await user2.save();
-};
+//   await user1.save();
+//   await user2.save();
+// };
