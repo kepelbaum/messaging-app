@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 
 const chatSchema = new mongoose.Schema({
-  users: [{ type: String, required: true }],
+  // users: [{ type: String, required: true }],
+  users: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Messenger", required: true },
+  ],
   groupName: { type: String },
   lastMessage: { type: mongoose.Schema.Types.ObjectId, ref: "Chatmessage" },
   messages: [
