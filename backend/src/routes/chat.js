@@ -57,7 +57,7 @@ router.post(
                   const newMessage =
                     await req.context.models.Chatmessage.create({
                       text: req.body.message,
-                      user: authData.user.username,
+                      user: acc._id,
                       date: Date.now(),
                     }).catch((err) => {
                       res.send(err);
@@ -98,7 +98,7 @@ router.post(
                     const newMessage =
                       await req.context.models.Chatmessage.create({
                         text: req.body.message,
-                        user: authData.user.username,
+                        user: acc._id,
                         date: Date.now(),
                       }).catch((err) => {
                         res.send(err);
