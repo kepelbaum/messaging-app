@@ -50,9 +50,9 @@ const Messenger = ({ delay }) => {
     (chats && (
       <div className="wrapper">
         <h2>{user}</h2>
-        {/* {chats.map((ele) => {
-          return <h3>{ele.groupName}</h3>;
-        })} */}
+        {chats.map((ele) => {
+          return <h3>{ele.groupName ? ele.groupName : ele.users[0]}</h3>;
+        })}
       </div>
     )) || (
       //     (posts && users && comments && (

@@ -1,10 +1,11 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "./App.jsx";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { chats, token, setToken, logout } = useContext(AppContext);
+  const { chats, token, setToken, logout, id, setId } = useContext(AppContext);
   const [name, setName] = useState("");
   const [pass, setPass] = useState("");
   const [errors, setErrors] = useState(null);

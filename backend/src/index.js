@@ -66,116 +66,13 @@ app.post("/login", async (req, res, next) => {
     jwt.sign({ user }, "secretkey", { expiresIn: "10h" }, (err, token) => {
       res.json({
         token,
+        id: check._id,
       });
     });
   } else {
     res.json({ result: "Wrong username and/or password." });
   }
 });
-
-//   app.get('/session', (req, res) => {
-//     return res.send(req.context.models.users[req.context.me.id]);
-//   });
-
-//   app.get('/users', (req, res) => {
-//     return res.send(Object.values(req.context.models.users));
-//   });
-
-//   app.get('/users/:userId', (req, res) => {
-//     return res.send(req.context.models.users[req.params.userId]);
-//   });
-
-//   app.get('/messages', (req, res) => {
-//     return res.send(Object.values(req.context.models.messages));
-//   });
-
-//   app.get('/messages/:messageId', (req, res) => {
-//     return res.send(req.context.models.messages[req.params.messageId]);
-//   });
-
-//   app.post('/messages', (req, res) => {
-//     const id = uuidv4();
-//     const message = {
-//       id,
-//       text: req.body.text,
-//       userId: req.context.me.id,
-//     };
-
-//     req.context.models.messages[id] = message;
-
-//     return res.send(message);
-//   });
-
-//   app.delete('/messages/:messageId', (req, res) => {
-//     const {
-//       [req.params.messageId]: message,
-//       ...otherMessages
-//     } = req.context.models.messages;
-
-//     req.context.models.messages = otherMessages;
-
-//     return res.send(message);
-//   });
-
-//   app.get('/users', (req, res) => {
-//     return res.send(Object.values(users));
-//   });
-
-//   app.get('/users/:userId', (req, res) => {
-//     return res.send(users[req.params.userId]);
-//   });
-
-//   app.get('/messages', (req, res) => {
-//     return res.send(Object.values(messages));
-//   });
-
-//   app.get('/messages/:messageId', (req, res) => {
-//     return res.send(messages[req.params.messageId]);
-//   });
-
-//   app.get('/session', (req, res) => {
-//     return res.send(users[req.me.id]);
-//   });
-
-//   app.post('/messages', (req, res) => {
-//     const id = uuidv4();
-//     const message = {
-//       id,
-//       text: req.body.text,
-//       userId: req.me.id,
-//     };
-
-//     messages[id] = message;
-
-//     return res.send(message);
-//   });
-
-//   app.delete('/messages/:messageId', (req, res) => {
-//     const {
-//       [req.params.messageId]: message,
-//       ...otherMessages
-//     } = messages;
-
-//     messages = otherMessages;
-
-//     return res.send(message);
-//   });
-
-// app.get('/users', (req, res) => {
-//     return res.send('GET HTTP method on user resource');
-//   });
-
-//   app.post('/users', (req, res) => {
-//     return res.send('POST HTTP method on user resource');
-//   });
-
-//   app.put('/users', (req, res) => {
-//     return res.send('PUT HTTP method on user resource');
-//   });
-
-//   app.delete('/users', (req, res) => {
-//     return res.send('DELETE HTTP method on user resource');
-//   });
 
 app.get("*", function (req, res, next) {
   const error = new Error(`${req.ip} tried to access ${req.originalUrl}`);
@@ -196,47 +93,97 @@ app.use((error, req, res, next) => {
 });
 
 connectDb().then(async () => {
-  // if (eraseDatabaseOnSync) {
-  //   await Promise.all([
-  //     models.User.deleteMany({}),
-  //     models.Message.deleteMany({}),
-  //   ]);
-  //   createUsersWithMessages();
-  // }
+  if (eraseDatabaseOnSync) {
+    await Promise.all([
+      models.Messenger.deleteMany({}),
+      models.Chat.deleteMany({}),
+      models.Chatmessage.deleteMany({}),
+    ]);
+    createUsersWithMessages();
+  }
 
   app.listen(process.env.PORT, () =>
     console.log(`Example app listening on port ${process.env.PORT}!`),
   );
 });
 
-// const createUsersWithMessages = async () => {
-//   const user1 = new models.User({
-//     username: "rwieruch",
-//   });
+const createUsersWithMessages = async () => {
+  const user1 = new models.Messenger({
+    username: "roflan",
+    password: "roflan",
+    displayName: "roflan",
+  });
 
-//   const user2 = new models.User({
-//     username: "ddavids",
-//   });
+  const user2 = new models.Messenger({
+    username: "rofl",
+    password: "rofl",
+    displayName: "rofl",
+  });
 
-//   const message1 = new models.Message({
-//     text: "Published the Road to learn React",
-//     user: user1.id,
-//   });
+  const user3 = new models.Messenger({
+    username: "roflcopter",
+    password: "roflcopter",
+    displayName: "roflcopter",
+  });
 
-//   const message2 = new models.Message({
-//     text: "Happy to release ...",
-//     user: user2.id,
-//   });
+  const message1 = new models.Chatmessage({
+    text: "What's up?",
+    user: user2.id,
+    date: Date.now() - 20000,
+  });
 
-//   const message3 = new models.Message({
-//     text: "Published a complete ...",
-//     user: user2.id,
-//   });
+  const message2 = new models.Chatmessage({
+    text: "Hey rofl",
+    user: user1.id,
+    date: Date.now() - 15000,
+  });
 
-//   await message1.save();
-//   await message2.save();
-//   await message3.save();
+  const message3 = new models.Chatmessage({
+    text: "You there, man?",
+    user: user1.id,
+    date: Date.now(),
+  });
 
-//   await user1.save();
-//   await user2.save();
-// };
+  const message4 = new models.Chatmessage({
+    text: "hey chat",
+    user: user3.id,
+    date: Date.now() - 5000,
+  });
+
+  const chat1 = new models.Chat({
+    users: [user1, user2],
+    lastMessage: message1,
+    messages: [message1],
+  });
+
+  const chat2 = new models.Chat({
+    users: [user1, user2],
+    lastMessage: message3,
+    messages: [message2, message3],
+    groupName: "Utopia",
+  });
+
+  const chat3 = new models.Chat({
+    users: [user1, user2, user3],
+    lastMessage: message4,
+    messages: [message4],
+    groupName: "Asylum",
+  });
+
+  user1.chats = [chat1, chat2, chat3];
+  user2.chats = [chat1, chat2, chat3];
+  user3.chats = [chat3];
+
+  await message1.save();
+  await message2.save();
+  await message3.save();
+  await message4.save();
+
+  await chat1.save();
+  await chat2.save();
+  await chat3.save();
+
+  await user1.save();
+  await user2.save();
+  await user3.save();
+};
