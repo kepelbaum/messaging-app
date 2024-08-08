@@ -9,6 +9,53 @@ const Messenger = ({ delay }) => {
 
   const [page, setPage] = useState(null);
 
+  function timeSince(date) {
+    var seconds = Math.floor((new Date() - date) / 1000);
+
+    var interval = seconds / 31536000;
+
+    if (interval > 1) {
+      if (seconds < 31536000 * 2 && seconds > 31535999) {
+        return Math.floor(interval) + " year ago";
+      } else {
+        return Math.floor(interval) + " years ago";
+      }
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+      if (seconds < 2592000 * 2 && seconds > 2591999) {
+        return Math.floor(interval) + " month ago";
+      } else {
+        return Math.floor(interval) + " months ago";
+      }
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+      if (seconds < 86400 * 2 && seconds > 86399) {
+        return Math.floor(interval) + " day ago";
+      } else {
+        return Math.floor(interval) + " days ago";
+      }
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+      if (seconds < 7200 && seconds > 3599) {
+        return Math.floor(interval) + " hour ago";
+      } else {
+        return Math.floor(interval) + " hours ago";
+      }
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+      if (seconds < 120 && seconds > 59) {
+        return Math.floor(interval) + " minute ago";
+      } else {
+        return Math.floor(interval) + " minutes ago";
+      }
+    }
+    return Math.floor(seconds) + " seconds ago";
+  }
+
   useEffect(() => {
     setTimeout(() => {
       fetch("https://messaging-app-production-6dff.up.railway.app/chats", {
@@ -55,104 +102,45 @@ const Messenger = ({ delay }) => {
 
   return (
     (chats && (
-      <div className="wrapper">
-        \<h1 onClick={logout}>Logout</h1>
-        <h2>{user}</h2>
-        {/* {"Your id: "}
-        {id} */}
-        {chats &&
-          chats.map((ele) => {
-            return (
-              <div className="wrap" key={ele._id}>
-                <h3 onClick={showChat} val={ele._id}>
-                  {ele.groupName
-                    ? ele.groupName
-                    : ele.users[0]._id === id
-                      ? ele.users[1].displayName
-                      : ele.users[0].displayName}
-                  <br />
-                  {ele.lastMessage.text}
-                </h3>
-                {page &&
-                  page === ele._id &&
-                  ele.messages.map((elem) => {
-                    return (
-                      <h4 key={elem._id}>
-                        {elem.user.displayName}
-                        {elem.text}
-                      </h4>
-                    );
-                  })}
-              </div>
-            );
-          })}
-        {!page && <h4>No pages active.</h4>}
+      <div className="body">
+        <div className="left">
+          <p onClick={logout}>Logout</p>
+          <p>Logged in as:</p>
+          <p>{user.substring(9, user.length - 1)}</p>
+        </div>
+        <div className="mid">
+          {chats &&
+            chats.map((ele) => {
+              return (
+                <div className="wrap" key={ele._id}>
+                  <h3 onClick={showChat} val={ele._id}>
+                    {ele.groupName
+                      ? ele.groupName
+                      : ele.users[0]._id === id
+                        ? ele.users[1].displayName
+                        : ele.users[0].displayName}
+                    <br />
+                    {ele.lastMessage.text}
+                    {timeSince(new Date(ele.lastMessage.date).getTime())}
+                  </h3>
+                  {/* {page &&
+                    page === ele._id &&
+                    ele.messages.map((elem) => {
+                      return (
+                        <h4 key={elem._id}>
+                          {elem.user.displayName}
+                          {elem.text}
+                        </h4>
+                      );
+                    })} */}
+                </div>
+              );
+            })}
+          {/* {!page && <h4>No pages active.</h4>} */}
+        </div>
+        <div className="wrapper"></div>
       </div>
-    )) || (
-      //     (posts && users && comments && (
-      //       <div className="wrapper">
-      //         <div className="header">
-      //           <h3>Blog API</h3>
-      //           <ul>
-      //             <Link to={"/"}>
-      //               <li>Posts</li>
-      //             </Link>
-      //             <Link to={"/users"}>
-      //               <li>Users</li>
-      //             </Link>
-      //             {!token && (
-      //               <Link to={"/login"}>
-      //                 <li>Login</li>
-      //               </Link>
-      //             )}
-      //             {token && (
-      //               <Link to={"/"}>
-      //                 <li onClick={logout}>Logout</li>
-      //               </Link>
-      //             )}
-      //           </ul>
-      //         </div>
-      //         <h2>{user}</h2>
-      //         <div className="grid">
-      //           {posts
-      //             .filter((ele) => ele.ifPublished)
-      //             .sort(function (a, b) {
-      //               return new Date(b.date) - new Date(a.date);
-      //             })
-      //             .map((ele) => {
-      //               return (
-      //                 <Link to={"/posts/" + ele._id}>
-      //                   <div className="card" key={ele._id}>
-      //                     <Link to={"/users/" + ele.user.username}>
-      //                       <div className="red">
-      //                         <h5>{ele.user.username}</h5>
-      //                       </div>
-      //                     </Link>
-      //                     <h3>
-      //                       {ele.title.length > 40
-      //                         ? ele.title.substring(0, 39) + "..."
-      //                         : ele.title}
-      //                     </h3>
-      //                     {ele.image_url && (
-      //                       <img src={ele.image_url} width="100%" height="200"></img>
-      //                     )}
-      //                     {!ele.image_url && <div className="filler"></div>}
-      //                     <div className="core">
-      //                       <p>
-      //                         {ele.text.length > 200
-      //                           ? ele.text.substring(0, 199) + "..."
-      //                           : ele.text}
-      //                       </p>
-      //                     </div>
-      //                   </div>
-      //                 </Link>
-      //               );
-      //             })}
-      //         </div>
-      //       </div>
-      //     )) || <h1>Loading...</h1>
-      <h1>Loading...</h1>
-    )
+    )) || <h1>Loading...</h1>
   );
 };
 
