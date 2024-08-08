@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { AppContext } from "./App.jsx";
 
 const Messenger = ({ delay }) => {
-  const { chats, setChats, user, token, setToken, setUser, logout } =
+  const { chats, setChats, user, token, setToken, setUser, logout, id } =
     useContext(AppContext);
 
   useEffect(() => {
@@ -51,7 +51,15 @@ const Messenger = ({ delay }) => {
       <div className="wrapper">
         <h2>{user}</h2>
         {chats.map((ele) => {
-          return <h3>{ele.groupName ? ele.groupName : ele.users[0]}</h3>;
+          return (
+            <h3 key={ele.id}>
+              {ele.groupName
+                ? ele.groupName
+                : ele.users[0] === id
+                  ? ele.users[1]
+                  : ele.users[0]}
+            </h3>
+          );
         })}
       </div>
     )) || (

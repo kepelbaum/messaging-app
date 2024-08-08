@@ -19,7 +19,8 @@ router.get("/", verifyToken, async (req, res) => {
           const allChats = await req.context.models.Chat.find({
             users: { $in: [acc._id] },
           })
-            .populate("lastMessage") //sorting left to do!!!!!!
+            .populate("lastMessage")
+            .populate("users") //sorting left to do!!!!!!
             .exec();
           res.json({ result: allChats });
         } else {
