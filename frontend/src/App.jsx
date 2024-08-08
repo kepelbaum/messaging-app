@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { useEffect, useState, createContext } from "react";
 import "./App.css";
@@ -23,37 +24,6 @@ function App() {
     setToken(null);
     localStorage.removeItem("token");
   };
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     fetch("https://messaging-app-production-6dff.up.railway.app/chats", {
-  //       mode: "cors",
-  //     })
-  //       .then((response) => response.json())
-  //       .then((response) => setUsers(response))
-  //       .catch((error) => console.error(error));
-  //   });
-  // }, [chats]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     fetch("https://messaging-app-production-6dff.up.railway.app/", {
-  //       mode: "cors",
-  //       headers: {
-  //         authorization: "Bearer " + (token ? token.toString() : ""),
-  //       },
-  //     })
-  //       .then((response) => response.json())
-  //       .then((response) => {
-  //         if (response.message) {
-  //           setUser(response.message);
-  //         } else {
-  //           setUser(response.result);
-  //         }
-  //       })
-  //       .catch((error) => console.error(error));
-  //   });
-  // }, [token]);
 
   return (
     <AppContext.Provider
