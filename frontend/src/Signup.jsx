@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "./App.jsx";
 
 const Signup = ({}) => {
-  const { chats, token, setToken, logout } = useContext(AppContext);
+  const { chats, token, setToken, logout, setId, id } = useContext(AppContext);
   const [name, setName] = useState("");
   const [pass, setPass] = useState("");
   const [conf, setConf] = useState("");
@@ -67,7 +67,9 @@ const Signup = ({}) => {
                 throw new Error("Cannot log in");
               } else {
                 setToken(response.token);
+                setId(response.id);
                 localStorage.setItem("token", response.token);
+                localStorage.setItem("id", response.id);
                 movePage("/app");
               }
             })
@@ -107,11 +109,7 @@ const Signup = ({}) => {
             <label htmlFor="displayname">
               Display Name {" (can be changed later)"}{" "}
             </label>
-            <input
-              type="password"
-              id="displayname"
-              onChange={handleDisp}
-            ></input>
+            <input type="text" id="displayname" onChange={handleDisp}></input>
             <label htmlFor="password">Password</label>
             <input type="password" id="password" onChange={handlePass}></input>
             <label htmlFor="confirm">Confirm Password</label>

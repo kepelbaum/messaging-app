@@ -22,7 +22,7 @@ function App() {
   const [chats, setChats] = useState(null);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [id, setId] = useState(localStorage.getItem("token"));
+  const [id, setId] = useState(localStorage.getItem("id"));
   const logout = () => {
     setToken(null);
     localStorage.removeItem("token");

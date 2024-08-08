@@ -65,8 +65,10 @@ const Login = () => {
           setErrors(response.result);
         } else {
           setToken(response.token);
+          setId(response.id);
           localStorage.setItem("token", response.token);
-          movePage("/");
+          localStorage.setItem("id", response.id);
+          movePage("/app");
         }
       })
       .catch((error) => console.error(error));

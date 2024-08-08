@@ -7,6 +7,8 @@ const Messenger = ({ delay }) => {
   const { chats, setChats, user, token, setToken, setUser, logout, id } =
     useContext(AppContext);
 
+  const [page, setPage] = useState(null);
+
   useEffect(() => {
     setTimeout(() => {
       fetch("https://messaging-app-production-6dff.up.railway.app/chats", {
@@ -46,21 +48,45 @@ const Messenger = ({ delay }) => {
     });
   }, [token]);
 
+  async function showChat(e) {
+    let val = e.target.attributes.getNamedItem("val").value;
+    setPage(val);
+  }
+
   return (
     (chats && (
       <div className="wrapper">
+        \<h1 onClick={logout}>Logout</h1>
         <h2>{user}</h2>
-        {chats.map((ele) => {
-          return (
-            <h3 key={ele.id}>
-              {ele.groupName
-                ? ele.groupName
-                : ele.users[0] === id
-                  ? ele.users[1]
-                  : ele.users[0]}
-            </h3>
-          );
-        })}
+        {/* {"Your id: "}
+        {id} */}
+        {chats &&
+          chats.map((ele) => {
+            return (
+              <div className="wrap" key={ele._id}>
+                <h3 onClick={showChat} val={ele._id}>
+                  {ele.groupName
+                    ? ele.groupName
+                    : ele.users[0]._id === id
+                      ? ele.users[1].displayName
+                      : ele.users[0].displayName}
+                  <br />
+                  {ele.lastMessage.text}
+                </h3>
+                {page &&
+                  page === ele._id &&
+                  ele.messages.map((elem) => {
+                    return (
+                      <h4 key={elem._id}>
+                        {elem.user.displayName}
+                        {elem.text}
+                      </h4>
+                    );
+                  })}
+              </div>
+            );
+          })}
+        {!page && <h4>No pages active.</h4>}
       </div>
     )) || (
       //     (posts && users && comments && (
