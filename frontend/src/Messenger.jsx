@@ -98,6 +98,7 @@ const Messenger = ({ delay }) => {
   async function showChat(e) {
     let val = e.target.attributes.getNamedItem("val").value;
     setPage(val);
+    console.log(await val);
   }
 
   return (
@@ -109,20 +110,33 @@ const Messenger = ({ delay }) => {
           <p>{user.substring(9, user.length - 1)}</p>
         </div>
         <div className="mid">
+          <div className="chatmenu">
+            <h2>Chats</h2>
+          </div>
           {chats &&
             chats.map((ele) => {
               return (
-                <div className="wrap" key={ele._id}>
-                  <h3 onClick={showChat} val={ele._id}>
-                    {ele.groupName
-                      ? ele.groupName
-                      : ele.users[0]._id === id
-                        ? ele.users[1].displayName
-                        : ele.users[0].displayName}
-                    <br />
-                    {ele.lastMessage.text}
+                <div
+                  className="wrap"
+                  onClick={showChat}
+                  val={ele._id}
+                  key={ele._id}
+                >
+                  <div className="avatar"></div>
+                  <div className="chatinfo">
+                    <h3>
+                      {ele.groupName
+                        ? ele.groupName
+                        : ele.users[0]._id === id
+                          ? ele.users[1].displayName
+                          : ele.users[0].displayName}
+                    </h3>
+                    <p>{ele.lastMessage.text}</p>
+                  </div>
+                  <div className="ago">
                     {timeSince(new Date(ele.lastMessage.date).getTime())}
-                  </h3>
+                  </div>
+
                   {/* {page &&
                     page === ele._id &&
                     ele.messages.map((elem) => {
@@ -138,7 +152,26 @@ const Messenger = ({ delay }) => {
             })}
           {/* {!page && <h4>No pages active.</h4>} */}
         </div>
-        <div className="wrapper"></div>
+        <div className="wrapper">
+          {chats &&
+            chats.map((ele) => {
+              return (
+                <div className="wrapp" key={ele._id}>
+                  {page &&
+                    page === ele._id &&
+                    ele.messages.map((elem) => {
+                      return (
+                        <h4 key={elem._id}>
+                          {elem.user.displayName}
+                          {elem.text}
+                        </h4>
+                      );
+                    })}
+                </div>
+              );
+            })}
+          {!page && <h4>No pages active.</h4>}
+        </div>
       </div>
     )) || <h1>Loading...</h1>
   );
