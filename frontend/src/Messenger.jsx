@@ -96,7 +96,7 @@ const Messenger = ({ delay }) => {
   }, [token]);
 
   async function showChat(e) {
-    let val = e.target.attributes.getNamedItem("val").value;
+    let val = e.currentTarget.attributes.getNamedItem("val").value;
     setPage(val);
     console.log(await val);
   }
@@ -122,7 +122,7 @@ const Messenger = ({ delay }) => {
                   val={ele._id}
                   key={ele._id}
                 >
-                  <div className="avatar"></div>
+                  <div className="avatar chatavatar"></div>
                   <div className="chatinfo">
                     <h3>
                       {ele.groupName
@@ -136,41 +136,64 @@ const Messenger = ({ delay }) => {
                   <div className="ago">
                     {timeSince(new Date(ele.lastMessage.date).getTime())}
                   </div>
-
-                  {/* {page &&
-                    page === ele._id &&
-                    ele.messages.map((elem) => {
-                      return (
-                        <h4 key={elem._id}>
-                          {elem.user.displayName}
-                          {elem.text}
-                        </h4>
-                      );
-                    })} */}
                 </div>
               );
             })}
-          {/* {!page && <h4>No pages active.</h4>} */}
         </div>
-        <div className="wrapper">
-          {chats &&
-            chats.map((ele) => {
-              return (
-                <div className="wrapp" key={ele._id}>
-                  {page &&
-                    page === ele._id &&
-                    ele.messages.map((elem) => {
+        <div className="messagebox">
+          <div className="chatinfotop">
+            {chats &&
+              chats
+                .filter((ele) => page === ele._id)
+                .map((ele) => {
+                  return (
+                    <div className="wrapp" key={ele._id}>
+                      <h3>
+                        {ele.groupName
+                          ? ele.groupName
+                          : ele.users[0]._id === id
+                            ? ele.users[1].displayName
+                            : ele.users[0].displayName}
+                      </h3>
+                    </div>
+                  );
+                })}
+          </div>
+          {(page &&
+            chats &&
+            chats
+              .filter((ele) => page === ele._id)
+              .map((ele) => {
+                return (
+                  <div className="messagemasterwrapper" key={ele._id}>
+                    {ele.messages.map((elem) => {
                       return (
-                        <h4 key={elem._id}>
-                          {elem.user.displayName}
-                          {elem.text}
-                        </h4>
+                        <div className="messagewrapper" key={elem._id}>
+                          <div
+                            className={
+                              elem.user._id === id ? "message right" : "message"
+                            }
+                          >
+                            {elem.user._id !== id && (
+                              <div className="avatar"></div>
+                            )}
+                            <div className="azure">
+                              <h4>{elem.user.displayName}</h4>
+                              <p>{elem.text}</p>
+                            </div>
+                            {elem.user._id === id && (
+                              <div className="avatar"></div>
+                            )}
+                            {/* <p className="small">
+                        {new Date(elem.date).toLocaleTimeString()}
+                      </p> */}
+                          </div>
+                        </div>
                       );
                     })}
-                </div>
-              );
-            })}
-          {!page && <h4>No pages active.</h4>}
+                  </div>
+                );
+              })) || <h4>PLACEHOLDER!</h4>}
         </div>
       </div>
     )) || <h1>Loading...</h1>
