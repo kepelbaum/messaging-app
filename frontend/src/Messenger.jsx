@@ -1,13 +1,65 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState, useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useState, useContext, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "./App.jsx";
 
 const Messenger = ({ delay }) => {
-  const { chats, setChats, user, token, setToken, setUser, logout, id } =
+  const { chats, setChats, user, token, setToken, setUser, logout, id, setId } =
     useContext(AppContext);
 
   const [page, setPage] = useState(null);
+  const [message, setMessage] = useState("");
+  const [scrollState, setScrollState] = useState([true, null]); //true = scrolled to the bottom
+
+  const navigate = useNavigate();
+
+  const movePage = (url) => {
+    navigate(url);
+  };
+
+  function logoutAndMove() {
+    logout();
+    movePage("/");
+  }
+
+  function handleChange(e) {
+    setMessage(e.target.value);
+  }
+
+  const messagesEndRef = useRef(null);
+  // const messagesContainerRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView();
+  };
+
+  function handleSubmit() {
+    if (message !== "") {
+      fetch(
+        "https://messaging-app-production-6dff.up.railway.app/messages/" + page,
+        {
+          mode: "cors",
+          method: "POST",
+          body: JSON.stringify({
+            message: message,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            authorization: "Bearer " + (token ? token.toString() : ""),
+          },
+        },
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.result) {
+            setMessage("");
+          } else {
+            throw new Error(Object.entries(response));
+          }
+        })
+        .catch((error) => console.error(error));
+    }
+  }
 
   function timeSince(date) {
     var seconds = Math.floor((new Date() - date) / 1000);
@@ -57,7 +109,31 @@ const Messenger = ({ delay }) => {
   }
 
   useEffect(() => {
-    setTimeout(() => {
+    scrollToBottom();
+  }, [page]);
+
+  useEffect(() => {
+    let div = document.querySelector(".messagemasterwrapper");
+    if (div !== null) {
+      const isNotScrolling =
+        div.scrollHeight - div.clientHeight <= div.scrollTop + 1;
+      if (scrollState[1] === null || div.scrollHeight > scrollState[1]) {
+        if (scrollState[0] === true) {
+          scrollToBottom();
+          setScrollState([true, div.scrollHeight]);
+        } else {
+          setScrollState([false, div.scrollHeight]);
+        }
+      } else if (isNotScrolling) {
+        setScrollState([true, div.scrollHeight]);
+      } else {
+        setScrollState([false, div.scrollHeight]);
+      }
+    }
+  }, [chats]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
       fetch("https://messaging-app-production-6dff.up.railway.app/chats", {
         mode: "cors",
         headers: {
@@ -68,11 +144,15 @@ const Messenger = ({ delay }) => {
         .then((response) => response.json())
         .then((response) => {
           var result = Object.keys(response).map((key) => [key, response[key]]);
-          console.log(result[0][1]);
+          // console.log(result[0][1]);
+          if (result[0][1].toString() === "You are not signed in.") {
+            logoutAndMove();
+          }
           setChats(result[0][1]);
         })
         .catch((error) => console.error(error));
-    });
+    }, 100);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -98,14 +178,14 @@ const Messenger = ({ delay }) => {
   async function showChat(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
     setPage(val);
-    console.log(await val);
+    // console.log(await val);
   }
 
   return (
-    (chats && (
+    (chats && token && (
       <div className="body">
         <div className="left">
-          <p onClick={logout}>Logout</p>
+          <p onClick={logoutAndMove}>Logout</p>
           <p>Logged in as:</p>
           <p>{user.substring(9, user.length - 1)}</p>
         </div>
@@ -140,61 +220,99 @@ const Messenger = ({ delay }) => {
               );
             })}
         </div>
-        <div className="messagebox">
-          <div className="chatinfotop">
-            {chats &&
+        {(page && (
+          <div className="messagebox">
+            <div className="chatinfotop">
+              <div className="avatar"></div>
+              {chats &&
+                chats
+                  .filter((ele) => page === ele._id)
+                  .map((ele) => {
+                    return (
+                      <div className="groupinfo" key={ele._id}>
+                        <h3>
+                          {ele.groupName
+                            ? ele.groupName
+                            : ele.users[0]._id === id
+                              ? ele.users[1].displayName
+                              : ele.users[0].displayName}
+                        </h3>
+                        <p>
+                          {ele.groupName
+                            ? ele.users.length > 1
+                              ? ele.users.length + " members"
+                              : ele.users.length + " member"
+                            : ele.users[0]._id === id
+                              ? "@" + ele.users[1].username
+                              : "@" + ele.users[0].username}
+                        </p>
+                      </div>
+                    );
+                  })}
+            </div>
+            {page &&
+              chats &&
               chats
                 .filter((ele) => page === ele._id)
                 .map((ele) => {
                   return (
-                    <div className="wrapp" key={ele._id}>
-                      <h3>
-                        {ele.groupName
-                          ? ele.groupName
-                          : ele.users[0]._id === id
-                            ? ele.users[1].displayName
-                            : ele.users[0].displayName}
-                      </h3>
+                    <div
+                      // ref={messagesContainerRef}
+                      className="messagemasterwrapper"
+                      key={ele._id}
+                    >
+                      {ele.messages.map((elem) => {
+                        return (
+                          <div className="messagewrapper" key={elem._id}>
+                            <div
+                              className={
+                                elem.user._id === id
+                                  ? "message right"
+                                  : "message"
+                              }
+                            >
+                              {elem.user._id !== id && (
+                                <div className="avatar"></div>
+                              )}
+                              <div className="azure">
+                                <h4>{elem.user.displayName}</h4>
+                                <p>{elem.text}</p>
+                              </div>
+                              {elem.user._id === id && (
+                                <div className="avatar"></div>
+                              )}
+                              {/* <p className="small">
+                        {new Date(elem.date).toLocaleTimeString()}
+                      </p> */}
+                            </div>
+                          </div>
+                        );
+                      })}
+                      <div ref={messagesEndRef} />
+                    </div>
+                  );
+                })}
+            {page &&
+              chats &&
+              chats
+                .filter((ele) => page === ele._id)
+                .map((ele) => {
+                  return (
+                    <div className="bottomsection" key={ele._id}>
+                      <textarea
+                        value={message}
+                        onChange={handleChange}
+                        id="entermessage"
+                        placeholder="Enter message here..."
+                      ></textarea>
+                      <button className="enterbutton" onClick={handleSubmit}>
+                        Enter
+                      </button>
                     </div>
                   );
                 })}
           </div>
-          {(page &&
-            chats &&
-            chats
-              .filter((ele) => page === ele._id)
-              .map((ele) => {
-                return (
-                  <div className="messagemasterwrapper" key={ele._id}>
-                    {ele.messages.map((elem) => {
-                      return (
-                        <div className="messagewrapper" key={elem._id}>
-                          <div
-                            className={
-                              elem.user._id === id ? "message right" : "message"
-                            }
-                          >
-                            {elem.user._id !== id && (
-                              <div className="avatar"></div>
-                            )}
-                            <div className="azure">
-                              <h4>{elem.user.displayName}</h4>
-                              <p>{elem.text}</p>
-                            </div>
-                            {elem.user._id === id && (
-                              <div className="avatar"></div>
-                            )}
-                            {/* <p className="small">
-                        {new Date(elem.date).toLocaleTimeString()}
-                      </p> */}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                );
-              })) || <h4>PLACEHOLDER!</h4>}
-        </div>
+        )) || <div className="imgcontainer"></div>}
       </div>
     )) || <h1>Loading...</h1>
   );

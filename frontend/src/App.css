@@ -7,7 +7,8 @@
 .body {
   display: flex;
   position: relative;
-  flex-wrap: nowrap;
+  /* flex-wrap: nowrap; */
+  /*   */
 }
 
 .left {
@@ -20,13 +21,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex-wrap: nowrap;
   white-space: initial;
 }
 .ago {
   position: absolute;
   left: 70%;
   top: 35%;
+}
+
+.groupinfo {
+  display: flex;
+  flex-direction: column;
 }
 
 .chatmenu {
@@ -55,7 +60,12 @@
 .chatinfotop {
   height: 8%;
   width: 100%;
-  position: sticky;
+  /* position: sticky; */
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  align-items: center;
+  border-bottom: 2px solid black;
 }
 
 .wrap:hover {
@@ -67,6 +77,20 @@
   height: 100vh;
   width: 75vw;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  /* overflow: hidden; */
+}
+
+#entermessage {
+  width: 60vw;
+  height: 60px;
+  display: flex;
+  vertical-align: center;
+  margin: auto;
+}
+
+.enterbutton {
 }
 
 .col {
@@ -77,11 +101,15 @@
 }
 
 .messagemasterwrapper {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: end; */
+  /* display: grid;
+  grid-template-rows: 1fr;
+  align-items: end; */
   width: 100%;
   height: 85%;
+  overflow-y: scroll;
 }
 
 .messagewrapper {
@@ -95,6 +123,13 @@
   padding: 0 20px;
   justify-content: start;
   align-items: center;
+}
+
+.imgcontainer {
+  height: 100vh;
+  width: 75vw;
+  background-image: url("https://images.unsplash.com/photo-1548620848-d375c7919ea2?q=80&w=2669&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-size: cover;
 }
 
 .message.right {
@@ -130,6 +165,15 @@
   position: absolute;
   top: 20%;
   left: 10%;
+}
+
+.bottomsection {
+  width: 100%;
+  height: 7%;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* #root {
