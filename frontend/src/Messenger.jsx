@@ -11,6 +11,7 @@ const Messenger = ({ delay }) => {
   const [message, setMessage] = useState("");
   const [scrollState, setScrollState] = useState([true, null]); //true = scrolled to the bottom
   const [activeElement, setActiveElement] = useState(null);
+  const [upForDeletion, setUpForDeletion] = useState(null);
 
   const navigate = useNavigate();
 
@@ -27,14 +28,50 @@ const Messenger = ({ delay }) => {
     setMessage(e.target.value);
   }
 
+  function undelete() {
+    setUpForDeletion(null);
+  }
+
+  function handleDelete() {
+    fetch(
+      "https://messaging-app-production-6dff.up.railway.app/messages/" +
+        page +
+        "/" +
+        upForDeletion,
+      {
+        mode: "cors",
+        method: "DELETE",
+        headers: {
+          authorization: "Bearer " + (token ? token.toString() : ""),
+        },
+      },
+    )
+      .then((response) => response.json())
+      .then((response) => {
+        if ((response.result = "Chat deleted")) {
+          setPage(null);
+          movePage("/app");
+        } else if (!response.result) {
+          throw new Error(Object.entries(response));
+        }
+      })
+      .catch((error) => console.error(error));
+  }
+
+  function areyousure(e) {
+    setActiveElement(null);
+    setMessage("");
+    setUpForDeletion(e.currentTarget.attributes.getNamedItem("val").value);
+  }
+
   function handleEdit(e) {
-    let aid = e.currentTarget.attributes.getNamedItem("aid").value;
-    if (aid === activeElement) {
+    let val = e.currentTarget.attributes.getNamedItem("val").value;
+    if (val === activeElement) {
       setActiveElement(null);
       setMessage("");
     } else {
       setMessage(e.currentTarget.attributes.getNamedItem("text").value);
-      setActiveElement(aid);
+      setActiveElement(val);
     }
   }
 
@@ -63,7 +100,6 @@ const Messenger = ({ delay }) => {
       )
         .then((response) => response.json())
         .then((response) => {
-          x;
           if (response.result) {
             setMessage("");
           } else {
@@ -313,6 +349,16 @@ const Messenger = ({ delay }) => {
                                     : "message"
                               }
                             >
+                              {elem._id === upForDeletion && (
+                                <div className="deletiondiv">
+                                  <h3>
+                                    Are you sure you want to delete this
+                                    message?
+                                  </h3>
+                                  <button onClick={handleDelete}>Yes</button>
+                                  <button onClick={undelete}>No</button>
+                                </div>
+                              )}
                               {elem.user._id !== id && (
                                 <div className="avatar"></div>
                               )}
@@ -324,13 +370,22 @@ const Messenger = ({ delay }) => {
                                 <div className="avatar"></div>
                               )}
                               {elem.user._id === id && (
-                                <div
-                                  className="edit"
-                                  onClick={handleEdit}
-                                  aid={elem._id}
-                                  text={elem.text}
-                                >
-                                  Edit
+                                <div className="editdelwrapper">
+                                  <div
+                                    className="edit"
+                                    onClick={handleEdit}
+                                    val={elem._id}
+                                    text={elem.text}
+                                  >
+                                    Edit
+                                  </div>
+                                  <div
+                                    className="delete"
+                                    onClick={areyousure}
+                                    val={elem._id}
+                                  >
+                                    Delete
+                                  </div>
                                 </div>
                               )}
                               {/* <p className="small">
