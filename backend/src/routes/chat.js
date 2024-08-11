@@ -189,7 +189,10 @@ router.put("/:chatId", verifyToken, async (req, res, next) => {
               { $pull: { users: acc._id } },
             );
             if (chat.users.length === 0) {
-              const delete = await req.context.models.Chat.findByIdAndDelete(req.params.chatId);
+              const chatdelete =
+                await req.context.models.Chat.findByIdAndDelete(
+                  req.params.chatId,
+                );
             }
             const userside =
               await req.context.models.Messenger.findByIdAndUpdate(acc._id, {
