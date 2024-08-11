@@ -24,8 +24,12 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [id, setId] = useState(localStorage.getItem("id"));
   const logout = () => {
-    setToken(null);
     localStorage.removeItem("token");
+    localStorage.removeItem("id");
+    setId(null);
+    setToken(null);
+    setChats(null);
+    setUser(null);
   };
 
   return (

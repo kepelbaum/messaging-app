@@ -252,14 +252,14 @@ const Messenger = ({ delay }) => {
         .then((response) => response.json())
         .then((response) => {
           var result = Object.keys(response).map((key) => [key, response[key]]);
-          // console.log(result[0][1]);
+          console.log(result[0][1]);
           if (result[0][1].toString() === "You are not signed in.") {
             logoutAndMove();
           }
           setChats(result[0][1]);
         })
         .catch((error) => console.error(error));
-    }, 100);
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -281,7 +281,7 @@ const Messenger = ({ delay }) => {
         })
         .catch((error) => console.error(error));
     });
-  }, [token]);
+  }, []);
 
   async function showChat(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
@@ -290,7 +290,7 @@ const Messenger = ({ delay }) => {
   }
 
   return (
-    (chats && token && (
+    (chats && token && user && (
       <div className="body">
         <div className="left">
           <p onClick={logoutAndMove}>Logout</p>
@@ -322,7 +322,8 @@ const Messenger = ({ delay }) => {
                     {ele.lastMessage && <p>{ele.lastMessage.text}</p>}
                   </div>
                   <div className="ago">
-                    {timeSince(new Date(ele.lastMessage.date).getTime())}
+                    {ele.lastMessage &&
+                      timeSince(new Date(ele.lastMessage.date).getTime())}
                   </div>
                 </div>
               );
