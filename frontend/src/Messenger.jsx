@@ -319,7 +319,7 @@ const Messenger = ({ delay }) => {
                           ? ele.users[1].displayName
                           : ele.users[0].displayName}
                     </h3>
-                    <p>{ele.lastMessage.text}</p>
+                    {ele.lastMessage && <p>{ele.lastMessage.text}</p>}
                   </div>
                   <div className="ago">
                     {timeSince(new Date(ele.lastMessage.date).getTime())}
