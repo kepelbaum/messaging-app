@@ -179,6 +179,61 @@ const Messenger = ({ delay }) => {
     }
   }
 
+  function handleDummySubmit() {
+    if (message !== "") {
+      fetch("https://messaging-app-production-6dff.up.railway.app/chats", {
+        mode: "cors",
+        method: "POST",
+        body: JSON.stringify({
+          message: message,
+          users: [dummyChat],
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          authorization: "Bearer " + (token ? token.toString() : ""),
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          if (response.result && response.result !== "Chat already exists") {
+            setMessage("");
+            setDummyChat(null);
+            setTimeout(setPage(response.result), 500);
+          } else {
+            throw new Error(Object.entries(response));
+          }
+        })
+        .catch((error) => console.error(error));
+    } else if (activeElement !== null) {
+      fetch(
+        "https://messaging-app-production-6dff.up.railway.app/messages/" +
+          activeElement,
+        {
+          mode: "cors",
+          method: "PUT",
+          body: JSON.stringify({
+            message: message,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            authorization: "Bearer " + (token ? token.toString() : ""),
+          },
+        },
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.result) {
+            setMessage("");
+            setActiveElement(null);
+          } else {
+            throw new Error(Object.entries(response));
+          }
+        })
+        .catch((error) => console.error(error));
+    }
+  }
+
   function timeSince(date) {
     var seconds = Math.floor((new Date() - date) / 1000);
 
@@ -320,6 +375,8 @@ const Messenger = ({ delay }) => {
 
   async function showChat(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
+    setDummyChat(null);
+    setMessage("");
     setPage(val);
     // console.log(await val);
   }
@@ -334,6 +391,8 @@ const Messenger = ({ delay }) => {
     if (findChat.length === 1) {
       setPage(findChat[0]._id);
     } else {
+      setMessage("");
+      setActiveElement(null);
       setPage(null);
       setDummyChat(val);
     }
@@ -549,6 +608,20 @@ const Messenger = ({ delay }) => {
                     </div>
                   );
                 })}
+            {dummyChat && users && <div className="messagemasterwrapper"></div>}
+            {dummyChat && users && (
+              <div className="bottomsection">
+                <textarea
+                  value={message}
+                  onChange={handleChange}
+                  id="entermessage"
+                  placeholder="Enter message here..."
+                ></textarea>
+                <button className="enterbutton" onClick={handleDummySubmit}>
+                  Enter
+                </button>
+              </div>
+            )}
             {page &&
               chats &&
               chats
