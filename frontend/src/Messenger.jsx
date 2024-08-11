@@ -10,6 +10,7 @@ const Messenger = ({ delay }) => {
   const [page, setPage] = useState(null);
   const [message, setMessage] = useState("");
   const [scrollState, setScrollState] = useState([true, null]); //true = scrolled to the bottom
+  const [activeElement, setActiveElement] = useState(null);
 
   const navigate = useNavigate();
 
@@ -26,6 +27,17 @@ const Messenger = ({ delay }) => {
     setMessage(e.target.value);
   }
 
+  function handleEdit(e) {
+    let aid = e.currentTarget.attributes.getNamedItem("aid").value;
+    if (aid === activeElement) {
+      setActiveElement(null);
+      setMessage("");
+    } else {
+      setMessage(e.currentTarget.attributes.getNamedItem("text").value);
+      setActiveElement(aid);
+    }
+  }
+
   const messagesEndRef = useRef(null);
   // const messagesContainerRef = useRef(null);
 
@@ -34,7 +46,7 @@ const Messenger = ({ delay }) => {
   };
 
   function handleSubmit() {
-    if (message !== "") {
+    if (message !== "" && activeElement === null) {
       fetch(
         "https://messaging-app-production-6dff.up.railway.app/messages/" + page,
         {
@@ -51,8 +63,35 @@ const Messenger = ({ delay }) => {
       )
         .then((response) => response.json())
         .then((response) => {
+          x;
           if (response.result) {
             setMessage("");
+          } else {
+            throw new Error(Object.entries(response));
+          }
+        })
+        .catch((error) => console.error(error));
+    } else if (activeElement !== null) {
+      fetch(
+        "https://messaging-app-production-6dff.up.railway.app/messages/" +
+          activeElement,
+        {
+          mode: "cors",
+          method: "PUT",
+          body: JSON.stringify({
+            message: message,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            authorization: "Bearer " + (token ? token.toString() : ""),
+          },
+        },
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.result) {
+            setMessage("");
+            setActiveElement(null);
           } else {
             throw new Error(Object.entries(response));
           }
@@ -266,9 +305,12 @@ const Messenger = ({ delay }) => {
                           <div className="messagewrapper" key={elem._id}>
                             <div
                               className={
-                                elem.user._id === id
-                                  ? "message right"
-                                  : "message"
+                                elem.user._id === id &&
+                                elem._id === activeElement
+                                  ? "message right orange"
+                                  : elem.user._id === id
+                                    ? "message right"
+                                    : "message"
                               }
                             >
                               {elem.user._id !== id && (
@@ -280,6 +322,16 @@ const Messenger = ({ delay }) => {
                               </div>
                               {elem.user._id === id && (
                                 <div className="avatar"></div>
+                              )}
+                              {elem.user._id === id && (
+                                <div
+                                  className="edit"
+                                  onClick={handleEdit}
+                                  aid={elem._id}
+                                  text={elem.text}
+                                >
+                                  Edit
+                                </div>
                               )}
                               {/* <p className="small">
                         {new Date(elem.date).toLocaleTimeString()}
