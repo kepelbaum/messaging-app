@@ -19,6 +19,12 @@ const Messenger = ({ delay }) => {
     navigate(url);
   };
 
+  function areyousurechat(e) {
+    setActiveElement(null);
+    setMessage("");
+    setUpForDeletion(e.currentTarget.attributes.getNamedItem("val").value);
+  }
+
   function logoutAndMove() {
     logout();
     movePage("/");
@@ -52,6 +58,33 @@ const Messenger = ({ delay }) => {
           setPage(null);
           movePage("/app");
         } else if (!response.result) {
+          throw new Error(Object.entries(response));
+        }
+      })
+      .catch((error) => console.error(error));
+  }
+
+  function handleLeave() {
+    fetch(
+      "https://messaging-app-production-6dff.up.railway.app/chats/" + page,
+      {
+        mode: "cors",
+        method: "PUT",
+        body: JSON.stringify({
+          change: "leave",
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          authorization: "Bearer " + (token ? token.toString() : ""),
+        },
+      },
+    )
+      .then((response) => response.json())
+      .then((response) => {
+        if ((response.result = "Left the chat")) {
+          setPage(null);
+          movePage("/app");
+        } else {
           throw new Error(Object.entries(response));
         }
       })
@@ -298,29 +331,52 @@ const Messenger = ({ delay }) => {
         {(page && (
           <div className="messagebox">
             <div className="chatinfotop">
-              <div className="avatar"></div>
+              <div className="grouped">
+                <div className="avatar"></div>
+                {chats &&
+                  chats
+                    .filter((ele) => page === ele._id)
+                    .map((ele) => {
+                      return (
+                        <div className="groupinfo" key={ele._id}>
+                          <h3>
+                            {ele.groupName
+                              ? ele.groupName
+                              : ele.users[0]._id === id
+                                ? ele.users[1].displayName
+                                : ele.users[0].displayName}
+                          </h3>
+                          <p>
+                            {ele.groupName
+                              ? ele.users.length > 1
+                                ? ele.users.length + " members"
+                                : ele.users.length + " member"
+                              : ele.users[0]._id === id
+                                ? "@" + ele.users[1].username
+                                : "@" + ele.users[0].username}
+                          </p>
+                        </div>
+                      );
+                    })}
+              </div>
               {chats &&
                 chats
-                  .filter((ele) => page === ele._id)
+                  .filter((ele) => page === ele._id && ele.groupName)
                   .map((ele) => {
                     return (
-                      <div className="groupinfo" key={ele._id}>
-                        <h3>
-                          {ele.groupName
-                            ? ele.groupName
-                            : ele.users[0]._id === id
-                              ? ele.users[1].displayName
-                              : ele.users[0].displayName}
-                        </h3>
-                        <p>
-                          {ele.groupName
-                            ? ele.users.length > 1
-                              ? ele.users.length + " members"
-                              : ele.users.length + " member"
-                            : ele.users[0]._id === id
-                              ? "@" + ele.users[1].username
-                              : "@" + ele.users[0].username}
-                        </p>
+                      <div className="topbuttons" key="topbuttons">
+                        {ele._id === upForDeletion && (
+                          <div className="grouped">
+                            <h3>Are you sure you want to leave this chat?</h3>
+                            <button onClick={handleLeave}>Yes</button>
+                            <button onClick={undelete}>No</button>
+                          </div>
+                        )}
+                        {ele._id !== upForDeletion && (
+                          <button onClick={areyousurechat} val={ele._id}>
+                            Leave Chat
+                          </button>
+                        )}
                       </div>
                     );
                   })}

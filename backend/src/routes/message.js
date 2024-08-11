@@ -167,7 +167,7 @@ router.delete("/:chatId/:messageId", verifyToken, async (req, res, next) => {
             const sortedChat = await req.context.models.Chat.findById(
               req.params.chatId,
             )
-              .sort({ date: -1 })
+              .sort({ _id: -1 })
               .limit(1);
             const updatedChat = await req.context.models.Chat.findByIdAndUpdate(
               req.params.chatId,
