@@ -8,10 +8,13 @@ const Messenger = ({ delay }) => {
     useContext(AppContext);
 
   const [page, setPage] = useState(null);
+  const [users, setUsers] = useState(null);
   const [message, setMessage] = useState("");
   const [scrollState, setScrollState] = useState([true, null]); //true = scrolled to the bottom
   const [activeElement, setActiveElement] = useState(null);
   const [upForDeletion, setUpForDeletion] = useState(null);
+  const [addMenutoggle, setAddMenuToggle] = useState(false);
+  const [dummyChat, setDummyChat] = useState(null);
 
   const navigate = useNavigate();
 
@@ -54,7 +57,7 @@ const Messenger = ({ delay }) => {
     )
       .then((response) => response.json())
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         if (response.result === "Chat deleted") {
           setPage(null);
         } else if (!response.result) {
@@ -95,6 +98,13 @@ const Messenger = ({ delay }) => {
     setActiveElement(null);
     setMessage("");
     setUpForDeletion(e.currentTarget.attributes.getNamedItem("val").value);
+  }
+  function addMenu() {
+    if (addMenutoggle) {
+      setAddMenuToggle(false);
+    } else {
+      setAddMenuToggle(true);
+    }
   }
 
   function handleEdit(e) {
@@ -252,11 +262,36 @@ const Messenger = ({ delay }) => {
         .then((response) => response.json())
         .then((response) => {
           var result = Object.keys(response).map((key) => [key, response[key]]);
-          console.log(result[0][1]);
+          // console.log(result[0][1]);
           if (result[0][1].toString() === "You are not signed in.") {
             logoutAndMove();
+          } else {
+            setChats(result[0][1]);
           }
-          setChats(result[0][1]);
+        })
+        .catch((error) => console.error(error));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetch("https://messaging-app-production-6dff.up.railway.app/users", {
+        mode: "cors",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          authorization: "Bearer " + (token ? token.toString() : ""),
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          var result = Object.keys(response).map((key) => [key, response[key]]);
+          setUsers(result);
+          // if (result[0][1].toString() === "You are not signed in.") {
+          //   logoutAndMove();
+          // } else {
+          //   setChats(result[0][1]);
+          // }
         })
         .catch((error) => console.error(error));
     }, 1000);
@@ -289,8 +324,23 @@ const Messenger = ({ delay }) => {
     // console.log(await val);
   }
 
+  function newChat(e) {
+    let val = e.currentTarget.attributes.getNamedItem("val").value;
+    let findChat = chats.filter(
+      (ele) =>
+        !ele.groupName &&
+        (ele.users[0]._id === val || ele.users[1]._id === val),
+    );
+    if (findChat.length === 1) {
+      setPage(findChat[0]._id);
+    } else {
+      setPage(null);
+      setDummyChat(val);
+    }
+  }
+
   return (
-    (chats && token && user && (
+    (chats && token && user && users && (
       <div className="body">
         <div className="left">
           <p onClick={logoutAndMove}>Logout</p>
@@ -300,8 +350,13 @@ const Messenger = ({ delay }) => {
         <div className="mid">
           <div className="chatmenu">
             <h2>Chats</h2>
+            <div>
+              {!addMenutoggle && <h1 onClick={addMenu}>+</h1>}
+              {addMenutoggle && <h1 onClick={addMenu}>-</h1>}
+            </div>
           </div>
           {chats &&
+            !addMenutoggle &&
             chats.map((ele) => {
               return (
                 <div
@@ -328,13 +383,38 @@ const Messenger = ({ delay }) => {
                 </div>
               );
             })}
+          {chats &&
+            addMenutoggle &&
+            users
+              .filter((ele) => ele[1]._id !== id)
+              .map((ele) => {
+                return (
+                  <div className="wrap" key={ele[1]._id}>
+                    <div className="avatar chatavatar"></div>
+                    <div className="chatinfo">
+                      <h3>{ele[1].displayName}</h3>
+                      {<p>{"@" + ele[1].username}</p>}
+                    </div>
+                    {/* <div className="ago">
+                      {ele.lastMessage &&
+                        timeSince(new Date(ele.lastMessage.date).getTime())}
+                    </div> */}
+                    <div className="chatbutton">
+                      <button onClick={newChat} val={ele[1]._id}>
+                        Chat
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
         </div>
-        {(page && (
+        {((page || dummyChat) && (
           <div className="messagebox">
             <div className="chatinfotop">
               <div className="grouped">
                 <div className="avatar"></div>
                 {chats &&
+                  page &&
                   chats
                     .filter((ele) => page === ele._id)
                     .map((ele) => {
@@ -359,8 +439,21 @@ const Messenger = ({ delay }) => {
                         </div>
                       );
                     })}
+                {dummyChat &&
+                  users &&
+                  users
+                    .filter((ele) => dummyChat === ele[1]._id)
+                    .map((ele) => {
+                      return (
+                        <div className="groupinfo" key={dummyChat}>
+                          <h3>{ele[1].displayName}</h3>
+                          <p>{"@" + ele[1].username}</p>
+                        </div>
+                      );
+                    })}
               </div>
               {chats &&
+                page &&
                 chats
                   .filter((ele) => page === ele._id && ele.groupName)
                   .map((ele) => {

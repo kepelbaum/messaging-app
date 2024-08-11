@@ -29,6 +29,12 @@
   top: 35%;
 }
 
+.chatbutton {
+  position: absolute;
+  left: 70%;
+  top: 25%;
+}
+
 .orange {
   background-color: orange;
 }
@@ -48,7 +54,7 @@
   width: 100%;
   border-bottom: 1px solid black;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 }
 .mid {
