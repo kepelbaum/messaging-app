@@ -162,7 +162,7 @@ router.delete("/:chatId/:messageId", verifyToken, async (req, res, next) => {
               req.params.chatId,
             );
 
-            return res.json({ result: "Chat deleted", test: "test" });
+            return res.json({ result: "Chat deleted" });
           } else {
             const sortedChat = await req.context.models.Chat.findById(
               req.params.chatId,

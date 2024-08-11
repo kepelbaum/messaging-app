@@ -188,6 +188,9 @@ router.put("/:chatId", verifyToken, async (req, res, next) => {
               req.params.chatId,
               { $pull: { users: acc._id } },
             );
+            if (chat.users.length === 0) {
+              const delete = await req.context.models.Chat.findByIdAndDelete(req.params.chatId);
+            }
             const userside =
               await req.context.models.Messenger.findByIdAndUpdate(acc._id, {
                 $pull: { chats: req.params.chatId },
@@ -236,7 +239,7 @@ router.delete("/:chatId", verifyToken, async (req, res, next) => {
               const result = await req.context.models.Chat.findByIdAndDelete(
                 req.params.chatId,
               );
-              res.json({ result: "Chat deleted", test: "chat" });
+              res.json({ result: "Chat deleted" });
             }
           } else {
             res.json({ result: "Invalid authentication token" });

@@ -54,9 +54,9 @@ const Messenger = ({ delay }) => {
     )
       .then((response) => response.json())
       .then((response) => {
-        if ((response.result = "Chat deleted")) {
+        console.log(response);
+        if (response.result === "Chat deleted") {
           setPage(null);
-          movePage("/app");
         } else if (!response.result) {
           throw new Error(Object.entries(response));
         }
@@ -411,7 +411,7 @@ const Messenger = ({ delay }) => {
                                   <h3>
                                     Are you sure you want to delete this
                                     message?
-                                  </h3>
+                                  </h3>{" "}
                                   <button onClick={handleDelete}>Yes</button>
                                   <button onClick={undelete}>No</button>
                                 </div>
