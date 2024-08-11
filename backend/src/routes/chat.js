@@ -236,7 +236,7 @@ router.delete("/:chatId", verifyToken, async (req, res, next) => {
               const result = await req.context.models.Chat.findByIdAndDelete(
                 req.params.chatId,
               );
-              res.json({ result: "Chat deleted" });
+              res.json({ result: "Chat deleted", test: "chat" });
             }
           } else {
             res.json({ result: "Invalid authentication token" });
