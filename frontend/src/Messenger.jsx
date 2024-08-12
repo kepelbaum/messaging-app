@@ -13,9 +13,10 @@ const Messenger = ({ delay }) => {
   const [scrollState, setScrollState] = useState([true, null]); //true = scrolled to the bottom
   const [activeElement, setActiveElement] = useState(null);
   const [upForDeletion, setUpForDeletion] = useState(null);
-  const [addMenuToggle, setaddMenuToggle] = useState(false);
+  const [addMenuToggle, setAddMenuToggle] = useState(false);
   const [groupAddMode, setGroupAddMode] = useState(false);
   const [dummyChat, setDummyChat] = useState(null);
+  const [newGroup, setNewGroup] = useState(null);
 
   const navigate = useNavigate();
 
@@ -102,10 +103,10 @@ const Messenger = ({ delay }) => {
   }
   function addMenu() {
     if (addMenuToggle) {
-      setaddMenuToggle(false);
+      setAddMenuToggle(false);
       setGroupAddMode(false);
     } else {
-      setaddMenuToggle(true);
+      setAddMenuToggle(true);
     }
   }
 
@@ -236,9 +237,9 @@ const Messenger = ({ delay }) => {
   }
 
   function timeSince(date) {
-    var seconds = Math.floor((new Date() - date) / 1000);
+    let seconds = Math.floor((new Date() - date) / 1000);
 
-    var interval = seconds / 31536000;
+    let interval = seconds / 31536000;
 
     if (interval > 1) {
       if (seconds < 31536000 * 2 && seconds > 31535999) {
@@ -317,7 +318,7 @@ const Messenger = ({ delay }) => {
       })
         .then((response) => response.json())
         .then((response) => {
-          var result = Object.keys(response).map((key) => [key, response[key]]);
+          let result = Object.keys(response).map((key) => [key, response[key]]);
           // console.log(result[0][1]);
           if (result[0][1].toString() === "You are not signed in.") {
             logoutAndMove();
@@ -341,7 +342,7 @@ const Messenger = ({ delay }) => {
       })
         .then((response) => response.json())
         .then((response) => {
-          var result = Object.keys(response).map((key) => [key, response[key]]);
+          let result = Object.keys(response).map((key) => [key, response[key]]);
           setUsers(result);
           // if (result[0][1].toString() === "You are not signed in.") {
           //   logoutAndMove();
@@ -382,59 +383,118 @@ const Messenger = ({ delay }) => {
     // console.log(await val);
   }
 
-  function newChat(e) {
-    let val = e.currentTarget.attributes.getNamedItem("val").value;
-    let findChat = chats.filter(
-      (ele) =>
-        !ele.groupName &&
-        (ele.users[0]._id === val || ele.users[1]._id === val),
-    );
-    if (findChat.length === 1) {
-      setPage(findChat[0]._id);
-    } else {
-      setMessage("");
-      setActiveElement(null);
-      setPage(null);
-      setDummyChat(val);
-    }
-  }
-
-  function addToGroup(e) {
-    let val = e.currentTarget.attributes.getNamedItem("val").value;
-    fetch(
-      "https://messaging-app-production-6dff.up.railway.app/chats/" + page,
-      {
+  function newChat() {
+    if (newGroup.message !== "" && newGroup.groupName !== "") {
+      fetch("https://messaging-app-production-6dff.up.railway.app/chats", {
         mode: "cors",
-        method: "PUT",
+        method: "POST",
         body: JSON.stringify({
-          change: "add",
-          newUser: val,
+          message: newGroup.message,
+          groupName: newGroup.groupName,
+          users: newGroup.users,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
           authorization: "Bearer " + (token ? token.toString() : ""),
         },
-      },
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        if ((response.result = "Change complete")) {
-          //do nothing
-        } else {
-          throw new Error(Object.entries(response));
-        }
       })
-      .catch((error) => console.error(error));
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.result) {
+            setNewGroup(null);
+            setGroupAddMode(false);
+            setAddMenuToggle(false);
+            setTimeout(setPage(response.result), 500);
+          } else {
+            throw new Error(Object.entries(response));
+          }
+        })
+        .catch((error) => console.error(error));
+    }
+  }
+
+  function handleGroupNameChange(e) {
+    setNewGroup({ ...newGroup, groupName: e.currentTarget.value });
+  }
+
+  function handleGroupMessageChange(e) {
+    setNewGroup({ ...newGroup, message: e.currentTarget.value });
+  }
+
+  function addToGroup(e) {
+    let val = e.currentTarget.attributes.getNamedItem("val").value;
+    // console.log(val);
+    if (newGroup) {
+      if (e.currentTarget.textContent === "Add") {
+        e.currentTarget.textContent = "Remove";
+        e.currentTarget.classList.add("red");
+        let newUsers = newGroup.users.concat(val);
+        setNewGroup({ ...newGroup, users: newUsers });
+      } else {
+        e.currentTarget.textContent = "Add";
+        e.currentTarget.classList.remove("red");
+        let index = newGroup.users.indexOf(val);
+        let newUsers = [...newGroup.users];
+        let removedUser = newUsers.splice(index, 1);
+        setNewGroup({ ...newGroup, users: newUsers });
+      }
+    } else {
+      fetch(
+        "https://messaging-app-production-6dff.up.railway.app/chats/" + page,
+        {
+          mode: "cors",
+          method: "PUT",
+          body: JSON.stringify({
+            change: "add",
+            newUser: val,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            authorization: "Bearer " + (token ? token.toString() : ""),
+          },
+        },
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          if ((response.result = "Change complete")) {
+            //do nothing
+          } else {
+            throw new Error(Object.entries(response));
+          }
+        })
+        .catch((error) => console.error(error));
+    }
   }
 
   function toggleGroupMode(e) {
     if (groupAddMode) {
       setGroupAddMode(false);
-      setaddMenuToggle(false);
+      setAddMenuToggle(false);
       // e.currentTarget.classList.add("borderless");
     } else {
       setGroupAddMode(true);
-      setaddMenuToggle(true);
+      setAddMenuToggle(true);
+    }
+  }
+
+  function makeNewGroup() {
+    if (newGroup) {
+      setNewGroup(null);
+      setAddMenuToggle(false);
+      setGroupAddMode(false);
+    } else {
+      setActiveElement(null);
+      setUpForDeletion(null);
+      setAddMenuToggle(true);
+      setGroupAddMode(true);
+      setDummyChat(null);
+      setPage(null);
+      // console.log(users);
+      setNewGroup({
+        users: [],
+        groupName: null,
+        message: "",
+      });
     }
   }
 
@@ -448,10 +508,13 @@ const Messenger = ({ delay }) => {
         </div>
         <div className="mid">
           <div className="chatmenu">
-            <h2>Chats</h2>
-            <div>
-              {!addMenuToggle && <h1 onClick={addMenu}>+</h1>}
-              {addMenuToggle && <h1 onClick={addMenu}>-</h1>}
+            <h2>{addMenuToggle ? "Users" : "Chats"}</h2>
+            <div className="row">
+              <div>
+                {!addMenuToggle && !newGroup && <h1 onClick={addMenu}>+</h1>}
+                {addMenuToggle && !newGroup && <h1 onClick={addMenu}>-</h1>}
+              </div>
+              <h2 onClick={makeNewGroup}>{newGroup ? "X" : "NG"}</h2>
             </div>
           </div>
           {chats &&
@@ -484,10 +547,11 @@ const Messenger = ({ delay }) => {
             })}
           {chats &&
             addMenuToggle &&
+            users &&
             users
               .filter((ele) => ele[1]._id !== id)
               .filter((ele) =>
-                groupAddMode
+                groupAddMode && !newGroup
                   ? !chats
                       .filter((chat) => chat._id === page)[0]
                       .users.map((user) => user._id)
@@ -507,10 +571,7 @@ const Messenger = ({ delay }) => {
                         timeSince(new Date(ele.lastMessage.date).getTime())}
                     </div> */}
                     <div className="chatbutton">
-                      <button
-                        onClick={groupAddMode ? addToGroup : newChat}
-                        val={ele[1]._id}
-                      >
+                      <button onClick={addToGroup} val={ele[1]._id}>
                         {groupAddMode ? "Add" : "Chat"}
                       </button>
                     </div>
@@ -696,7 +757,56 @@ const Messenger = ({ delay }) => {
                   );
                 })}
           </div>
-        )) || <div className="imgcontainer"></div>}
+        )) ||
+          (newGroup && users && (
+            <div className="newgroup">
+              <h2>Create New Group</h2>
+              <label htmlFor="groupname">Group Name:</label>
+              <input
+                id="groupname"
+                type="text"
+                min="1"
+                max="50"
+                placeholder="Enter group name here..."
+                onChange={handleGroupNameChange}
+              ></input>
+              <label htmlFor="firstmessage">Enter the first message.</label>
+              <input
+                type="text"
+                id="firstmessage"
+                placeholder="Enter first message here..."
+                onChange={handleGroupMessageChange}
+              ></input>
+              <h3>Invited users will show up here.</h3>
+              <h4>
+                {newGroup.users.length === 0
+                  ? "No members added."
+                  : "You and " + newGroup.users.length + " other members:"}
+              </h4>
+              <div className="grid">
+                {users
+                  .filter((ele) => newGroup.users.includes(ele[1]._id))
+                  .map((ele) => {
+                    return (
+                      <div className="useravatarwrapper" key={ele[1]._id}>
+                        <div className="newchatrow">
+                          <div className="avatar"></div>
+                          <h4>
+                            {"@" +
+                              (ele[1].username.length > 13
+                                ? ele[1].username.substring(0, 10) + "..."
+                                : ele[1].username)}
+                          </h4>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+              <button type="submit" onClick={newChat}>
+                Submit!
+              </button>
+            </div>
+          )) || <div className="imgcontainer"></div>}
       </div>
     )) || <h1>Loading...</h1>
   );

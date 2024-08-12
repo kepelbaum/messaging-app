@@ -11,6 +11,12 @@
   /*   */
 }
 
+.red {
+  background-color: red;
+  color: white;
+  border-color: white;
+}
+
 .left {
   width: 5vw;
   height: 100vh;
@@ -39,6 +45,27 @@
   background-color: orange;
 }
 
+.newgroup {
+  height: 100vh;
+  width: 75vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 50px;
+  gap: 20px;
+}
+
+#groupname {
+  width: 300px;
+  height: 40px;
+}
+
+#firstmessage {
+  width: 500px;
+  height: 60px;
+}
+
 .edit {
   width: 50px;
   height: 50px;
@@ -54,8 +81,10 @@
   width: 100%;
   border-bottom: 1px solid black;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+  padding-left: 20%;
+  padding-right: 5%;
 }
 .mid {
   border-right: 3px solid black;
@@ -111,7 +140,16 @@
   gap: 30px;
 }
 
-.enterbutton {
+.row {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+.newchatrow {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .col {
@@ -141,6 +179,19 @@
 
 .messagewrapper {
   width: 100%;
+}
+
+.grid {
+  width: 80%;
+  height: 50%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 200px);
+  padding: 30px;
+  grid-gap: 10px;
+}
+
+.useravatarwrapper {
+  max-width: 300px;
 }
 
 .message {
