@@ -13,7 +13,8 @@ const Messenger = ({ delay }) => {
   const [scrollState, setScrollState] = useState([true, null]); //true = scrolled to the bottom
   const [activeElement, setActiveElement] = useState(null);
   const [upForDeletion, setUpForDeletion] = useState(null);
-  const [addMenutoggle, setAddMenuToggle] = useState(false);
+  const [addMenuToggle, setaddMenuToggle] = useState(false);
+  const [groupAddMode, setGroupAddMode] = useState(false);
   const [dummyChat, setDummyChat] = useState(null);
 
   const navigate = useNavigate();
@@ -100,10 +101,11 @@ const Messenger = ({ delay }) => {
     setUpForDeletion(e.currentTarget.attributes.getNamedItem("val").value);
   }
   function addMenu() {
-    if (addMenutoggle) {
-      setAddMenuToggle(false);
+    if (addMenuToggle) {
+      setaddMenuToggle(false);
+      setGroupAddMode(false);
     } else {
-      setAddMenuToggle(true);
+      setaddMenuToggle(true);
     }
   }
 
@@ -195,7 +197,6 @@ const Messenger = ({ delay }) => {
       })
         .then((response) => response.json())
         .then((response) => {
-          console.log(response);
           if (response.result && response.result !== "Chat already exists") {
             setMessage("");
             setDummyChat(null);
@@ -398,6 +399,45 @@ const Messenger = ({ delay }) => {
     }
   }
 
+  function addToGroup(e) {
+    let val = e.currentTarget.attributes.getNamedItem("val").value;
+    fetch(
+      "https://messaging-app-production-6dff.up.railway.app/chats/" + page,
+      {
+        mode: "cors",
+        method: "PUT",
+        body: JSON.stringify({
+          change: "add",
+          newUser: val,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          authorization: "Bearer " + (token ? token.toString() : ""),
+        },
+      },
+    )
+      .then((response) => response.json())
+      .then((response) => {
+        if ((response.result = "Change complete")) {
+          //do nothing
+        } else {
+          throw new Error(Object.entries(response));
+        }
+      })
+      .catch((error) => console.error(error));
+  }
+
+  function toggleGroupMode(e) {
+    if (groupAddMode) {
+      setGroupAddMode(false);
+      setaddMenuToggle(false);
+      // e.currentTarget.classList.add("borderless");
+    } else {
+      setGroupAddMode(true);
+      setaddMenuToggle(true);
+    }
+  }
+
   return (
     (chats && token && user && users && (
       <div className="body">
@@ -410,12 +450,12 @@ const Messenger = ({ delay }) => {
           <div className="chatmenu">
             <h2>Chats</h2>
             <div>
-              {!addMenutoggle && <h1 onClick={addMenu}>+</h1>}
-              {addMenutoggle && <h1 onClick={addMenu}>-</h1>}
+              {!addMenuToggle && <h1 onClick={addMenu}>+</h1>}
+              {addMenuToggle && <h1 onClick={addMenu}>-</h1>}
             </div>
           </div>
           {chats &&
-            !addMenutoggle &&
+            !addMenuToggle &&
             chats.map((ele) => {
               return (
                 <div
@@ -443,9 +483,17 @@ const Messenger = ({ delay }) => {
               );
             })}
           {chats &&
-            addMenutoggle &&
+            addMenuToggle &&
             users
               .filter((ele) => ele[1]._id !== id)
+              .filter((ele) =>
+                groupAddMode
+                  ? !chats
+                      .filter((chat) => chat._id === page)[0]
+                      .users.map((user) => user._id)
+                      .includes(ele[1]._id)
+                  : ele,
+              )
               .map((ele) => {
                 return (
                   <div className="wrap" key={ele[1]._id}>
@@ -459,8 +507,11 @@ const Messenger = ({ delay }) => {
                         timeSince(new Date(ele.lastMessage.date).getTime())}
                     </div> */}
                     <div className="chatbutton">
-                      <button onClick={newChat} val={ele[1]._id}>
-                        Chat
+                      <button
+                        onClick={groupAddMode ? addToGroup : newChat}
+                        val={ele[1]._id}
+                      >
+                        {groupAddMode ? "Add" : "Chat"}
                       </button>
                     </div>
                   </div>
@@ -518,6 +569,9 @@ const Messenger = ({ delay }) => {
                   .map((ele) => {
                     return (
                       <div className="topbuttons" key="topbuttons">
+                        <button onClick={toggleGroupMode}>
+                          {groupAddMode ? "-" : "+"}
+                        </button>
                         {ele._id === upForDeletion && (
                           <div className="grouped">
                             <h3>Are you sure you want to leave this chat?</h3>
