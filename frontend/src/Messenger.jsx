@@ -627,31 +627,13 @@ const Messenger = ({ delay }) => {
                       .includes(ele[1]._id)
                   : ele,
               )
-              // .filter((ele) =>
-              //   ele.groupName && select === "displayName"
-              //     ? ele.groupName.toLowerCase().startsWith(search)
-              //     : true,
-              // )
-              // .filter((ele) =>
-              //   !ele.groupName &&
-              //   select === "displayName" &&
-              //   ele.users[0]._id === id
-              //     ? ele.users[1].displayName.toLowerCase().startsWith(search)
-              //     : !ele.groupName && select === "displayName"
-              //       ? ele.users[0].displayName.toLowerCase().startsWith(search)
-              //       : true,
-              // )
-              // .filter((ele) =>
-              //   select === "username" &&
-              //   !ele.groupName &&
-              //   ele.users[0]._id === id
-              //     ? ele.users[1].username.toLowerCase().startsWith(search)
-              //     : !ele.groupName && select === "username"
-              //       ? ele.users[0].username.toLowerCase().startsWith(search)
-              //       : ele.groupName && select === "username"
-              //         ? false
-              //         : true,
-              // )
+              .filter((ele) =>
+                select === "displayName"
+                  ? ele[1].displayName.toLowerCase().startsWith(search) &&
+                    ele[1].displayName.length >= search.length
+                  : ele[1].username.toLowerCase().startsWith(search) &&
+                    ele[1].username.length >= search.length,
+              )
               .map((ele) => {
                 return (
                   <div className="wrap" key={ele[1]._id}>
