@@ -17,6 +17,8 @@ const Messenger = ({ delay }) => {
   const [groupAddMode, setGroupAddMode] = useState(false);
   const [dummyChat, setDummyChat] = useState(null);
   const [newGroup, setNewGroup] = useState(null);
+  const [search, setSearch] = useState("");
+  const [select, setSelect] = useState("displayName");
 
   const navigate = useNavigate();
 
@@ -127,6 +129,10 @@ const Messenger = ({ delay }) => {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView();
   };
+
+  function handleSearch(e) {
+    setSearch(e.currentTarget.value.toLowerCase());
+  }
 
   function handleSubmit() {
     if (message !== "" && activeElement === null) {
@@ -413,6 +419,10 @@ const Messenger = ({ delay }) => {
     }
   }
 
+  function handleSelect(e) {
+    setSelect(e.currentTarget.value);
+  }
+
   function handleGroupNameChange(e) {
     setNewGroup({ ...newGroup, groupName: e.currentTarget.value });
   }
@@ -423,8 +433,21 @@ const Messenger = ({ delay }) => {
 
   function addToGroup(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
-    // console.log(val);
-    if (newGroup) {
+    if (e.currentTarget.textContent === "Chat") {
+      let findChat = chats.filter(
+        (ele) =>
+          !ele.groupName &&
+          (ele.users[0]._id === val || ele.users[1]._id === val),
+      );
+      if (findChat.length === 1) {
+        setPage(findChat[0]._id);
+      } else {
+        setMessage("");
+        setActiveElement(null);
+        setPage(null);
+        setDummyChat(val);
+      }
+    } else if (newGroup) {
       if (e.currentTarget.textContent === "Add") {
         e.currentTarget.textContent = "Remove";
         e.currentTarget.classList.add("red");
@@ -508,43 +531,89 @@ const Messenger = ({ delay }) => {
         </div>
         <div className="mid">
           <div className="chatmenu">
-            <h2>{addMenuToggle ? "Users" : "Chats"}</h2>
-            <div className="row">
-              <div>
-                {!addMenuToggle && !newGroup && <h1 onClick={addMenu}>+</h1>}
-                {addMenuToggle && !newGroup && <h1 onClick={addMenu}>-</h1>}
+            <div className="chatmenutop">
+              <h2>{addMenuToggle ? "Users" : "Chats"}</h2>
+              <div className="row">
+                <div>
+                  {!addMenuToggle && !newGroup && <h1 onClick={addMenu}>+</h1>}
+                  {addMenuToggle && !newGroup && <h1 onClick={addMenu}>-</h1>}
+                </div>
+                <h2 onClick={makeNewGroup}>{newGroup ? "X" : "NG"}</h2>
               </div>
-              <h2 onClick={makeNewGroup}>{newGroup ? "X" : "NG"}</h2>
+            </div>
+            <div className="chatmenubot">
+              <select className="select" id="select" onChange={handleSelect}>
+                <option value="displayName">Display/Group Name</option>
+                <option value="username">Username(@)</option>
+              </select>
+              <input
+                type="search"
+                className="searchbar"
+                onChange={handleSearch}
+              ></input>
             </div>
           </div>
           {chats &&
             !addMenuToggle &&
-            chats.map((ele) => {
-              return (
-                <div
-                  className="wrap"
-                  onClick={showChat}
-                  val={ele._id}
-                  key={ele._id}
-                >
-                  <div className="avatar chatavatar"></div>
-                  <div className="chatinfo">
-                    <h3>
-                      {ele.groupName
-                        ? ele.groupName
-                        : ele.users[0]._id === id
-                          ? ele.users[1].displayName
-                          : ele.users[0].displayName}
-                    </h3>
-                    {ele.lastMessage && <p>{ele.lastMessage.text}</p>}
+            chats
+              .filter((ele) =>
+                ele.groupName && select === "displayName"
+                  ? ele.groupName.toLowerCase().startsWith(search) &&
+                    ele.groupName.length >= search.length
+                  : true,
+              )
+              .filter((ele) =>
+                !ele.groupName &&
+                select === "displayName" &&
+                ele.users[0]._id === id
+                  ? ele.users[1].displayName.toLowerCase().startsWith(search) &&
+                    ele.users[1].displayName.length >= search.length
+                  : !ele.groupName && select === "displayName"
+                    ? ele.users[0].displayName
+                        .toLowerCase()
+                        .startsWith(search) &&
+                      ele.users[0].displayName.length >= search.length
+                    : true,
+              )
+              .filter((ele) =>
+                select === "username" &&
+                !ele.groupName &&
+                ele.users[0]._id === id
+                  ? ele.users[1].username.toLowerCase().startsWith(search) &&
+                    ele.users[1].username.length >= search.length
+                  : !ele.groupName && select === "username"
+                    ? ele.users[0].username.toLowerCase().startsWith(search) &&
+                      ele.users[0].username.length >= search.length
+                    : ele.groupName && select === "username"
+                      ? false
+                      : true,
+              )
+              .map((ele) => {
+                return (
+                  <div
+                    className="wrap"
+                    onClick={showChat}
+                    val={ele._id}
+                    key={ele._id}
+                  >
+                    <div className="avatar chatavatar"></div>
+                    <div className="chatinfo">
+                      <h3>
+                        {ele.groupName
+                          ? ele.groupName
+                          : ele.users[0]._id === id
+                            ? ele.users[1].displayName
+                            : ele.users[0].displayName}
+                      </h3>
+                      {ele.lastMessage && <p>{ele.lastMessage.text}</p>}
+                    </div>
+                    <div className="ago">
+                      {ele.lastMessage &&
+                        timeSince(new Date(ele.lastMessage.date).getTime())}
+                    </div>
                   </div>
-                  <div className="ago">
-                    {ele.lastMessage &&
-                      timeSince(new Date(ele.lastMessage.date).getTime())}
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
           {chats &&
             addMenuToggle &&
             users &&
@@ -558,6 +627,31 @@ const Messenger = ({ delay }) => {
                       .includes(ele[1]._id)
                   : ele,
               )
+              // .filter((ele) =>
+              //   ele.groupName && select === "displayName"
+              //     ? ele.groupName.toLowerCase().startsWith(search)
+              //     : true,
+              // )
+              // .filter((ele) =>
+              //   !ele.groupName &&
+              //   select === "displayName" &&
+              //   ele.users[0]._id === id
+              //     ? ele.users[1].displayName.toLowerCase().startsWith(search)
+              //     : !ele.groupName && select === "displayName"
+              //       ? ele.users[0].displayName.toLowerCase().startsWith(search)
+              //       : true,
+              // )
+              // .filter((ele) =>
+              //   select === "username" &&
+              //   !ele.groupName &&
+              //   ele.users[0]._id === id
+              //     ? ele.users[1].username.toLowerCase().startsWith(search)
+              //     : !ele.groupName && select === "username"
+              //       ? ele.users[0].username.toLowerCase().startsWith(search)
+              //       : ele.groupName && select === "username"
+              //         ? false
+              //         : true,
+              // )
               .map((ele) => {
                 return (
                   <div className="wrap" key={ele[1]._id}>

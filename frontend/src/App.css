@@ -82,11 +82,32 @@
   width: 100%;
   border-bottom: 1px solid black;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 20%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  padding-left: 5%;
   padding-right: 5%;
 }
+
+.chatmenutop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10%;
+}
+
+.searchbar {
+  width: 200px;
+  height: 25px;
+}
+
+.chatmenubot {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .mid {
   border-right: 3px solid black;
   height: 100vh;
