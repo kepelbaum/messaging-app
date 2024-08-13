@@ -612,7 +612,13 @@ const Messenger = ({ delay }) => {
                               ? ele.users[1].displayName
                               : ele.users[0].displayName}
                         </h3>
-                        {ele.lastMessage && <p>{ele.lastMessage.text}</p>}
+                        {ele.lastMessage && (
+                          <p>
+                            {ele.lastMessage.text.length > 20
+                              ? ele.lastMessage.text.substring(0, 17) + "..."
+                              : ele.lastMessage.text}
+                          </p>
+                        )}
                       </div>
                       <div className="ago">
                         {ele.lastMessage &&
@@ -772,7 +778,7 @@ const Messenger = ({ delay }) => {
                               )}
                               <div className="azure">
                                 <h4>{elem.user.displayName}</h4>
-                                <p>{elem.text}</p>
+                                <p className="textmessage">{elem.text}</p>
                               </div>
                               {elem.user._id === id && (
                                 <div className="avatar"></div>
