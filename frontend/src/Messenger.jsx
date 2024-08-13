@@ -555,107 +555,113 @@ const Messenger = ({ delay }) => {
               ></input>
             </div>
           </div>
-          {chats &&
-            !addMenuToggle &&
-            chats
-              .filter((ele) =>
-                ele.groupName && select === "displayName"
-                  ? ele.groupName.toLowerCase().startsWith(search) &&
-                    ele.groupName.length >= search.length
-                  : true,
-              )
-              .filter((ele) =>
-                !ele.groupName &&
-                select === "displayName" &&
-                ele.users[0]._id === id
-                  ? ele.users[1].displayName.toLowerCase().startsWith(search) &&
-                    ele.users[1].displayName.length >= search.length
-                  : !ele.groupName && select === "displayName"
-                    ? ele.users[0].displayName
+          <div className="overflowdiv">
+            {chats &&
+              !addMenuToggle &&
+              chats
+                .filter((ele) =>
+                  ele.groupName && select === "displayName"
+                    ? ele.groupName.toLowerCase().startsWith(search) &&
+                      ele.groupName.length >= search.length
+                    : true,
+                )
+                .filter((ele) =>
+                  !ele.groupName &&
+                  select === "displayName" &&
+                  ele.users[0]._id === id
+                    ? ele.users[1].displayName
                         .toLowerCase()
                         .startsWith(search) &&
-                      ele.users[0].displayName.length >= search.length
-                    : true,
-              )
-              .filter((ele) =>
-                select === "username" &&
-                !ele.groupName &&
-                ele.users[0]._id === id
-                  ? ele.users[1].username.toLowerCase().startsWith(search) &&
-                    ele.users[1].username.length >= search.length
-                  : !ele.groupName && select === "username"
-                    ? ele.users[0].username.toLowerCase().startsWith(search) &&
-                      ele.users[0].username.length >= search.length
-                    : ele.groupName && select === "username"
-                      ? false
+                      ele.users[1].displayName.length >= search.length
+                    : !ele.groupName && select === "displayName"
+                      ? ele.users[0].displayName
+                          .toLowerCase()
+                          .startsWith(search) &&
+                        ele.users[0].displayName.length >= search.length
                       : true,
-              )
-              .map((ele) => {
-                return (
-                  <div
-                    className="wrap"
-                    onClick={showChat}
-                    val={ele._id}
-                    key={ele._id}
-                  >
-                    <div className="avatar chatavatar"></div>
-                    <div className="chatinfo">
-                      <h3>
-                        {ele.groupName
-                          ? ele.groupName
-                          : ele.users[0]._id === id
-                            ? ele.users[1].displayName
-                            : ele.users[0].displayName}
-                      </h3>
-                      {ele.lastMessage && <p>{ele.lastMessage.text}</p>}
+                )
+                .filter((ele) =>
+                  select === "username" &&
+                  !ele.groupName &&
+                  ele.users[0]._id === id
+                    ? ele.users[1].username.toLowerCase().startsWith(search) &&
+                      ele.users[1].username.length >= search.length
+                    : !ele.groupName && select === "username"
+                      ? ele.users[0].username
+                          .toLowerCase()
+                          .startsWith(search) &&
+                        ele.users[0].username.length >= search.length
+                      : ele.groupName && select === "username"
+                        ? false
+                        : true,
+                )
+                .map((ele) => {
+                  return (
+                    <div
+                      className="wrap"
+                      onClick={showChat}
+                      val={ele._id}
+                      key={ele._id}
+                    >
+                      <div className="avatar chatavatar"></div>
+                      <div className="chatinfo">
+                        <h3>
+                          {ele.groupName
+                            ? ele.groupName
+                            : ele.users[0]._id === id
+                              ? ele.users[1].displayName
+                              : ele.users[0].displayName}
+                        </h3>
+                        {ele.lastMessage && <p>{ele.lastMessage.text}</p>}
+                      </div>
+                      <div className="ago">
+                        {ele.lastMessage &&
+                          timeSince(new Date(ele.lastMessage.date).getTime())}
+                      </div>
                     </div>
-                    <div className="ago">
-                      {ele.lastMessage &&
-                        timeSince(new Date(ele.lastMessage.date).getTime())}
+                  );
+                })}
+            {chats &&
+              addMenuToggle &&
+              users &&
+              users
+                .filter((ele) => ele[1]._id !== id)
+                .filter((ele) =>
+                  groupAddMode && !newGroup
+                    ? !chats
+                        .filter((chat) => chat._id === page)[0]
+                        .users.map((user) => user._id)
+                        .includes(ele[1]._id)
+                    : ele,
+                )
+                .filter((ele) =>
+                  select === "displayName"
+                    ? ele[1].displayName.toLowerCase().startsWith(search) &&
+                      ele[1].displayName.length >= search.length
+                    : ele[1].username.toLowerCase().startsWith(search) &&
+                      ele[1].username.length >= search.length,
+                )
+                .map((ele) => {
+                  return (
+                    <div className="wrap" key={ele[1]._id}>
+                      <div className="avatar chatavatar"></div>
+                      <div className="chatinfo">
+                        <h3>{ele[1].displayName}</h3>
+                        {<p>{"@" + ele[1].username}</p>}
+                      </div>
+                      {/* <div className="ago">
+                        {ele.lastMessage &&
+                          timeSince(new Date(ele.lastMessage.date).getTime())}
+                      </div> */}
+                      <div className="chatbutton">
+                        <button onClick={addToGroup} val={ele[1]._id}>
+                          {groupAddMode ? "Add" : "Chat"}
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-          {chats &&
-            addMenuToggle &&
-            users &&
-            users
-              .filter((ele) => ele[1]._id !== id)
-              .filter((ele) =>
-                groupAddMode && !newGroup
-                  ? !chats
-                      .filter((chat) => chat._id === page)[0]
-                      .users.map((user) => user._id)
-                      .includes(ele[1]._id)
-                  : ele,
-              )
-              .filter((ele) =>
-                select === "displayName"
-                  ? ele[1].displayName.toLowerCase().startsWith(search) &&
-                    ele[1].displayName.length >= search.length
-                  : ele[1].username.toLowerCase().startsWith(search) &&
-                    ele[1].username.length >= search.length,
-              )
-              .map((ele) => {
-                return (
-                  <div className="wrap" key={ele[1]._id}>
-                    <div className="avatar chatavatar"></div>
-                    <div className="chatinfo">
-                      <h3>{ele[1].displayName}</h3>
-                      {<p>{"@" + ele[1].username}</p>}
-                    </div>
-                    {/* <div className="ago">
-                      {ele.lastMessage &&
-                        timeSince(new Date(ele.lastMessage.date).getTime())}
-                    </div> */}
-                    <div className="chatbutton">
-                      <button onClick={addToGroup} val={ele[1]._id}>
-                        {groupAddMode ? "Add" : "Chat"}
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+          </div>
         </div>
         {((page || dummyChat) && (
           <div className="messagebox">
