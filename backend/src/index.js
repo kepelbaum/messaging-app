@@ -42,6 +42,7 @@ app.get("/", verifyToken, (req, res) => {
             message: "Welcome, " + authData.user.username + "!",
             name: acc.username,
             id: acc.id,
+            friends: acc.friends,
           });
         } else {
           res.json({ result: "You are not signed in." });
@@ -126,6 +127,48 @@ const createUsersWithMessages = async () => {
     displayName: "roflcopter",
   });
 
+  const user4 = new models.Messenger({
+    username: "bob",
+    password: "rofl",
+    displayName: "Bob",
+  });
+
+  const user5 = new models.Messenger({
+    username: "ross",
+    password: "rofl",
+    displayName: "Ross",
+  });
+
+  const user6 = new models.Messenger({
+    username: "thor",
+    password: "rofl",
+    displayName: "Thor",
+  });
+
+  const user7 = new models.Messenger({
+    username: "odin",
+    password: "rofl",
+    displayName: "Odin",
+  });
+
+  const user8 = new models.Messenger({
+    username: "loki",
+    password: "rofl",
+    displayName: "Loki",
+  });
+
+  const user9 = new models.Messenger({
+    username: "freya",
+    password: "rofl",
+    displayName: "Freya",
+  });
+
+  const user10 = new models.Messenger({
+    username: "skadi",
+    password: "rofl",
+    displayName: "Skadi",
+  });
+
   const message1 = new models.Chatmessage({
     text: "What's up?",
     user: user2.id,
@@ -186,4 +229,11 @@ const createUsersWithMessages = async () => {
   await user1.save();
   await user2.save();
   await user3.save();
+  await user4.save();
+  await user5.save();
+  await user6.save();
+  await user7.save();
+  await user8.save();
+  await user9.save();
+  await user10.save();
 };

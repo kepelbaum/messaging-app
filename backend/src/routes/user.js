@@ -6,14 +6,16 @@ const { body, validationResult } = require("express-validator");
 const router = Router();
 
 router.get("/", async (req, res) => {
-  const users = await req.context.models.Messenger.find().select("-password");
+  const users = await req.context.models.Messenger.find().select(
+    "-password -friends -chats",
+  );
   return res.send(users);
 });
 
 router.get("/:user", async (req, res) => {
   const user = await req.context.models.Messenger.findOne({
     username: req.params.user,
-  }).select("-password");
+  }).select("-password -friends -chats");
   return res.json({ result: user }); //revisit for hiding chats
 });
 
@@ -93,8 +95,8 @@ router.put(
                 {
                   password: req.body.password,
                   friends: req.body.friends,
-                  chats: req.body.chats,
                   displayName: req.body.displayName,
+                  avatar: req.body.avatar,
                 },
               );
               return res.json({ message: "Settings updated" });

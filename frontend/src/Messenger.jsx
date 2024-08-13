@@ -9,6 +9,7 @@ const Messenger = ({ delay }) => {
 
   const [page, setPage] = useState(null);
   const [users, setUsers] = useState(null);
+  const [friends, setFriends] = useState(null);
   const [message, setMessage] = useState("");
   const [scrollState, setScrollState] = useState([true, null]); //true = scrolled to the bottom
   const [activeElement, setActiveElement] = useState(null);
@@ -373,6 +374,7 @@ const Messenger = ({ delay }) => {
         .then((response) => {
           if (response.message) {
             setUser(response.message);
+            setFriends(response.friends);
           } else {
             setUser(response.result);
           }
