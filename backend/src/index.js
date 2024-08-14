@@ -184,13 +184,19 @@ const createUsersWithMessages = async () => {
   const message3 = new models.Chatmessage({
     text: "You there, man?",
     user: user1.id,
-    date: Date.now(),
+    date: Date.now() - 3000,
   });
 
   const message4 = new models.Chatmessage({
     text: "hey chat",
     user: user3.id,
     date: Date.now() - 5000,
+  });
+
+  const message5 = new models.Chatmessage({
+    text: "MananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaa",
+    user: user1.id,
+    date: Date.now(),
   });
 
   const chat1 = new models.Chat({
@@ -201,8 +207,8 @@ const createUsersWithMessages = async () => {
 
   const chat2 = new models.Chat({
     users: [user1, user2],
-    lastMessage: message3,
-    messages: [message2, message3],
+    lastMessage: message5,
+    messages: [message2, message3, message5],
     groupName: "Utopia",
   });
 
@@ -221,6 +227,7 @@ const createUsersWithMessages = async () => {
   await message2.save();
   await message3.save();
   await message4.save();
+  await message5.save();
 
   await chat1.save();
   await chat2.save();

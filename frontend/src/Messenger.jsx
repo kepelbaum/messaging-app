@@ -9,7 +9,7 @@ const Messenger = ({ delay }) => {
 
   const [page, setPage] = useState(null);
   const [users, setUsers] = useState(null);
-  const [friends, setFriends] = useState(null);
+  const [friends, setFriends] = useState([]);
   const [message, setMessage] = useState("");
   const [scrollState, setScrollState] = useState([true, null]); //true = scrolled to the bottom
   const [activeElement, setActiveElement] = useState(null);
@@ -20,6 +20,7 @@ const Messenger = ({ delay }) => {
   const [newGroup, setNewGroup] = useState(null);
   const [search, setSearch] = useState("");
   const [select, setSelect] = useState("displayName");
+  const [favorites, setFavorites] = useState(false);
 
   const navigate = useNavigate();
 
@@ -383,7 +384,74 @@ const Messenger = ({ delay }) => {
     });
   }, []);
 
-  async function showChat(e) {
+  function untoggleFav() {
+    if (favorites) {
+      setFavorites(false);
+    }
+  }
+
+  function handleFav(e) {
+    let val = e.currentTarget.attributes.getNamedItem("val").value;
+    if (!friends.includes(val)) {
+      fetch(
+        "https://messaging-app-production-6dff.up.railway.app/chats/" + page,
+        {
+          mode: "cors",
+          method: "PUT",
+          body: JSON.stringify({
+            change: "add",
+            newUser: val,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            authorization: "Bearer " + (token ? token.toString() : ""),
+          },
+        },
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          if ((response.result = "Change complete")) {
+            //do nothing
+          } else {
+            throw new Error(Object.entries(response));
+          }
+        })
+        .catch((error) => console.error(error));
+    } else {
+      fetch(
+        "https://messaging-app-production-6dff.up.railway.app/chats/" + page,
+        {
+          mode: "cors",
+          method: "PUT",
+          body: JSON.stringify({
+            change: "remove",
+            newUser: val,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            authorization: "Bearer " + (token ? token.toString() : ""),
+          },
+        },
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          if ((response.result = "Change complete")) {
+            //do nothing
+          } else {
+            throw new Error(Object.entries(response));
+          }
+        })
+        .catch((error) => console.error(error));
+    }
+  }
+
+  function toggleFav() {
+    if (!favorites) {
+      setFavorites(true);
+    }
+  }
+
+  function showChat(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
     setDummyChat(null);
     setMessage("");
@@ -530,6 +598,8 @@ const Messenger = ({ delay }) => {
           <p onClick={logoutAndMove}>Logout</p>
           <p>Logged in as:</p>
           <p>{user.substring(9, user.length - 1)}</p>
+          <h1 onClick={untoggleFav}>UNFAV</h1>
+          <h1 onClick={toggleFav}>FAV</h1>
         </div>
         <div className="mid">
           <div className="chatmenu">
@@ -595,6 +665,7 @@ const Messenger = ({ delay }) => {
                         ? false
                         : true,
                 )
+                .filter((ele) => (favorites ? friends.includes(ele._id) : true))
                 .map((ele) => {
                   return (
                     <div
@@ -603,6 +674,9 @@ const Messenger = ({ delay }) => {
                       val={ele._id}
                       key={ele._id}
                     >
+                      <h5 onClick={handleFav} className="favicon" val={ele._id}>
+                        {friends.includes(ele._id) ? "U" : "*"}
+                      </h5>
                       <div className="avatar chatavatar"></div>
                       <div className="chatinfo">
                         <h3>

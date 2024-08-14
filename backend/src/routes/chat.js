@@ -183,6 +183,17 @@ router.put("/:chatId", verifyToken, async (req, res, next) => {
                 { $push: { chats: req.params.chatId } },
               );
             res.json({ result: "Change complete" });
+          } else if (chat.groupName && req.body.change === "remove") {
+            const change = await req.context.models.Chat.findByIdAndUpdate(
+              req.params.chatId,
+              { $pull: { users: req.body.oldUser } },
+            );
+            const userside =
+              await req.context.models.Messenger.findByIdAndUpdate(
+                req.body.oldUser,
+                { $pull: { chats: req.params.chatId } },
+              );
+            res.json({ result: "Change complete" });
           } else if (chat.groupName && req.body.change === "leave") {
             const change = await req.context.models.Chat.findByIdAndUpdate(
               req.params.chatId,
