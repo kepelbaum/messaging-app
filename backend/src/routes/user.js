@@ -66,7 +66,7 @@ router.post(
 );
 
 router.put(
-  "/",
+  "/password",
   body("password")
     .isLength({ min: 5 })
     .withMessage("Password has to be at least 5 symbols long"),
@@ -94,9 +94,9 @@ router.put(
                 acc._id,
                 {
                   password: req.body.password,
-                  friends: req.body.friends,
-                  displayName: req.body.displayName,
-                  avatar: req.body.avatar,
+                  // friends: req.body.friends,
+                  // displayName: req.body.displayName,
+                  // avatar: req.body.avatar,
                 },
               );
               return res.json({ message: "Settings updated" });
@@ -110,6 +110,35 @@ router.put(
     }
   },
 );
+
+router.put("/", async (req, res, next) => {
+  jwt.verify(req.token, "secretkey", (err, authData) => {
+    if (err) {
+      res.send("You are not signed in.");
+    } else {
+      const fullVerify = async () => {
+        const acc = await req.context.models.Messenger.findOne({
+          username: authData.user.username,
+          password: authData.user.password,
+        });
+        if (acc) {
+          const user = await req.context.models.Messenger.findByIdAndUpdate(
+            acc._id,
+            {
+              friends: req.body.friends,
+              displayName: req.body.displayName,
+              avatar: req.body.avatar,
+            },
+          );
+          return res.json({ message: "Settings updated" });
+        } else {
+          res.sendStatus(401);
+        }
+      };
+      fullVerify();
+    }
+  });
+});
 
 //delete purposefully not implemented not to complicate anything related to existing chats
 

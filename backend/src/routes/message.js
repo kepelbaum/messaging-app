@@ -2,6 +2,36 @@ import { Router } from "express";
 import { verifyToken } from "../modules/verifytoken.js";
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  secure: true,
+});
+
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
+/////////////////////////
+// Uploads an image file
+/////////////////////////
+const uploadImage = async (imagePath) => {
+  // Use the uploaded file's name as the asset's public ID and
+  // allow overwriting the asset with new versions
+  const options = {
+    use_filename: true,
+    unique_filename: false,
+    overwrite: true,
+  };
+
+  try {
+    // Upload the image
+    const result = await cloudinary.uploader.upload(imagePath, options);
+    console.log(result);
+    return result.public_id;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const router = Router();
 
@@ -78,6 +108,63 @@ router.post(
         }
       });
     }
+  },
+);
+
+router.post(
+  "/img/:chatId",
+  upload.single("image"),
+  verifyToken,
+  async (req, res, next) => {
+    jwt.verify(req.token, "secretkey", (err, authData) => {
+      if (err) {
+        res.json({ result: "You are not signed in." });
+      } else {
+        const fullVerify = async () => {
+          const acc = await req.context.models.Messenger.findOne({
+            username: authData.user.username,
+            password: authData.user.password,
+          });
+          const findChat = await req.context.models.Chat.findById(
+            req.params.chatId,
+          );
+          if (acc && findChat && findChat.users.includes(acc._id)) {
+            // const imagePath = req.file;
+            // const publicId = await uploadImage(imagePath).secure_url;
+
+            const uploadResult = await cloudinary.uploader
+              .upload(req.file.path, {
+                public_id: req.file.filename,
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+
+            const message = await req.context.models.Chatmessage.create({
+              img: uploadResult.secure_url,
+              user: acc._id,
+              date: Date.now(),
+            }).catch((error) => {
+              error.statusCode = 400;
+              next(error);
+            });
+            const chat = await req.context.models.Chat.findByIdAndUpdate(
+              req.params.chatId,
+              {
+                $push: { messages: message._id },
+                lastMessage: message._id,
+              },
+            );
+            return res.json({
+              result: "Image uploaded",
+            });
+          } else {
+            res.json({ result: "Invalid authentication token" });
+          }
+        };
+        fullVerify();
+      }
+    });
   },
 );
 

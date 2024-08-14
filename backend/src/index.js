@@ -6,10 +6,60 @@ import routes from "./routes";
 import { verifyToken } from "./modules/verifytoken.js";
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
+import { v4 as uuidv4 } from "uuid";
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  secure: true,
+});
+
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 const eraseDatabaseOnSync = true;
 
 const app = express();
+
+/////////////////////////
+// Uploads an image file
+/////////////////////////
+const uploadImage = async (imagePath) => {
+  // Use the uploaded file's name as the asset's public ID and
+  // allow overwriting the asset with new versions
+  const options = {
+    use_filename: true,
+    unique_filename: false,
+    overwrite: true,
+  };
+
+  try {
+    // Upload the image
+    const result = await cloudinary.uploader.upload(imagePath, options);
+    console.log(result);
+    return result.public_id;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// /////////////////////////////////////
+// // Gets details of an uploaded image
+// /////////////////////////////////////
+// const getAssetInfo = async (publicId) => {
+//   // Return colors in the response
+//   const options = {
+//     colors: true,
+//   };
+
+//   try {
+//     // Get details about the asset
+//     const result = await cloudinary.api.resource(publicId, options);
+//     console.log(result);
+//     return result.colors;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
 app.use(cors());
 
@@ -199,6 +249,12 @@ const createUsersWithMessages = async () => {
     date: Date.now(),
   });
 
+  const message6 = new models.Chatmessage({
+    img: "https://res.cloudinary.com/dxbkraqxl/image/upload/v1723673392/1cf6b1572ee65fd008e3866daf138f12.jpg",
+    user: user1.id,
+    date: Date.now() - 12000,
+  });
+
   const chat1 = new models.Chat({
     users: [user1, user2],
     lastMessage: message1,
@@ -228,6 +284,7 @@ const createUsersWithMessages = async () => {
   await message3.save();
   await message4.save();
   await message5.save();
+  await message6.save();
 
   await chat1.save();
   await chat2.save();
