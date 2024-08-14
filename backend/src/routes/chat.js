@@ -22,6 +22,7 @@ router.get("/", verifyToken, async (req, res) => {
             .populate("lastMessage")
             .populate("users") //sorting left to do!!!!!!
             .populate({ path: "messages", populate: { path: "user" } })
+            .sort({ date: -1 })
             .exec();
           res.json({ result: allChats });
         } else {

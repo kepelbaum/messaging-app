@@ -845,18 +845,21 @@ const Messenger = ({ delay }) => {
                               {elem.user._id !== id && (
                                 <div className="avatar"></div>
                               )}
-                              {elem.text && (
-                                <div className="azure">
-                                  <h4>{elem.user.displayName}</h4>
+                              <div
+                                className={elem.img ? "imgmessage" : "azure"}
+                              >
+                                <h4>{elem.user.displayName}</h4>
+                                {!elem.img && (
                                   <p className="textmessage">{elem.text}</p>
-                                </div>
-                              )}
-                              {!elem.text && (
+                                )}
+                                {elem.img && <img src={elem.img}></img>}
+                              </div>
+                              {/* {elem.img && (
                                 <div className="imgmessage">
                                   <h4>{elem.user.displayName}</h4>
                                   <img src={elem.img}></img>
                                 </div>
-                              )}
+                              )} */}
                               {elem.user._id === id && (
                                 <div className="avatar"></div>
                               )}
@@ -972,6 +975,7 @@ const Messenger = ({ delay }) => {
               <button type="submit" onClick={newChat}>
                 Submit!
               </button>
+              <input type="file" id="file"></input>
             </div>
           )) || <div className="imgcontainer"></div>}
       </div>
