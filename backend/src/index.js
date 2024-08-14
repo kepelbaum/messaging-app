@@ -231,7 +231,7 @@ const createUsersWithMessages = async () => {
     date: Date.now() - 15000,
   });
 
-  const message5 = new models.Chatmessage({
+  const message3 = new models.Chatmessage({
     text: "You there, man?",
     user: user1.id,
     date: Date.now() - 3000,
@@ -243,16 +243,16 @@ const createUsersWithMessages = async () => {
     date: Date.now() - 5000,
   });
 
-  const message3 = new models.Chatmessage({
+  const message6 = new models.Chatmessage({
     text: "MananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaa",
     user: user1.id,
     date: Date.now(),
   });
 
-  const message6 = new models.Chatmessage({
+  const message5 = new models.Chatmessage({
     img: "https://res.cloudinary.com/dxbkraqxl/image/upload/v1723673392/1cf6b1572ee65fd008e3866daf138f12.jpg",
     user: user1.id,
-    date: Date.now() - 12000,
+    date: Date.now() - 2000,
     text: "Image",
   });
 
