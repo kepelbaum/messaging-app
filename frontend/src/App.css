@@ -256,6 +256,16 @@
   max-width: 50vw;
 }
 
+.imgmessage {
+  padding: 10px 20px;
+}
+
+.imgmessage img {
+  max-width: 50vw;
+  max-height: 50vh;
+  object-fit: cover;
+}
+
 .chatinfo {
   position: absolute;
   top: 25%;

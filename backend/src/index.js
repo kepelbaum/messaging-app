@@ -253,6 +253,7 @@ const createUsersWithMessages = async () => {
     img: "https://res.cloudinary.com/dxbkraqxl/image/upload/v1723673392/1cf6b1572ee65fd008e3866daf138f12.jpg",
     user: user1.id,
     date: Date.now() - 12000,
+    text: "Image",
   });
 
   const chat1 = new models.Chat({
@@ -264,7 +265,7 @@ const createUsersWithMessages = async () => {
   const chat2 = new models.Chat({
     users: [user1, user2],
     lastMessage: message5,
-    messages: [message2, message3, message5],
+    messages: [message2, message3, message5, message6],
     groupName: "Utopia",
   });
 

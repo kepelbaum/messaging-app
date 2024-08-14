@@ -327,7 +327,7 @@ const Messenger = ({ delay }) => {
         .then((response) => response.json())
         .then((response) => {
           let result = Object.keys(response).map((key) => [key, response[key]]);
-          // console.log(result[0][1]);
+          console.log(result[0][1]);
           if (result[0][1].toString() === "You are not signed in.") {
             logoutAndMove();
           } else {
@@ -845,10 +845,18 @@ const Messenger = ({ delay }) => {
                               {elem.user._id !== id && (
                                 <div className="avatar"></div>
                               )}
-                              <div className="azure">
-                                <h4>{elem.user.displayName}</h4>
-                                <p className="textmessage">{elem.text}</p>
-                              </div>
+                              {elem.text && (
+                                <div className="azure">
+                                  <h4>{elem.user.displayName}</h4>
+                                  <p className="textmessage">{elem.text}</p>
+                                </div>
+                              )}
+                              {!elem.text && (
+                                <div className="imgmessage">
+                                  <h4>{elem.user.displayName}</h4>
+                                  <img src={elem.img}></img>
+                                </div>
+                              )}
                               {elem.user._id === id && (
                                 <div className="avatar"></div>
                               )}

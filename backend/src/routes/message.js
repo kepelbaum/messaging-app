@@ -142,6 +142,7 @@ router.post(
 
             const message = await req.context.models.Chatmessage.create({
               img: uploadResult.secure_url,
+              text: "Image",
               user: acc._id,
               date: Date.now(),
             }).catch((error) => {
