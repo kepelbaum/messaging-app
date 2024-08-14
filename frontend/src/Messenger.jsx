@@ -849,10 +849,11 @@ const Messenger = ({ delay }) => {
                                 className={elem.img ? "imgmessage" : "azure"}
                               >
                                 <h4>{elem.user.displayName}</h4>
-                                {!elem.img && (
+                                {
+                                  // !elem.img &&
                                   <p className="textmessage">{elem.text}</p>
-                                )}
-                                {elem.img && <img src={elem.img}></img>}
+                                }
+                                {/* {elem.img && <img src={elem.img}></img>} */}
                               </div>
                               {/* {elem.img && (
                                 <div className="imgmessage">
