@@ -392,51 +392,46 @@ const Messenger = ({ delay }) => {
 
   function handleFav(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
+    let newFriends = [...friends];
     if (!friends.includes(val)) {
-      fetch(
-        "https://messaging-app-production-6dff.up.railway.app/chats/" + page,
-        {
-          mode: "cors",
-          method: "PUT",
-          body: JSON.stringify({
-            change: "add",
-            newUser: val,
-          }),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-            authorization: "Bearer " + (token ? token.toString() : ""),
-          },
+      fetch("https://messaging-app-production-6dff.up.railway.app/users", {
+        mode: "cors",
+        method: "PUT",
+        body: JSON.stringify({
+          friends: newFriends.concat(val),
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          authorization: "Bearer " + (token ? token.toString() : ""),
         },
-      )
+      })
         .then((response) => response.json())
         .then((response) => {
-          if ((response.result = "Change complete")) {
-            //do nothing
+          if ((response.result = "Settings updated")) {
+            setFriends(newFriends.concat(val));
           } else {
             throw new Error(Object.entries(response));
           }
         })
         .catch((error) => console.error(error));
     } else {
-      fetch(
-        "https://messaging-app-production-6dff.up.railway.app/chats/" + page,
-        {
-          mode: "cors",
-          method: "PUT",
-          body: JSON.stringify({
-            change: "remove",
-            newUser: val,
-          }),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-            authorization: "Bearer " + (token ? token.toString() : ""),
-          },
+      let index = friends.indexOf(val);
+      let removedUser = newFriends.splice(index, 1);
+      fetch("https://messaging-app-production-6dff.up.railway.app/users", {
+        mode: "cors",
+        method: "PUT",
+        body: JSON.stringify({
+          friends: newFriends,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          authorization: "Bearer " + (token ? token.toString() : ""),
         },
-      )
+      })
         .then((response) => response.json())
         .then((response) => {
-          if ((response.result = "Change complete")) {
-            //do nothing
+          if ((response.result = "Settings updated")) {
+            setFriends(newFriends);
           } else {
             throw new Error(Object.entries(response));
           }
