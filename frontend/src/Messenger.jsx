@@ -390,6 +390,8 @@ const Messenger = ({ delay }) => {
     }
   }
 
+  function handleImg(e) {}
+
   function handleFav(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
     let newFriends = [...friends];
@@ -972,10 +974,11 @@ const Messenger = ({ delay }) => {
                     );
                   })}
               </div>
+              <button type="submit" onClick={handleImg}></button>
               <button type="submit" onClick={newChat}>
                 Submit!
               </button>
-              <input type="file" id="file"></input>
+              <input type="file" name="image" id="image"></input>
             </div>
           )) || <div className="imgcontainer"></div>}
       </div>
