@@ -149,7 +149,7 @@ router.post(
               error.statusCode = 400;
               next(error);
             });
-            const chat = await req.context.models.Chat.findByIdAndUpdate(
+            const updatedChat = await req.context.models.Chat.findByIdAndUpdate(
               req.params.chatId,
               {
                 $push: { messages: message._id },
@@ -252,15 +252,14 @@ router.delete("/:chatId/:messageId", verifyToken, async (req, res, next) => {
 
             return res.json({ result: "Chat deleted" });
           } else {
-            const sortedChat = await req.context.models.Chat.findById(
-              req.params.chatId,
-            )
-              .sort({ _id: -1 })
-              .limit(1);
             const updatedChat = await req.context.models.Chat.findByIdAndUpdate(
               req.params.chatId,
               {
-                lastMessage: sortedChat.messages[0]._id,
+                lastMessage:
+                  chat.messages[chat.messages.length - 1]._id ===
+                  req.params.messageId
+                    ? chat.messages[chat.messages.length - 2]._id
+                    : chat.messages[chat.messages.length - 1]._id,
                 $pull: { messages: req.params.messageId },
               },
             );
