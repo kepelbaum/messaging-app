@@ -211,8 +211,19 @@
   gap: 30px;
 }
 
+.line {
+  border-top: 1px solid grey;
+}
+
 .messagewrapper {
   width: 100%;
+}
+
+.daywrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .grid {

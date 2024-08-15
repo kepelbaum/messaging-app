@@ -440,7 +440,9 @@ const Messenger = () => {
         .then((response) => response.json())
         .then((response) => {
           if (response.result && response.result !== "Chat already exists") {
-            //do nothing
+            setDummyChat(null);
+            setPage(response.result);
+            setAddMenuToggle(false);
           } else {
             throw new Error(Object.entries(response));
           }
@@ -720,6 +722,21 @@ const Messenger = () => {
                         : true,
                 )
                 .filter((ele) => (favorites ? friends.includes(ele._id) : true))
+                .sort((first, second) => {
+                  var x = []
+                    .concat(first.messages)
+                    .sort((a, b) => {
+                      return new Date(b.date - a.date);
+                    })
+                    .reverse()[0].date;
+                  var y = []
+                    .concat(second.messages)
+                    .sort((a, b) => {
+                      return new Date(b.date - a.date);
+                    })
+                    .reverse()[0].date;
+                  return new Date(y) - new Date(x);
+                })
                 .map((ele) => {
                   return (
                     <div
@@ -895,9 +912,28 @@ const Messenger = () => {
                       className="messagemasterwrapper"
                       key={ele._id}
                     >
-                      {ele.messages.map((elem) => {
+                      {ele.messages.map((elem, index) => {
                         return (
                           <div className="messagewrapper" key={elem._id}>
+                            <div className="daywrapper">
+                              <div className="line"></div>
+                              {(index === 0 ||
+                                new Date(ele.messages[index - 1].date)
+                                  .toISOString()
+                                  .substring(0, 10) !==
+                                  new Date(elem.date)
+                                    .toISOString()
+                                    .substring(0, 10)) && (
+                                <div className="day">
+                                  <h4>
+                                    {new Date(elem.date)
+                                      .toISOString()
+                                      .substring(0, 10)}
+                                  </h4>
+                                </div>
+                              )}
+                              <div className="line"></div>
+                            </div>
                             <div
                               className={
                                 elem.user._id === id &&

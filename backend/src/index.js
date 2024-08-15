@@ -228,7 +228,7 @@ const createUsersWithMessages = async () => {
   const message2 = new models.Chatmessage({
     text: "Hey rofl",
     user: user1.id,
-    date: Date.now() - 15000,
+    date: Date.now() - 150000000,
   });
 
   const message3 = new models.Chatmessage({
