@@ -2,6 +2,36 @@ import { Router } from "express";
 import { verifyToken } from "../modules/verifytoken.js";
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  secure: true,
+});
+
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
+// /////////////////////////
+// // Uploads an image file
+// /////////////////////////
+// const uploadImage = async (imagePath) => {
+//   // Use the uploaded file's name as the asset's public ID and
+//   // allow overwriting the asset with new versions
+//   const options = {
+//     use_filename: true,
+//     unique_filename: false,
+//     overwrite: true,
+//   };
+
+//   try {
+//     // Upload the image
+//     const result = await cloudinary.uploader.upload(imagePath, options);
+//     console.log(result);
+//     return result.public_id;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
 const router = Router();
 
@@ -34,6 +64,75 @@ router.get("/", verifyToken, async (req, res) => {
 });
 
 router.post(
+  "/:userId",
+  upload.single("image"),
+  verifyToken,
+  async (req, res, next) => {
+    jwt.verify(req.token, "secretkey", (err, authData) => {
+      if (err) {
+        res.json({ result: "You are not signed in." });
+      } else {
+        const fullVerify = async () => {
+          const acc = await req.context.models.Messenger.findOne({
+            username: authData.user.username,
+            password: authData.user.password,
+          });
+          if (acc) {
+            const existingChat = await req.context.models.Chat.findOne({
+              $and: [
+                {
+                  users: {
+                    $all: [req.params.userId, acc._id],
+                  },
+                },
+                { groupName: null },
+              ],
+            });
+            if (existingChat) {
+              res.json({ result: "Chat already exists" });
+            } else {
+              const uploadResult = await cloudinary.uploader
+                .upload(req.file.path, {
+                  public_id: req.file.filename,
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+              const newMessage = await req.context.models.Chatmessage.create({
+                img: uploadResult.secure_url,
+                text: "Image",
+                date: Date.now(),
+              }).catch((err) => {
+                res.send(err);
+              });
+              let newUsers = [req.params.userId].concat(acc._id);
+              const newChat = await req.context.models.Chat.create({
+                users: newUsers,
+                messages: [newMessage._id],
+              }).catch((err) => {
+                res.send(err);
+              });
+              newUsers.forEach(async (id) => {
+                const eachUser =
+                  await req.context.models.Messenger.findByIdAndUpdate(id, {
+                    $push: { chats: newChat._id },
+                  }).catch((err) => {
+                    res.send(err);
+                  });
+              });
+              res.json({ result: newChat._id });
+            }
+          } else {
+            res.json({ result: "Invalid authentication token" });
+          }
+        };
+        fullVerify();
+      }
+    });
+  },
+);
+
+router.post(
   "/",
   body("message")
     .isLength({ min: 1 })
@@ -54,8 +153,46 @@ router.post(
               password: authData.user.password,
             });
             if (acc) {
-              const fullVerify = async () => {
-                if (req.body.groupName) {
+              if (req.body.groupName) {
+                const newMessage = await req.context.models.Chatmessage.create({
+                  text: req.body.message,
+                  user: acc._id,
+                  date: Date.now(),
+                }).catch((err) => {
+                  res.send(err);
+                });
+                let newUsers = req.body.users.concat(acc._id);
+                const newChat = await req.context.models.Chat.create({
+                  users: newUsers,
+                  groupName: req.body.groupName,
+                  messages: [newMessage._id],
+                }).catch((err) => {
+                  res.send(err);
+                });
+                newUsers.forEach(async (id) => {
+                  const eachUser =
+                    await req.context.models.Messenger.findByIdAndUpdate(id, {
+                      $push: { chats: newChat._id },
+                    }).catch((err) => {
+                      res.send(err);
+                    });
+                });
+
+                res.json({ result: newChat._id });
+              } else {
+                const existingChat = await req.context.models.Chat.findOne({
+                  $and: [
+                    {
+                      users: {
+                        $all: [req.body.users[0], acc._id],
+                      },
+                    },
+                    { groupName: null },
+                  ],
+                });
+                if (existingChat) {
+                  res.json({ result: "Chat already exists" });
+                } else {
                   const newMessage =
                     await req.context.models.Chatmessage.create({
                       text: req.body.message,
@@ -67,7 +204,6 @@ router.post(
                   let newUsers = req.body.users.concat(acc._id);
                   const newChat = await req.context.models.Chat.create({
                     users: newUsers,
-                    groupName: req.body.groupName,
                     messages: [newMessage._id],
                   }).catch((err) => {
                     res.send(err);
@@ -80,53 +216,9 @@ router.post(
                         res.send(err);
                       });
                   });
-
                   res.json({ result: newChat._id });
-                } else {
-                  const existingChat = await req.context.models.Chat.findOne({
-                    $and: [
-                      {
-                        users: {
-                          $all: [req.body.users[0], acc._id],
-                        },
-                      },
-                      { groupName: null },
-                    ],
-                  });
-                  if (existingChat) {
-                    res.json({ result: "Chat already exists" });
-                  } else {
-                    const newMessage =
-                      await req.context.models.Chatmessage.create({
-                        text: req.body.message,
-                        user: acc._id,
-                        date: Date.now(),
-                      }).catch((err) => {
-                        res.send(err);
-                      });
-                    let newUsers = req.body.users.concat(acc._id);
-                    const newChat = await req.context.models.Chat.create({
-                      users: newUsers,
-                      messages: [newMessage._id],
-                    }).catch((err) => {
-                      res.send(err);
-                    });
-                    newUsers.forEach(async (id) => {
-                      const eachUser =
-                        await req.context.models.Messenger.findByIdAndUpdate(
-                          id,
-                          {
-                            $push: { chats: newChat._id },
-                          },
-                        ).catch((err) => {
-                          res.send(err);
-                        });
-                    });
-                    res.json({ result: newChat._id });
-                  }
                 }
-              };
-              fullVerify();
+              }
             } else {
               res.json({ result: "Invalid authentication token" });
             }
