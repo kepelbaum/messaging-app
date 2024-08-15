@@ -94,7 +94,6 @@ router.post(
                 req.params.chatId,
                 {
                   $push: { messages: message._id },
-                  lastMessage: message._id,
                 },
               );
               return res.json({
@@ -153,7 +152,6 @@ router.post(
               req.params.chatId,
               {
                 $push: { messages: message._id },
-                lastMessage: message._id,
               },
             );
             return res.json({
@@ -255,11 +253,6 @@ router.delete("/:chatId/:messageId", verifyToken, async (req, res, next) => {
             const updatedChat = await req.context.models.Chat.findByIdAndUpdate(
               req.params.chatId,
               {
-                lastMessage:
-                  chat.messages[chat.messages.length - 1]._id ===
-                  req.params.messageId
-                    ? chat.messages[chat.messages.length - 2]._id
-                    : chat.messages[chat.messages.length - 1]._id,
                 $pull: { messages: req.params.messageId },
               },
             );

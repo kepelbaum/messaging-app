@@ -683,17 +683,25 @@ const Messenger = ({ delay }) => {
                               ? ele.users[1].displayName
                               : ele.users[0].displayName}
                         </h3>
-                        {ele.lastMessage && (
-                          <p>
-                            {ele.lastMessage.text.length > 20
-                              ? ele.lastMessage.text.substring(0, 17) + "..."
-                              : ele.lastMessage.text}
-                          </p>
-                        )}
+                        {[]
+                          .concat(ele.messages)
+                          .sort((a, b) => {
+                            return new Date(b.date - a.date);
+                          })
+                          .reverse()[0]
+                          .text.substring(0, 17)}
                       </div>
                       <div className="ago">
-                        {ele.lastMessage &&
-                          timeSince(new Date(ele.lastMessage.date).getTime())}
+                        {timeSince(
+                          new Date(
+                            []
+                              .concat(ele.messages)
+                              .sort((a, b) => {
+                                return new Date(b.date - a.date);
+                              })
+                              .reverse()[0].date,
+                          ).getTime(),
+                        )}
                       </div>
                     </div>
                   );
@@ -726,10 +734,6 @@ const Messenger = ({ delay }) => {
                         <h3>{ele[1].displayName}</h3>
                         {<p>{"@" + ele[1].username}</p>}
                       </div>
-                      {/* <div className="ago">
-                        {ele.lastMessage &&
-                          timeSince(new Date(ele.lastMessage.date).getTime())}
-                      </div> */}
                       <div className="chatbutton">
                         <button onClick={addToGroup} val={ele[1]._id}>
                           {groupAddMode ? "Add" : "Chat"}

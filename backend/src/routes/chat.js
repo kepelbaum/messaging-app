@@ -19,7 +19,6 @@ router.get("/", verifyToken, async (req, res) => {
           const allChats = await req.context.models.Chat.find({
             users: { $in: [acc._id] },
           })
-            .populate("lastMessage")
             .populate("users") //sorting left to do!!!!!!
             .populate({ path: "messages", populate: { path: "user" } })
             // .sort({ _id: 1 })
@@ -69,7 +68,6 @@ router.post(
                   const newChat = await req.context.models.Chat.create({
                     users: newUsers,
                     groupName: req.body.groupName,
-                    lastMessage: newMessage._id,
                     messages: [newMessage._id],
                   }).catch((err) => {
                     res.send(err);
@@ -109,7 +107,6 @@ router.post(
                     let newUsers = req.body.users.concat(acc._id);
                     const newChat = await req.context.models.Chat.create({
                       users: newUsers,
-                      lastMessage: newMessage._id,
                       messages: [newMessage._id],
                     }).catch((err) => {
                       res.send(err);
