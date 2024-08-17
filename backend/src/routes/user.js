@@ -111,7 +111,7 @@ router.put(
   },
 );
 
-router.put("/", async (req, res, next) => {
+router.put("/", verifyToken, async (req, res, next) => {
   jwt.verify(req.token, "secretkey", (err, authData) => {
     if (err) {
       res.send("You are not signed in.");
@@ -139,7 +139,5 @@ router.put("/", async (req, res, next) => {
     }
   });
 });
-
-//delete purposefully not implemented not to complicate anything related to existing chats
 
 export default router;
