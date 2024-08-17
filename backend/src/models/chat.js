@@ -14,6 +14,8 @@ const chatSchema = new mongoose.Schema({
       default: [],
     },
   ],
+  background: { type: String },
+  avatar: { type: String },
 });
 
 const Chat = mongoose.model("Chat", chatSchema);
