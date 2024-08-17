@@ -11,10 +11,36 @@
   /*   */
 }
 
+.profilebackground {
+  width: 100%;
+  height: 20vh;
+  background-image: url("https://plus.unsplash.com/premium_photo-1723568460657-2113d189c4a6?q=80&w=2304&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  object-fit: cover;
+}
+
+.profilegroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5vw;
+}
+
 .red {
   background-color: red;
   color: white;
   border-color: white;
+}
+
+.xmargin {
+  margin: 10vh 10vw;
+}
+
+.groupedtogether {
+  display: flex;
+  gap: 20px;
+  /* position: absolute;
+  top: 15vh;
+  left: 5vw; */
 }
 
 .left {
@@ -106,6 +132,7 @@
 
 .textmessage {
   word-wrap: break-word;
+  padding-bottom: 5px;
 }
 
 .chatmenubot {
@@ -161,6 +188,17 @@
   /* overflow: hidden; */
 }
 
+.profile {
+  height: 100vh;
+  width: 75vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  /* padding: 0 10vw; */
+  /* overflow: hidden; */
+}
+
 #entermessage {
   width: 60vw;
   height: 60px;
@@ -211,19 +249,21 @@
   gap: 30px;
 }
 
-.line {
-  border-top: 1px solid grey;
-}
-
 .messagewrapper {
   width: 100%;
 }
 
-.daywrapper {
-  width: 100%;
+/* .daywrapper {
   display: flex;
   justify-content: center;
   align-items: center;
+} */
+
+.border {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  width: 100%;
+  text-align: center;
 }
 
 .grid {
@@ -266,14 +306,13 @@
 .azure {
   background-color: azure;
   border: 1px solid azure;
-  border-radius: 25%;
+  border-radius: 15%;
   padding: 10px 20px;
   max-width: 50vw;
 }
 
 .imgmessage {
   padding: 10px 20px;
-  background-color: azure;
 }
 
 .imgmessage img {
@@ -297,10 +336,15 @@
   height: 90px;
   border-radius: 50%;
   border: 3px solid black;
-  /* background-color: gold; */
+  background-color: white;
   background-image: url("https://steamuserimages-a.akamaihd.net/ugc/2492254803012160630/33FDDE88D49A58AF9C263ED4354B43193F50903A/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false");
   background-size: cover;
   background-repeat: no-repeat;
+}
+
+.bigavatar {
+  width: 150px;
+  height: 150px;
 }
 
 .chatavatar {
@@ -322,6 +366,9 @@
   position: absolute;
   left: 95%;
   top: 40%;
+}
+
+.date {
 }
 
 /* #root {

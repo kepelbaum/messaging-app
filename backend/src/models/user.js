@@ -29,6 +29,8 @@ const userSchema = new mongoose.Schema({
     },
   ],
   avatar: { type: String },
+  bio: { type: String },
+  background: { type: String },
 });
 
 const Messenger = mongoose.model("Messenger", userSchema);

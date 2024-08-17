@@ -21,9 +21,20 @@ const Messenger = () => {
   const [search, setSearch] = useState("");
   const [select, setSelect] = useState("displayName");
   const [favorites, setFavorites] = useState(false);
+  const [profile, setProfile] = useState(null);
 
   const navigate = useNavigate();
 
+  function convertTime(time) {
+    let hrs = Number(time.substring(0, 2));
+    hrs = hrs >= 12 ? (hrs - 12).toString() + "PM" : hrs.toString() + "AM";
+    if (hrs.length === 3) {
+      hrs = "0" + hrs;
+    }
+    return (
+      hrs.substring(0, 2) + time.substring(2, 10) + " " + hrs.substring(2, 4)
+    );
+  }
   const movePage = (url) => {
     navigate(url);
   };
@@ -187,6 +198,19 @@ const Messenger = () => {
           }
         })
         .catch((error) => console.error(error));
+    }
+  }
+
+  function handleProfile() {
+    console.log("Hey!");
+    if (!profile) {
+      setPage(null);
+      setDummyChat(null);
+      setMessage("");
+      setActiveElement(null);
+      setProfile("test");
+    } else {
+      setProfile(null);
     }
   }
 
@@ -511,6 +535,7 @@ const Messenger = () => {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
     setDummyChat(null);
     setMessage("");
+    setActiveElement(null);
     setPage(val);
     // console.log(await val);
   }
@@ -835,7 +860,7 @@ const Messenger = () => {
           <div className="messagebox">
             <div className="chatinfotop">
               <div className="grouped">
-                <div className="avatar"></div>
+                <div className="avatar" onClick={handleProfile}></div>
                 {chats &&
                   page &&
                   chats
@@ -925,7 +950,7 @@ const Messenger = () => {
                                     .toISOString()
                                     .substring(0, 10)) && (
                                 <div className="day">
-                                  <h4>
+                                  <h4 className="border">
                                     {new Date(elem.date)
                                       .toISOString()
                                       .substring(0, 10)}
@@ -957,27 +982,30 @@ const Messenger = () => {
                               {elem.user._id !== id && (
                                 <div className="avatar"></div>
                               )}
-                              <div
-                                className={elem.img ? "imgmessage" : "azure"}
-                              >
-                                <h4>{elem.user.displayName}</h4>
-                                {!elem.img && (
-                                  <p className="textmessage">{elem.text}</p>
-                                )}
-                                {elem.img && <img src={elem.img}></img>}
-                              </div>
-                              {/* {elem.img && (
-                                <div className="imgmessage">
+                              <div>
+                                <div
+                                  className={elem.img ? "imgmessage" : "azure"}
+                                >
                                   <h4>{elem.user.displayName}</h4>
-                                  <img src={elem.img}></img>
+                                  {!elem.img && (
+                                    <p className="textmessage">{elem.text}</p>
+                                  )}
+                                  {elem.img && <img src={elem.img}></img>}
+                                  <h5 className="date">
+                                    {convertTime(
+                                      new Date(elem.date)
+                                        .toISOString()
+                                        .substring(11, 19),
+                                    )}
+                                  </h5>
                                 </div>
-                              )} */}
+                              </div>
                               {elem.user._id === id && (
                                 <div className="avatar"></div>
                               )}
                               {elem.user._id === id && (
                                 <div className="editdelwrapper">
-                                  {elem.user.img ? (
+                                  {!elem.img ? (
                                     <div
                                       className="edit"
                                       onClick={handleEdit}
@@ -1100,6 +1128,34 @@ const Messenger = () => {
               <button type="submit" onClick={newChat}>
                 Submit!
               </button>
+            </div>
+          )) ||
+          (profile && (
+            <div className="profile">
+              <div className="profilebackground"></div>
+              <div className="profilegroup">
+                <div className="groupedtogether">
+                  <div className="avatar bigavatar"></div>
+                  <div className="groupinfo">
+                    <h2>User</h2>
+                    <h3>@user</h3>
+                  </div>
+                </div>
+                <button>Edit Profile</button>
+              </div>
+              <div className="xmargin">
+                <h2>About Me</h2>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                  irure dolor in reprehenderit in voluptate velit esse cillum
+                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                  cupidatat non proident, sunt in culpa qui officia deserunt
+                  mollit anim id est laborum.
+                </p>
+              </div>
             </div>
           )) || <div className="imgcontainer"></div>}
       </div>
