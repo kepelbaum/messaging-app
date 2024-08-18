@@ -322,7 +322,7 @@ const createUsersWithMessages = async () => {
   });
 
   const message5 = new models.Chatmessage({
-    img: "https://res.cloudinary.com/dxbkraqxl/image/upload/v1723673392/1cf6b1572ee65fd008e3866daf138f12.jpg",
+    img: "https://res.cloudinary.com/dxbkraqxl/image/upload/v1724016013/ac6125ba893efab2a4505161e4aa0632.jpg",
     user: user1.id,
     date: Date.now() - 2000,
     text: "Image",

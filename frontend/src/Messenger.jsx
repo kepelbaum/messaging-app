@@ -97,9 +97,9 @@ const Messenger = () => {
 
   function bioSubmit(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
-    console.log(val);
+    let dname = e.currentTarget.attributes.getNamedItem("dname").value;
+    console.log(val, dname.value);
     if (val === "group") {
-      let dname = e.currentTarget.attributes.getNamedItem("dname").value;
       fetch(
         "https://messaging-app-production-6dff.up.railway.app/chats/" + profile,
         {
@@ -118,7 +118,7 @@ const Messenger = () => {
       )
         .then((response) => response.json())
         .then((response) => {
-          if (response.result === "Bio updated") {
+          if (response.result === "Change complete") {
             setBioEdit(false);
             setBioText("");
           } else {
@@ -132,6 +132,7 @@ const Messenger = () => {
         method: "PUT",
         body: JSON.stringify({
           bio: bioText === "" ? "No description provided" : bioText,
+          displayName: displayName === "" ? dname : displayName,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
@@ -195,10 +196,12 @@ const Messenger = () => {
       setBioText("");
     } else {
       let val = e.currentTarget.attributes.getNamedItem("val").value;
+      let dname = e.currentTarget.attributes.getNamedItem("dname").value;
       setBioEdit(true);
       setBioText(val);
       setPassword("");
       setConfirm("");
+      setDisplayName(dname ? dname : "");
     }
   }
 
@@ -823,13 +826,19 @@ const Messenger = () => {
       setActiveElement(null);
       setProfile(null);
       setPage(val);
+      setBioEdit(false);
+      setPassEdit(false);
     }
 
     // console.log(await val);
   }
 
   function newChat() {
-    if (newGroup.message !== "" && newGroup.groupName !== "") {
+    if (
+      newGroup.message !== "" &&
+      newGroup.groupName !== "" &&
+      newGroup.groupName !== null
+    ) {
       fetch("https://messaging-app-production-6dff.up.railway.app/chats", {
         mode: "cors",
         method: "POST",
@@ -886,6 +895,8 @@ const Messenger = () => {
       } else {
         setMessage("");
         setPage(null);
+        setBioEdit(false);
+        setPassEdit(false);
         setDummyChat(val);
       }
     } else if (newGroup) {
@@ -955,6 +966,8 @@ const Messenger = () => {
       setDummyChat(null);
       setPage(null);
       setProfile(null);
+      setBioEdit(false);
+      setPassEdit(false);
       // console.log(users);
       setNewGroup({
         users: [],
@@ -1225,18 +1238,12 @@ const Messenger = () => {
                       ></div>
                       <div className="groupinfo">
                         <h2>
-                          {ele.groupName
-                            ? ele.groupName
-                            : ele.users[0]._id === id
-                              ? ele.users[1].displayName
-                              : ele.users[0].displayName}
-                        </h2>
-                        <h3>
-                          {!bioEdit && ele.groupName
-                            ? ""
-                            : ele.users[0]._id === id
-                              ? "@" + ele.users[1].username
-                              : "@" + ele.users[0].username}
+                          {!bioEdit &&
+                            (ele.groupName
+                              ? ele.groupName
+                              : ele.users[0]._id === id
+                                ? ele.users[1].displayName
+                                : ele.users[0].displayName)}
                           {bioEdit && (
                             <textarea
                               value={displayName}
@@ -1247,6 +1254,13 @@ const Messenger = () => {
                               maxLength={50}
                             ></textarea>
                           )}
+                        </h2>
+                        <h3>
+                          {ele.groupName
+                            ? ""
+                            : ele.users[0]._id === id
+                              ? "@" + ele.users[1].username
+                              : "@" + ele.users[0].username}
                           {ele.groupName && ele.users.length > 1
                             ? ele.users.length + " members"
                             : ele.groupName
@@ -1271,6 +1285,7 @@ const Messenger = () => {
                                     : ele.users[0].bio
                                 : ""
                         }
+                        dname={ele.groupName ? ele.groupName : null}
                       >
                         {bioEdit ? "Cancel" : "Edit Profile"}
                       </button>
@@ -1373,6 +1388,7 @@ const Messenger = () => {
                       {profile === id ? (
                         <button
                           onClick={editBio}
+                          dname={ele[1].displayName}
                           val={ele[1].bio ? ele[1].bio : ""}
                         >
                           {bioEdit ? "Cancel" : "Edit Profile"}
@@ -1399,7 +1415,12 @@ const Messenger = () => {
                             value={bioText}
                             onChange={handleBioText}
                           ></textarea>
-                          <button type="submit" onClick={bioSubmit} val="self">
+                          <button
+                            type="submit"
+                            onClick={bioSubmit}
+                            val="self"
+                            dname={ele[1].displayName}
+                          >
                             Submit
                           </button>
                         </div>
@@ -1499,6 +1520,7 @@ const Messenger = () => {
                         <button
                           onClick={editBio}
                           val={ele[1].bio ? ele[1].bio : ""}
+                          dname={ele[1].displayName}
                         >
                           {bioEdit ? "Cancel" : "Edit Profile"}
                         </button>
@@ -1524,7 +1546,12 @@ const Messenger = () => {
                             value={bioText}
                             onChange={handleBioText}
                           ></textarea>
-                          <button type="submit" onClick={bioSubmit} val="self">
+                          <button
+                            type="submit"
+                            onClick={bioSubmit}
+                            val="self"
+                            dname={ele[1].displayName}
+                          >
                             Submit
                           </button>
                         </div>
