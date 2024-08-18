@@ -292,7 +292,9 @@
   align-items: center;
 }
 
-#image {
+#image,
+#background,
+#avatar {
   display: none;
 }
 
