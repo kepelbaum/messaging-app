@@ -2,6 +2,14 @@ import { Router } from "express";
 import { verifyToken } from "../modules/verifytoken.js";
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  secure: true,
+});
+
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 const router = Router();
 
@@ -139,5 +147,56 @@ router.put("/", verifyToken, async (req, res, next) => {
     }
   });
 });
+
+router.put(
+  "/img",
+  upload.single("image"),
+  verifyToken,
+  async (req, res, next) => {
+    jwt.verify(req.token, "secretkey", (err, authData) => {
+      if (err) {
+        res.json({ result: "You are not signed in." });
+      } else {
+        const fullVerify = async () => {
+          const acc = await req.context.models.Messenger.findOne({
+            username: authData.user.username,
+            password: authData.user.password,
+          });
+          if (acc) {
+            // const imagePath = req.file;
+            // const publicId = await uploadImage(imagePath).secure_url;
+
+            const uploadResult = await cloudinary.uploader
+              .upload(req.file.path, {
+                public_id: req.file.filename,
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+            if (req.body.change === "avatar") {
+              const updatedUser =
+                await req.context.models.Messenger.findByIdAndUpdate(acc._id, {
+                  avatar: uploadResult.secure_url,
+                });
+            } else if (req.body.change === "background") {
+              const updatedUser =
+                await req.context.models.Messenger.findByIdAndUpdate(acc._id, {
+                  background: uploadResult.secure_url,
+                });
+            } else {
+              return res.json({ result: "Invalid change type" });
+            }
+            return res.json({
+              result: "Image uploaded",
+            });
+          } else {
+            res.json({ result: "Invalid authentication token" });
+          }
+        };
+        fullVerify();
+      }
+    });
+  },
+);
 
 export default router;
