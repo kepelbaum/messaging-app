@@ -21,6 +21,39 @@
   position: relative;
 }
 
+.dispchange {
+}
+
+.biotext {
+  width: 30vw;
+  height: 100px;
+}
+
+.passwordwrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.changepass {
+  width: 200px;
+  height: 40px;
+  align-self: start;
+  margin-left: 5vw;
+  margin-top: 30px;
+}
+
+.biodiv,
+.xmargin {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
 .profilegroup {
   display: flex;
   justify-content: space-between;

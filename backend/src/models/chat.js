@@ -16,7 +16,7 @@ const chatSchema = new mongoose.Schema({
   ],
   background: { type: String },
   avatar: { type: String },
-  bio: { type: String },
+  bio: { type: String, required: true, default: "No description provided" },
 });
 
 const Chat = mongoose.model("Chat", chatSchema);

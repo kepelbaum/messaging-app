@@ -344,13 +344,15 @@ router.put("/:chatId", verifyToken, async (req, res, next) => {
           res.json({ result: "Chat not found" });
         }
         if (acc && chat.users.includes(acc._id)) {
-          if (req.body.change === "groupName") {
+          if (req.body.change === "groupNamebio") {
             if (!chat.groupName) {
-              res.json({ result: "Can only change name for group chats" });
+              res.json({
+                result: "Can only change name and bio for group chats",
+              });
             } else {
               const change = await req.context.models.Chat.findByIdAndUpdate(
                 req.params.chatId,
-                { groupName: req.body.groupName },
+                { groupName: req.body.groupName, bio: req.body.bio },
               );
               res.json({ result: "Change complete" });
             }
@@ -394,13 +396,15 @@ router.put("/:chatId", verifyToken, async (req, res, next) => {
                 $pull: { chats: req.params.chatId },
               });
             res.json({ result: "Left the chat" });
-          } else if (chat.groupName && req.body.change === "bio") {
-            const change = await req.context.models.Chat.findByIdAndUpdate(
-              req.params.chatId,
-              { bio: req.body.bio },
-            );
-            res.json({ result: "Bio updated" });
-          } else if (
+          }
+          // else if (chat.groupName && req.body.change === "bio") {
+          //   const change = await req.context.models.Chat.findByIdAndUpdate(
+          //     req.params.chatId,
+          //     { bio: req.body.bio },
+          //   );
+          //   res.json({ result: "Bio updated" });
+          // }
+          else if (
             !chat.groupName &&
             (req.body.change === "leave" || req.body.change === "add")
           ) {

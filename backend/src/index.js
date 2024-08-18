@@ -160,9 +160,9 @@ connectDb().then(async () => {
 
 const createUsersWithMessages = async () => {
   const user1 = new models.Messenger({
-    username: "roflan",
-    password: "roflan",
-    displayName: "roflan",
+    username: "blackcat",
+    password: "catsarecool",
+    displayName: "Black Cat",
     avatar:
       "https://images.unsplash.com/photo-1606926233688-0594e2344efb?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     background:
@@ -171,9 +171,9 @@ const createUsersWithMessages = async () => {
   });
 
   const user2 = new models.Messenger({
-    username: "rofl",
-    password: "test",
-    displayName: "rofl",
+    username: "whitecat",
+    password: "catsarecool",
+    displayName: "White Cat",
     avatar:
       "https://images.unsplash.com/photo-1472491235688-bdc81a63246e?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     background:
@@ -182,11 +182,11 @@ const createUsersWithMessages = async () => {
   });
 
   const user3 = new models.Messenger({
-    username: "roflcopter",
+    username: "whitebeard",
     password: "test",
-    displayName: "roflcopter",
+    displayName: "Whitebeard",
     avatar:
-      "https://plus.unsplash.com/premium_photo-1661962637716-e29cb0ac15c1?q=80&w=2669&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://res.cloudinary.com/dxbkraqxl/image/upload/v1724012296/9d596b5354170bfa3e273e925f0279ad.png",
     background:
       "https://plus.unsplash.com/premium_photo-1666700698946-fbf7baa0134a?q=80&w=2672&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
@@ -280,6 +280,17 @@ const createUsersWithMessages = async () => {
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
   });
 
+  const user12 = new models.Messenger({
+    username: "guest",
+    password: "guest",
+    displayName: "Guest",
+    avatar:
+      "https://plus.unsplash.com/premium_vector-1723815986942-d6ed18a4f4d4?q=80&w=2806&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    background:
+      "https://images.unsplash.com/photo-1723902499824-13f225769ebf?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  });
+
   const message1 = new models.Chatmessage({
     text: "What's up?",
     user: user2.id,
@@ -287,13 +298,13 @@ const createUsersWithMessages = async () => {
   });
 
   const message2 = new models.Chatmessage({
-    text: "Hey test",
+    text: "Hey there",
     user: user1.id,
     date: Date.now() - 150000000,
   });
 
   const message3 = new models.Chatmessage({
-    text: "You there, man?",
+    text: "You there?",
     user: user1.id,
     date: Date.now() - 3000,
   });
@@ -305,7 +316,7 @@ const createUsersWithMessages = async () => {
   });
 
   const message6 = new models.Chatmessage({
-    text: "MananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaaMananananaa",
+    text: "Looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooongtext",
     user: user1.id,
     date: Date.now(),
   });
@@ -341,7 +352,7 @@ const createUsersWithMessages = async () => {
     messages: [message4],
     groupName: "Asylum",
     avatar:
-      "https://images.unsplash.com/photo-1701454728497-82f79564a85d?q=80&w=2664&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://plus.unsplash.com/premium_photo-1661962637716-e29cb0ac15c1?q=80&w=2669&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     background:
       "https://plus.unsplash.com/premium_photo-1688071660303-737eee8a0783?q=80&w=2672&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",

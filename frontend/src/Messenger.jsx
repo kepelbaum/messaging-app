@@ -22,8 +22,134 @@ const Messenger = () => {
   const [select, setSelect] = useState("displayName");
   const [favorites, setFavorites] = useState(false);
   const [profile, setProfile] = useState(null);
+  const [bioEdit, setBioEdit] = useState(false);
+  const [bioText, setBioText] = useState("");
+  const [passEdit, setPassEdit] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [errors, setErrors] = useState("");
+  const [displayName, setDisplayName] = useState("");
 
   const navigate = useNavigate();
+
+  function handleBioText(e) {
+    let val = e.currentTarget.value;
+    setBioText(val);
+  }
+
+  function handleConf(e) {
+    let val = e.currentTarget.value;
+    setConfirm(val);
+  }
+
+  function handlePass(e) {
+    let val = e.currentTarget.value;
+    setPassword(val);
+  }
+
+  function handleDisp(e) {
+    let val = e.currentTarget.value;
+    setDisplayName(val);
+  }
+
+  function passSubmit() {
+    let pass = password;
+    let conf = confirm;
+    console.log(password === confirm);
+    if (password.length > 4 && pass === conf) {
+      fetch(
+        "https://messaging-app-production-6dff.up.railway.app/users/password",
+        {
+          mode: "cors",
+          method: "PUT",
+          body: JSON.stringify({
+            password: pass,
+            confirm: conf,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            authorization: "Bearer " + (token ? token.toString() : ""),
+          },
+        },
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.message === "Settings updated") {
+            setPassEdit(false);
+            setPassword("");
+            setConfirm("");
+            setErrors(null);
+          } else {
+            throw new Error(Object.entries(response));
+          }
+        })
+        .catch((error) => console.error(error));
+    } else if (password.length <= 4 && pass !== conf) {
+      setErrors(
+        "Password do not match; Password needs to be 5 characters minimum",
+      );
+    } else if (password.length > 4) {
+      setErrors("Password do not match");
+    } else {
+      setErrors("Password needs to be 5 characters minimum");
+    }
+  }
+
+  function bioSubmit(e) {
+    let val = e.currentTarget.attributes.getNamedItem("val").value;
+    console.log(val);
+    if (val === "group") {
+      let dname = e.currentTarget.attributes.getNamedItem("dname").value;
+      fetch(
+        "https://messaging-app-production-6dff.up.railway.app/chats/" + profile,
+        {
+          mode: "cors",
+          method: "PUT",
+          body: JSON.stringify({
+            change: "groupNamebio",
+            bio: bioText === "" ? "No description provided" : bioText,
+            groupName: displayName === "" ? dname : displayName,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            authorization: "Bearer " + (token ? token.toString() : ""),
+          },
+        },
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.result === "Bio updated") {
+            setBioEdit(false);
+            setBioText("");
+          } else {
+            throw new Error(Object.entries(response));
+          }
+        })
+        .catch((error) => console.error(error));
+    } else if (val === "self") {
+      fetch("https://messaging-app-production-6dff.up.railway.app/users", {
+        mode: "cors",
+        method: "PUT",
+        body: JSON.stringify({
+          bio: bioText === "" ? "No description provided" : bioText,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          authorization: "Bearer " + (token ? token.toString() : ""),
+        },
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.message === "Settings updated") {
+            setBioEdit(false);
+            setBioText("");
+          } else {
+            throw new Error(Object.entries(response));
+          }
+        })
+        .catch((error) => console.error(error));
+    }
+  }
 
   function convertTime(time) {
     let hrs = Number(time.substring(0, 2));
@@ -48,6 +174,32 @@ const Messenger = () => {
   function logoutAndMove() {
     logout();
     movePage("/");
+  }
+
+  function togglePass() {
+    if (passEdit) {
+      setPassword("");
+      setConfirm("");
+      setPassEdit(false);
+      setErrors(null);
+    } else {
+      setBioEdit(false);
+      setBioText("");
+      setPassEdit(true);
+    }
+  }
+
+  function editBio(e) {
+    if (bioEdit) {
+      setBioEdit(false);
+      setBioText("");
+    } else {
+      let val = e.currentTarget.attributes.getNamedItem("val").value;
+      setBioEdit(true);
+      setBioText(val);
+      setPassword("");
+      setConfirm("");
+    }
   }
 
   function handleChange(e) {
@@ -101,7 +253,7 @@ const Messenger = () => {
     )
       .then((response) => response.json())
       .then((response) => {
-        if ((response.result = "Left the chat")) {
+        if (response.result === "Left the chat") {
           setPage(null);
           movePage("/app");
         } else {
@@ -352,7 +504,10 @@ const Messenger = () => {
         .then((response) => {
           let result = Object.keys(response).map((key) => [key, response[key]]);
           console.log(result[0][1]);
-          if (result[0][1].toString() === "You are not signed in.") {
+          if (
+            result[0][1].toString() === "You are not signed in." ||
+            result[0][1].toString() === "Invalid authentication token"
+          ) {
             logoutAndMove();
           } else {
             setChats(result[0][1]);
@@ -419,13 +574,20 @@ const Messenger = () => {
     document.getElementById("image").click();
   }
 
-  function handleAvatar() {
-    document.getElementById("avatar").click();
+  function handleAvatar(e) {
+    let val = e.currentTarget.attributes.getNamedItem("val").value;
+    console.log(val);
+    if (val) {
+      document.getElementById("avatar").click();
+    }
   }
 
-  function handleBackground() {
-    console.log("Click!");
-    document.getElementById("background").click();
+  function handleBackground(e) {
+    let val = e.currentTarget.attributes.getNamedItem("val").value;
+    console.log(val);
+    if (val) {
+      document.getElementById("background").click();
+    }
   }
 
   function uploadBackground(e) {
@@ -612,7 +774,7 @@ const Messenger = () => {
       })
         .then((response) => response.json())
         .then((response) => {
-          if ((response.result = "Settings updated")) {
+          if (response.result === "Settings updated") {
             setFriends(newFriends.concat(val));
           } else {
             throw new Error(Object.entries(response));
@@ -635,7 +797,7 @@ const Messenger = () => {
       })
         .then((response) => response.json())
         .then((response) => {
-          if ((response.result = "Settings updated")) {
+          if (response.result === "Settings updated") {
             setFriends(newFriends);
           } else {
             throw new Error(Object.entries(response));
@@ -732,6 +894,7 @@ const Messenger = () => {
         e.currentTarget.classList.add("red");
         let newUsers = newGroup.users.concat(val);
         setNewGroup({ ...newGroup, users: newUsers });
+        setProfile(null);
       } else {
         e.currentTarget.textContent = "Add";
         e.currentTarget.classList.remove("red");
@@ -791,6 +954,7 @@ const Messenger = () => {
       setGroupAddMode(true);
       setDummyChat(null);
       setPage(null);
+      setProfile(null);
       // console.log(users);
       setNewGroup({
         users: [],
@@ -1030,6 +1194,7 @@ const Messenger = () => {
                   <div
                     className="profilebackground"
                     onClick={handleBackground}
+                    val={ele.groupName ? profile : null}
                     style={{
                       backgroundImage:
                         'url("' +
@@ -1046,6 +1211,7 @@ const Messenger = () => {
                       <div
                         className="avatar bigavatar"
                         onClick={handleAvatar}
+                        val={ele.groupName ? profile : null}
                         style={{
                           backgroundImage:
                             'url("' +
@@ -1066,11 +1232,21 @@ const Messenger = () => {
                               : ele.users[0].displayName}
                         </h2>
                         <h3>
-                          {ele.groupName
+                          {!bioEdit && ele.groupName
                             ? ""
                             : ele.users[0]._id === id
                               ? "@" + ele.users[1].username
                               : "@" + ele.users[0].username}
+                          {bioEdit && (
+                            <textarea
+                              value={displayName}
+                              onChange={handleDisp}
+                              className="dispchange"
+                              val="group"
+                              minLength={1}
+                              maxLength={50}
+                            ></textarea>
+                          )}
                           {ele.groupName && ele.users.length > 1
                             ? ele.users.length + " members"
                             : ele.groupName
@@ -1080,20 +1256,56 @@ const Messenger = () => {
                       </div>
                     </div>
                     {profile === id || ele.groupName ? (
-                      <button>Edit Profile</button>
+                      <button
+                        onClick={editBio}
+                        val={
+                          ele.groupName
+                            ? ele.bio
+                            : ele.users[0]._id === id
+                              ? ele.users[1].bio
+                              : ele.users[0].bio
+                                ? ele.groupName
+                                  ? ele.bio
+                                  : ele.users[0]._id === id
+                                    ? ele.users[1].bio
+                                    : ele.users[0].bio
+                                : ""
+                        }
+                      >
+                        {bioEdit ? "Cancel" : "Edit Profile"}
+                      </button>
                     ) : (
                       ""
                     )}
                   </div>
                   <div className="xmargin">
                     <h2>About Me</h2>
-                    <p>
-                      {ele.groupName
-                        ? ele.bio
-                        : ele.users[0]._id === id
-                          ? ele.users[1].bio
-                          : ele.users[0].bio}
-                    </p>
+                    {bioEdit ? (
+                      <div className="biodiv">
+                        <textarea
+                          className="biotext"
+                          value={bioText}
+                          onChange={handleBioText}
+                          maxLength={500}
+                        ></textarea>
+                        <button
+                          type="submit"
+                          onClick={bioSubmit}
+                          val="group"
+                          dname={ele.groupName}
+                        >
+                          Submit
+                        </button>
+                      </div>
+                    ) : (
+                      <p>
+                        {ele.groupName
+                          ? ele.bio
+                          : ele.users[0]._id === id
+                            ? ele.users[1].bio
+                            : ele.users[0].bio}
+                      </p>
+                    )}
                   </div>
                   <input
                     type="file"
@@ -1128,6 +1340,7 @@ const Messenger = () => {
                     <div
                       className="profilebackground"
                       onClick={handleBackground}
+                      val={profile === id ? profile : null}
                       style={{
                         backgroundImage: 'url("' + ele[1].background + '")',
                       }}
@@ -1137,20 +1350,88 @@ const Messenger = () => {
                         <div
                           className="avatar bigavatar"
                           onClick={handleAvatar}
+                          val={profile === id ? profile : null}
                           style={{
                             backgroundImage: 'url("' + ele[1].avatar + '")',
                           }}
                         ></div>
                         <div className="groupinfo">
-                          <h2>{ele[1].displayName}</h2>
-                          <h3>{ele[1].username}</h3>
+                          {!bioEdit && <h2>{ele[1].displayName}</h2>}
+                          {bioEdit && (
+                            <textarea
+                              value={displayName}
+                              className="dispchange"
+                              onChange={handleDisp}
+                              val="self"
+                              minLength={1}
+                              maxLength={50}
+                            ></textarea>
+                          )}
+                          <h3>{"@" + ele[1].username}</h3>
                         </div>
                       </div>
-                      {profile === id ? <button>Edit Profile</button> : ""}
+                      {profile === id ? (
+                        <button
+                          onClick={editBio}
+                          val={ele[1].bio ? ele[1].bio : ""}
+                        >
+                          {bioEdit ? "Cancel" : "Edit Profile"}
+                        </button>
+                      ) : (
+                        ""
+                      )}
                     </div>
+                    {profile === id ? (
+                      <button className="changepass" onClick={togglePass}>
+                        {passEdit ? "Cancel" : "Change Password"}
+                      </button>
+                    ) : (
+                      ""
+                    )}
                     <div className="xmargin">
-                      <h2>About Me</h2>
-                      <p>{ele[1].bio}</p>
+                      {!passEdit && <h2>About Me</h2>}
+                      {errors && <h2>{errors}</h2>}
+                      {bioEdit ? (
+                        <div className="biodiv">
+                          <textarea
+                            maxLength={500}
+                            className="biotext"
+                            value={bioText}
+                            onChange={handleBioText}
+                          ></textarea>
+                          <button type="submit" onClick={bioSubmit} val="self">
+                            Submit
+                          </button>
+                        </div>
+                      ) : !passEdit ? (
+                        <p>{ele[1].bio}</p>
+                      ) : (
+                        <div className="passwordwrapper">
+                          <label htmlFor="password">New password:</label>
+                          <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            value={password}
+                            onChange={handlePass}
+                            minLength={5}
+                            maxLength={50}
+                          ></input>
+                          <label htmlFor="confirm">Confirm new password:</label>
+                          <input
+                            type="password"
+                            id="confirm"
+                            name="confirm"
+                            value={confirm}
+                            onChange={handleConf}
+                            minLength={5}
+                            maxLength={50}
+                          ></input>
+                          <button type="submit" onClick={passSubmit}>
+                            Submit
+                          </button>
+                        </div>
+                      )}
                     </div>
                     <input
                       type="file"
@@ -1184,6 +1465,7 @@ const Messenger = () => {
                     <div
                       className="profilebackground"
                       onClick={handleBackground}
+                      val={profile === id ? profile : null}
                       style={{
                         backgroundImage: 'url("' + ele[1].background + '")',
                       }}
@@ -1193,20 +1475,88 @@ const Messenger = () => {
                         <div
                           className="avatar bigavatar"
                           onClick={handleAvatar}
+                          val={profile === id ? profile : null}
                           style={{
                             backgroundImage: 'url("' + ele[1].avatar + '")',
                           }}
                         ></div>
                         <div className="groupinfo">
-                          <h2>{ele[1].displayName}</h2>
+                          {!bioEdit && <h2>{ele[1].displayName}</h2>}
+                          {bioEdit && (
+                            <textarea
+                              className="dispchange"
+                              value={displayName}
+                              onChange={handleDisp}
+                              val="self"
+                              minLength={1}
+                              maxLength={50}
+                            ></textarea>
+                          )}
                           <h3>{"@" + ele[1].username}</h3>
                         </div>
                       </div>
-                      {profile === id ? <button>Edit Profile</button> : ""}
+                      {profile === id ? (
+                        <button
+                          onClick={editBio}
+                          val={ele[1].bio ? ele[1].bio : ""}
+                        >
+                          {bioEdit ? "Cancel" : "Edit Profile"}
+                        </button>
+                      ) : (
+                        ""
+                      )}
                     </div>
+                    {profile === id ? (
+                      <button className="changepass" onClick={togglePass}>
+                        {passEdit ? "Cancel" : "Change Password"}
+                      </button>
+                    ) : (
+                      ""
+                    )}
                     <div className="xmargin">
-                      <h2>About Me</h2>
-                      <p>{ele[1].bio}</p>
+                      {!passEdit && <h2>About Me</h2>}
+                      {errors && <h2>{errors}</h2>}
+                      {bioEdit ? (
+                        <div className="biodiv">
+                          <textarea
+                            className="biotext"
+                            maxLength={500}
+                            value={bioText}
+                            onChange={handleBioText}
+                          ></textarea>
+                          <button type="submit" onClick={bioSubmit} val="self">
+                            Submit
+                          </button>
+                        </div>
+                      ) : !passEdit ? (
+                        <p>{ele[1].bio}</p>
+                      ) : (
+                        <div className="passwordwrapper">
+                          <label htmlFor="password">New password:</label>
+                          <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            value={password}
+                            onChange={handlePass}
+                            minLength={5}
+                            maxLength={50}
+                          ></input>
+                          <label htmlFor="confirm">Confirm new password:</label>
+                          <input
+                            type="confirm"
+                            id="confirm"
+                            name="confirm"
+                            value={confirm}
+                            minLength={5}
+                            maxLength={50}
+                            onChange={handleConf}
+                          ></input>
+                          <button type="submit" onClick={passSubmit}>
+                            Submit
+                          </button>
+                        </div>
+                      )}
                     </div>
                     <input
                       type="file"
@@ -1455,6 +1805,7 @@ const Messenger = () => {
               {dummyChat && users && (
                 <div className="bottomsection">
                   <textarea
+                    maxLength={500}
                     value={message}
                     onChange={handleChange}
                     id="entermessage"
@@ -1474,6 +1825,7 @@ const Messenger = () => {
                     return (
                       <div className="bottomsection" key={ele._id}>
                         <textarea
+                          maxLength={500}
                           value={message}
                           onChange={handleChange}
                           id="entermessage"
@@ -1502,8 +1854,8 @@ const Messenger = () => {
               <input
                 id="groupname"
                 type="text"
-                min="1"
-                max="50"
+                minLength={1}
+                maxLength={50}
                 placeholder="Enter group name here..."
                 onChange={handleGroupNameChange}
               ></input>
@@ -1513,6 +1865,7 @@ const Messenger = () => {
                 id="firstmessage"
                 placeholder="Enter first message here..."
                 onChange={handleGroupMessageChange}
+                maxLength={500}
               ></input>
               <h3>Invited users will show up here.</h3>
               <h4>
