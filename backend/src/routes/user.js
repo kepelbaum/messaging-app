@@ -127,7 +127,7 @@ router.put("/", verifyToken, async (req, res, next) => {
             {
               friends: req.body.friends,
               displayName: req.body.displayName,
-              avatar: req.body.avatar,
+              bio: req.body.bio,
             },
           );
           return res.json({ message: "Settings updated" });

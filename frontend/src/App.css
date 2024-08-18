@@ -13,16 +13,19 @@
 
 .profilebackground {
   width: 100%;
-  height: 20vh;
-  background-image: url("https://plus.unsplash.com/premium_photo-1723568460657-2113d189c4a6?q=80&w=2304&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
-  object-fit: cover;
+  height: 50vh;
+  background-color: lightgray;
+  /* background-image: url("https://plus.unsplash.com/premium_photo-1723568460657-2113d189c4a6?q=80&w=2304&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"); */
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  position: relative;
 }
 
 .profilegroup {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 5vw;
+  padding: 10px 5vw;
 }
 
 .red {
@@ -32,7 +35,7 @@
 }
 
 .xmargin {
-  margin: 10vh 10vw;
+  margin: 2vh 10vw;
 }
 
 .groupedtogether {
@@ -52,6 +55,7 @@
   text-wrap: wrap;
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   align-items: center;
   white-space: initial;
 }
@@ -331,15 +335,26 @@
   justify-content: left;
 }
 
+.closeprof {
+  position: absolute;
+  right: 1vw;
+  top: 1vh;
+  z-index: 2;
+  width: 30px;
+  height: 30px;
+  background-image: url("https://plus.unsplash.com/premium_photo-1723587567569-0545a68c6b54?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+}
+
 .avatar {
   width: 90px;
   height: 90px;
   border-radius: 50%;
   border: 3px solid black;
   background-color: white;
-  background-image: url("https://steamuserimages-a.akamaihd.net/ugc/2492254803012160630/33FDDE88D49A58AF9C263ED4354B43193F50903A/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false");
+  /* background-image: url("https://steamuserimages-a.akamaihd.net/ugc/2492254803012160630/33FDDE88D49A58AF9C263ED4354B43193F50903A/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"); */
   background-size: cover;
   background-repeat: no-repeat;
+  cursor: pointer;
 }
 
 .bigavatar {

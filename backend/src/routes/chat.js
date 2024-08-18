@@ -303,6 +303,12 @@ router.put("/:chatId", verifyToken, async (req, res, next) => {
                 $pull: { chats: req.params.chatId },
               });
             res.json({ result: "Left the chat" });
+          } else if (chat.groupName && req.body.change === "bio") {
+            const change = await req.context.models.Chat.findByIdAndUpdate(
+              req.params.chatId,
+              { bio: req.body.bio },
+            );
+            res.json({ result: "Bio updated" });
           } else if (
             !chat.groupName &&
             (req.body.change === "leave" || req.body.change === "add")

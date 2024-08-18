@@ -147,6 +147,10 @@ const Messenger = () => {
     setSearch(e.currentTarget.value.toLowerCase());
   }
 
+  function closeProf() {
+    setProfile(null);
+  }
+
   function handleSubmit() {
     if (message !== "" && activeElement === null) {
       fetch(
@@ -201,17 +205,13 @@ const Messenger = () => {
     }
   }
 
-  function handleProfile() {
-    console.log("Hey!");
-    if (!profile) {
-      setPage(null);
-      setDummyChat(null);
-      setMessage("");
-      setActiveElement(null);
-      setProfile("test");
-    } else {
-      setProfile(null);
-    }
+  function handleProfile(e) {
+    let val = e.currentTarget.attributes.getNamedItem("val").value;
+    console.log(val);
+    setPage(null);
+    setMessage("");
+    setActiveElement(null);
+    setProfile(val);
   }
 
   function handleDummySubmit() {
@@ -375,6 +375,7 @@ const Messenger = () => {
         .then((response) => response.json())
         .then((response) => {
           let result = Object.keys(response).map((key) => [key, response[key]]);
+          // console.log(result);
           setUsers(result);
           // if (result[0][1].toString() === "You are not signed in.") {
           //   logoutAndMove();
@@ -417,6 +418,18 @@ const Messenger = () => {
   function handleImg() {
     document.getElementById("image").click();
   }
+
+  function handleAvatar() {
+    document.getElementById("avatar").click();
+  }
+
+  function handleBackground() {
+    document.getElementById("background").click();
+  }
+
+  function uploadBackground(e) {}
+
+  function uploadAvatar(e) {}
 
   function uploadImg(e) {
     const formData = new FormData();
@@ -533,10 +546,16 @@ const Messenger = () => {
 
   function showChat(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
-    setDummyChat(null);
-    setMessage("");
-    setActiveElement(null);
-    setPage(val);
+    let ifprof = e.target.attributes.getNamedItem("ifprof");
+    console.log(ifprof);
+    if (!ifprof) {
+      setDummyChat(null);
+      setMessage("");
+      setActiveElement(null);
+      setProfile(null);
+      setPage(val);
+    }
+
     // console.log(await val);
   }
 
@@ -590,11 +609,13 @@ const Messenger = () => {
           !ele.groupName &&
           (ele.users[0]._id === val || ele.users[1]._id === val),
       );
+      setActiveElement(null);
+      setProfile(null);
       if (findChat.length === 1) {
+        setDummyChat(null);
         setPage(findChat[0]._id);
       } else {
         setMessage("");
-        setActiveElement(null);
         setPage(null);
         setDummyChat(val);
       }
@@ -677,10 +698,21 @@ const Messenger = () => {
       <div className="body">
         <div className="left">
           <p onClick={logoutAndMove}>Logout</p>
-          <p>Logged in as:</p>
-          <p>{user.substring(9, user.length - 1)}</p>
+          {/* <p>Logged in as:</p>
+          <p>{user.substring(9, user.length - 1)}</p> */}
           <h1 onClick={untoggleFav}>UNFAV</h1>
           <h1 onClick={toggleFav}>FAV</h1>
+          <div
+            className="avatar"
+            style={{
+              backgroundImage:
+                'url("' +
+                users.filter((ele) => ele[1]._id === id)[0][1].avatar +
+                '")',
+            }}
+            onClick={handleProfile}
+            val={id}
+          ></div>
         </div>
         <div className="mid">
           <div className="chatmenu">
@@ -773,7 +805,22 @@ const Messenger = () => {
                       <h5 onClick={handleFav} className="favicon" val={ele._id}>
                         {friends.includes(ele._id) ? "U" : "*"}
                       </h5>
-                      <div className="avatar chatavatar"></div>
+                      <div
+                        className="avatar chatavatar"
+                        onClick={handleProfile}
+                        val={ele._id}
+                        ifprof="yes"
+                        style={{
+                          backgroundImage:
+                            'url("' +
+                            (ele.groupName
+                              ? ele.avatar
+                              : ele.users[0]._id === id
+                                ? ele.users[1].avatar
+                                : ele.users[0].avatar) +
+                            '")',
+                        }}
+                      ></div>
                       <div className="chatinfo">
                         <h3>
                           {ele.groupName
@@ -841,7 +888,14 @@ const Messenger = () => {
                 .map((ele) => {
                   return (
                     <div className="wrap" key={ele[1]._id}>
-                      <div className="avatar chatavatar"></div>
+                      <div
+                        className="avatar chatavatar"
+                        style={{
+                          backgroundImage: 'url("' + ele[1].avatar + '")',
+                        }}
+                        onClick={handleProfile}
+                        val={ele[1]._id}
+                      ></div>
                       <div className="chatinfo">
                         <h3>{ele[1].displayName}</h3>
                         {<p>{"@" + ele[1].username}</p>}
@@ -856,231 +910,456 @@ const Messenger = () => {
                 })}
           </div>
         </div>
-        {((page || dummyChat) && (
-          <div className="messagebox">
-            <div className="chatinfotop">
-              <div className="grouped">
-                <div className="avatar" onClick={handleProfile}></div>
-                {chats &&
-                  page &&
-                  chats
-                    .filter((ele) => page === ele._id)
-                    .map((ele) => {
-                      return (
-                        <div className="groupinfo" key={ele._id}>
-                          <h3>
-                            {ele.groupName
-                              ? ele.groupName
+        {(profile &&
+          chats &&
+          !dummyChat &&
+          Object.keys(chats.filter((ele) => ele._id === profile)).length > 0 &&
+          chats
+            .filter((ele) => ele._id === profile)
+            .map((ele) => {
+              //"background-image: url(" + ele.background + ");"
+              return (
+                <div className="profile" key={ele._id}>
+                  <div
+                    className="profilebackground"
+                    style={{
+                      backgroundImage:
+                        'url("' +
+                        (ele.groupName
+                          ? ele.background
+                          : ele.users[0]._id === id
+                            ? ele.users[1].background
+                            : ele.users[0].background) +
+                        '")',
+                    }}
+                  ></div>
+                  <div className="profilegroup">
+                    <div className="groupedtogether">
+                      <div
+                        className="avatar bigavatar"
+                        style={{
+                          backgroundImage:
+                            'url("' +
+                            (ele.groupName
+                              ? ele.avatar
                               : ele.users[0]._id === id
-                                ? ele.users[1].displayName
-                                : ele.users[0].displayName}
-                          </h3>
-                          <p>
-                            {ele.groupName
-                              ? ele.users.length > 1
-                                ? ele.users.length + " members"
-                                : ele.users.length + " member"
-                              : ele.users[0]._id === id
-                                ? "@" + ele.users[1].username
-                                : "@" + ele.users[0].username}
-                          </p>
-                        </div>
-                      );
-                    })}
-                {dummyChat &&
-                  users &&
-                  users
-                    .filter((ele) => dummyChat === ele[1]._id)
-                    .map((ele) => {
-                      return (
-                        <div className="groupinfo" key={dummyChat}>
-                          <h3>{ele[1].displayName}</h3>
-                          <p>{"@" + ele[1].username}</p>
-                        </div>
-                      );
-                    })}
-              </div>
-              {chats &&
-                page &&
-                chats
-                  .filter((ele) => page === ele._id && ele.groupName)
-                  .map((ele) => {
-                    return (
-                      <div className="topbuttons" key="topbuttons">
-                        <button onClick={toggleGroupMode}>
-                          {groupAddMode ? "-" : "+"}
-                        </button>
-                        {ele._id === upForDeletion && (
-                          <div className="grouped">
-                            <h3>Are you sure you want to leave this chat?</h3>
-                            <button onClick={handleLeave}>Yes</button>
-                            <button onClick={undelete}>No</button>
-                          </div>
-                        )}
-                        {ele._id !== upForDeletion && (
-                          <button onClick={areyousurechat} val={ele._id}>
-                            Leave Chat
-                          </button>
-                        )}
+                                ? ele.users[1].avatar
+                                : ele.users[0].avatar) +
+                            '")',
+                        }}
+                      ></div>
+                      <div className="groupinfo">
+                        <h2>
+                          {ele.groupName
+                            ? ele.groupName
+                            : ele.users[0]._id === id
+                              ? ele.users[1].displayName
+                              : ele.users[0].displayName}
+                        </h2>
+                        <h3>
+                          {ele.groupName
+                            ? ""
+                            : ele.users[0]._id === id
+                              ? "@" + ele.users[1].username
+                              : "@" + ele.users[0].username}
+                          {ele.groupName && ele.users.length > 1
+                            ? ele.users.length + " members"
+                            : ele.groupName
+                              ? ele.users.length + " member"
+                              : ""}
+                        </h3>
                       </div>
-                    );
-                  })}
-            </div>
-            {page &&
-              chats &&
-              chats
-                .filter((ele) => page === ele._id)
-                .map((ele) => {
-                  return (
+                    </div>
+                    {profile === id || ele.groupName ? (
+                      <button>Edit Profile</button>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <div className="xmargin">
+                    <h2>About Me</h2>
+                    <p>
+                      {ele.groupName
+                        ? ele.bio
+                        : ele.users[0]._id === id
+                          ? ele.users[1].bio
+                          : ele.users[0].bio}
+                    </p>
+                  </div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    name="background"
+                    id="background"
+                    onChange={uploadBackground}
+                  ></input>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    name="avatar"
+                    id="avatar"
+                    onChange={uploadAvatar}
+                  ></input>
+                </div>
+              );
+            })) ||
+          (profile &&
+            users &&
+            !dummyChat &&
+            users
+              .filter((ele) => ele[1]._id === profile)
+              .map((ele) => {
+                //"background-image: url(" + ele.background + ");"
+                return (
+                  <div className="profile" key={ele[1]._id}>
                     <div
-                      // ref={messagesContainerRef}
-                      className="messagemasterwrapper"
-                      key={ele._id}
-                    >
-                      {ele.messages.map((elem, index) => {
+                      className="profilebackground"
+                      onClick={handleBackground}
+                      style={{
+                        backgroundImage: 'url("' + ele[1].background + '")',
+                      }}
+                    ></div>
+                    <div className="profilegroup">
+                      <div className="groupedtogether">
+                        <div
+                          className="avatar bigavatar"
+                          onClick={handleAvatar}
+                          style={{
+                            backgroundImage: 'url("' + ele[1].avatar + '")',
+                          }}
+                        ></div>
+                        <div className="groupinfo">
+                          <h2>{ele[1].displayName}</h2>
+                          <h3>{ele[1].username}</h3>
+                        </div>
+                      </div>
+                      {profile === id ? <button>Edit Profile</button> : ""}
+                    </div>
+                    <div className="xmargin">
+                      <h2>About Me</h2>
+                      <p>{ele[1].bio}</p>
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      name="background"
+                      id="background"
+                      onChange={uploadBackground}
+                    ></input>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      name="avatar"
+                      id="avatar"
+                      onChange={uploadAvatar}
+                    ></input>
+                  </div>
+                );
+              })) ||
+          (profile &&
+            dummyChat &&
+            users &&
+            users
+              .filter((ele) => ele[1]._id === profile)
+              .map((ele) => {
+                return (
+                  <div className="profile" key={ele._id}>
+                    <div
+                      className="profilebackground"
+                      onClick={handleBackground}
+                      style={{
+                        backgroundImage: 'url("' + ele[1].background + '")',
+                      }}
+                    ></div>
+                    <div className="profilegroup">
+                      <div className="groupedtogether">
+                        <div
+                          className="avatar bigavatar"
+                          onClick={handleAvatar}
+                          style={{
+                            backgroundImage: 'url("' + ele[1].avatar + '")',
+                          }}
+                        ></div>
+                        <div className="groupinfo">
+                          <h2>{ele[1].displayName}</h2>
+                          <h3>{"@" + ele[1].username}</h3>
+                        </div>
+                      </div>
+                      {profile === id ? <button>Edit Profile</button> : ""}
+                    </div>
+                    <div className="xmargin">
+                      <h2>About Me</h2>
+                      <p>{ele[1].bio}</p>
+                    </div>
+                  </div>
+                );
+              })) ||
+          ((page || dummyChat) && (
+            <div className="messagebox">
+              <div className="chatinfotop">
+                <div className="grouped">
+                  <div
+                    className="avatar"
+                    onClick={handleProfile}
+                    val={page ? page : dummyChat}
+                    style={{
+                      backgroundImage:
+                        'url("' +
+                        (dummyChat
+                          ? users.filter(
+                              (ele) => dummyChat === ele[1]._id,
+                            )[0][1].avatar
+                          : chats.filter((ele) => ele._id === page)[0].groupName
+                            ? chats.filter((ele) => ele._id === page)[0].avatar
+                            : chats.filter((ele) => ele._id === page)[0]
+                                  .users[0]._id === id
+                              ? chats.filter((ele) => ele._id === page)[0]
+                                  .users[1].avatar
+                              : chats.filter((ele) => ele._id === page)[0]
+                                  .users[0].avatar) +
+                        '")',
+                    }}
+                  ></div>
+                  {chats &&
+                    page &&
+                    chats
+                      .filter((ele) => page === ele._id)
+                      .map((ele) => {
                         return (
-                          <div className="messagewrapper" key={elem._id}>
-                            <div className="daywrapper">
-                              <div className="line"></div>
-                              {(index === 0 ||
-                                new Date(ele.messages[index - 1].date)
-                                  .toISOString()
-                                  .substring(0, 10) !==
-                                  new Date(elem.date)
-                                    .toISOString()
-                                    .substring(0, 10)) && (
-                                <div className="day">
-                                  <h4 className="border">
-                                    {new Date(elem.date)
-                                      .toISOString()
-                                      .substring(0, 10)}
-                                  </h4>
-                                </div>
-                              )}
-                              <div className="line"></div>
-                            </div>
-                            <div
-                              className={
-                                elem.user._id === id &&
-                                elem._id === activeElement
-                                  ? "message right orange"
-                                  : elem.user._id === id
-                                    ? "message right"
-                                    : "message"
-                              }
-                            >
-                              {elem._id === upForDeletion && (
-                                <div className="deletiondiv">
-                                  <h3>
-                                    Are you sure you want to delete this
-                                    message?
-                                  </h3>{" "}
-                                  <button onClick={handleDelete}>Yes</button>
-                                  <button onClick={undelete}>No</button>
-                                </div>
-                              )}
-                              {elem.user._id !== id && (
-                                <div className="avatar"></div>
-                              )}
-                              <div>
-                                <div
-                                  className={elem.img ? "imgmessage" : "azure"}
-                                >
-                                  <h4>{elem.user.displayName}</h4>
-                                  {!elem.img && (
-                                    <p className="textmessage">{elem.text}</p>
-                                  )}
-                                  {elem.img && <img src={elem.img}></img>}
-                                  <h5 className="date">
-                                    {convertTime(
-                                      new Date(elem.date)
-                                        .toISOString()
-                                        .substring(11, 19),
-                                    )}
-                                  </h5>
-                                </div>
-                              </div>
-                              {elem.user._id === id && (
-                                <div className="avatar"></div>
-                              )}
-                              {elem.user._id === id && (
-                                <div className="editdelwrapper">
-                                  {!elem.img ? (
-                                    <div
-                                      className="edit"
-                                      onClick={handleEdit}
-                                      val={elem._id}
-                                      text={elem.text}
-                                    >
-                                      Edit
-                                    </div>
-                                  ) : (
-                                    ""
-                                  )}
-                                  <div
-                                    className="delete"
-                                    onClick={areyousure}
-                                    val={elem._id}
-                                  >
-                                    Delete
-                                  </div>
-                                </div>
-                              )}
-                              {/* <p className="small">
-                        {new Date(elem.date).toLocaleTimeString()}
-                      </p> */}
-                            </div>
+                          <div className="groupinfo" key={ele._id}>
+                            <h3>
+                              {ele.groupName
+                                ? ele.groupName
+                                : ele.users[0]._id === id
+                                  ? ele.users[1].displayName
+                                  : ele.users[0].displayName}
+                            </h3>
+                            <p>
+                              {ele.groupName
+                                ? ele.users.length > 1
+                                  ? ele.users.length + " members"
+                                  : ele.users.length + " member"
+                                : ele.users[0]._id === id
+                                  ? "@" + ele.users[1].username
+                                  : "@" + ele.users[0].username}
+                            </p>
                           </div>
                         );
                       })}
-                      <div ref={messagesEndRef} />
-                    </div>
-                  );
-                })}
-            {dummyChat && users && <div className="messagemasterwrapper"></div>}
-            {dummyChat && users && (
-              <div className="bottomsection">
-                <textarea
-                  value={message}
-                  onChange={handleChange}
-                  id="entermessage"
-                  placeholder="Enter message here..."
-                ></textarea>
-                <button onClick={handleImg}>Img</button>
-                <button className="enterbutton" onClick={handleDummySubmit}>
-                  Enter
-                </button>
+                  {dummyChat &&
+                    users &&
+                    users
+                      .filter((ele) => dummyChat === ele[1]._id)
+                      .map((ele) => {
+                        return (
+                          <div className="groupinfo" key={dummyChat}>
+                            <h3>{ele[1].displayName}</h3>
+                            <p>{"@" + ele[1].username}</p>
+                          </div>
+                        );
+                      })}
+                </div>
+                {chats &&
+                  page &&
+                  chats
+                    .filter((ele) => page === ele._id && ele.groupName)
+                    .map((ele) => {
+                      return (
+                        <div className="topbuttons" key="topbuttons">
+                          <button onClick={toggleGroupMode}>
+                            {groupAddMode ? "-" : "+"}
+                          </button>
+                          {ele._id === upForDeletion && (
+                            <div className="grouped">
+                              <h3>Are you sure you want to leave this chat?</h3>
+                              <button onClick={handleLeave}>Yes</button>
+                              <button onClick={undelete}>No</button>
+                            </div>
+                          )}
+                          {ele._id !== upForDeletion && (
+                            <button onClick={areyousurechat} val={ele._id}>
+                              Leave Chat
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
               </div>
-            )}
-            {page &&
-              chats &&
-              chats
-                .filter((ele) => page === ele._id)
-                .map((ele) => {
-                  return (
-                    <div className="bottomsection" key={ele._id}>
-                      <textarea
-                        value={message}
-                        onChange={handleChange}
-                        id="entermessage"
-                        placeholder="Enter message here..."
-                      ></textarea>
-                      <button onClick={handleImg}>Img</button>
-                      <button className="enterbutton" onClick={handleSubmit}>
-                        Enter
-                      </button>
-                    </div>
-                  );
-                })}
-            <input
-              type="file"
-              accept="image/*"
-              name="image"
-              id="image"
-              onChange={uploadImg}
-            ></input>
-          </div>
-        )) ||
+              {page &&
+                chats &&
+                chats
+                  .filter((ele) => page === ele._id)
+                  .map((ele) => {
+                    return (
+                      <div
+                        // ref={messagesContainerRef}
+                        className="messagemasterwrapper"
+                        key={ele._id}
+                      >
+                        {ele.messages.map((elem, index) => {
+                          return (
+                            <div className="messagewrapper" key={elem._id}>
+                              <div className="daywrapper">
+                                <div className="line"></div>
+                                {(index === 0 ||
+                                  new Date(ele.messages[index - 1].date)
+                                    .toISOString()
+                                    .substring(0, 10) !==
+                                    new Date(elem.date)
+                                      .toISOString()
+                                      .substring(0, 10)) && (
+                                  <div className="day">
+                                    <h4 className="border">
+                                      {new Date(elem.date)
+                                        .toISOString()
+                                        .substring(0, 10)}
+                                    </h4>
+                                  </div>
+                                )}
+                                <div className="line"></div>
+                              </div>
+                              <div
+                                className={
+                                  elem.user._id === id &&
+                                  elem._id === activeElement
+                                    ? "message right orange"
+                                    : elem.user._id === id
+                                      ? "message right"
+                                      : "message"
+                                }
+                              >
+                                {elem._id === upForDeletion && (
+                                  <div className="deletiondiv">
+                                    <h3>
+                                      Are you sure you want to delete this
+                                      message?
+                                    </h3>{" "}
+                                    <button onClick={handleDelete}>Yes</button>
+                                    <button onClick={undelete}>No</button>
+                                  </div>
+                                )}
+                                {elem.user._id !== id && (
+                                  <div
+                                    className="avatar"
+                                    val={elem.user._id}
+                                    onClick={handleProfile}
+                                    style={{
+                                      backgroundImage:
+                                        'url("' + elem.user.avatar + '")',
+                                    }}
+                                  ></div>
+                                )}
+                                <div>
+                                  <div
+                                    className={
+                                      elem.img ? "imgmessage" : "azure"
+                                    }
+                                  >
+                                    <h4>{elem.user.displayName}</h4>
+                                    {!elem.img && (
+                                      <p className="textmessage">{elem.text}</p>
+                                    )}
+                                    {elem.img && <img src={elem.img}></img>}
+                                    <h5 className="date">
+                                      {convertTime(
+                                        new Date(elem.date)
+                                          .toISOString()
+                                          .substring(11, 19),
+                                      )}
+                                    </h5>
+                                  </div>
+                                </div>
+                                {elem.user._id === id && (
+                                  <div
+                                    className="avatar"
+                                    val={id}
+                                    onClick={handleProfile}
+                                    style={{
+                                      backgroundImage:
+                                        'url("' + elem.user.avatar + '")',
+                                    }}
+                                  ></div>
+                                )}
+                                {elem.user._id === id && (
+                                  <div className="editdelwrapper">
+                                    {!elem.img ? (
+                                      <div
+                                        className="edit"
+                                        onClick={handleEdit}
+                                        val={elem._id}
+                                        text={elem.text}
+                                      >
+                                        Edit
+                                      </div>
+                                    ) : (
+                                      ""
+                                    )}
+                                    <div
+                                      className="delete"
+                                      onClick={areyousure}
+                                      val={elem._id}
+                                    >
+                                      Delete
+                                    </div>
+                                  </div>
+                                )}
+                                {/* <p className="small">
+                        {new Date(elem.date).toLocaleTimeString()}
+                      </p> */}
+                              </div>
+                            </div>
+                          );
+                        })}
+                        <div ref={messagesEndRef} />
+                      </div>
+                    );
+                  })}
+              {dummyChat && users && (
+                <div className="messagemasterwrapper"></div>
+              )}
+              {dummyChat && users && (
+                <div className="bottomsection">
+                  <textarea
+                    value={message}
+                    onChange={handleChange}
+                    id="entermessage"
+                    placeholder="Enter message here..."
+                  ></textarea>
+                  <button onClick={handleImg}>Img</button>
+                  <button className="enterbutton" onClick={handleDummySubmit}>
+                    Enter
+                  </button>
+                </div>
+              )}
+              {page &&
+                chats &&
+                chats
+                  .filter((ele) => page === ele._id)
+                  .map((ele) => {
+                    return (
+                      <div className="bottomsection" key={ele._id}>
+                        <textarea
+                          value={message}
+                          onChange={handleChange}
+                          id="entermessage"
+                          placeholder="Enter message here..."
+                        ></textarea>
+                        <button onClick={handleImg}>Img</button>
+                        <button className="enterbutton" onClick={handleSubmit}>
+                          Enter
+                        </button>
+                      </div>
+                    );
+                  })}
+              <input
+                type="file"
+                accept="image/*"
+                name="image"
+                id="image"
+                onChange={uploadImg}
+              ></input>
+            </div>
+          )) ||
           (newGroup && users && (
             <div className="newgroup">
               <h2>Create New Group</h2>
@@ -1113,7 +1392,12 @@ const Messenger = () => {
                     return (
                       <div className="useravatarwrapper" key={ele[1]._id}>
                         <div className="newchatrow">
-                          <div className="avatar"></div>
+                          <div
+                            className="avatar"
+                            style={{
+                              backgroundImage: 'url("' + ele[1].avatar + '")',
+                            }}
+                          ></div>
                           <h4>
                             {"@" +
                               (ele[1].username.length > 13
@@ -1129,35 +1413,8 @@ const Messenger = () => {
                 Submit!
               </button>
             </div>
-          )) ||
-          (profile && (
-            <div className="profile">
-              <div className="profilebackground"></div>
-              <div className="profilegroup">
-                <div className="groupedtogether">
-                  <div className="avatar bigavatar"></div>
-                  <div className="groupinfo">
-                    <h2>User</h2>
-                    <h3>@user</h3>
-                  </div>
-                </div>
-                <button>Edit Profile</button>
-              </div>
-              <div className="xmargin">
-                <h2>About Me</h2>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                  cupidatat non proident, sunt in culpa qui officia deserunt
-                  mollit anim id est laborum.
-                </p>
-              </div>
-            </div>
           )) || <div className="imgcontainer"></div>}
+        {profile && <div onClick={closeProf} className="closeprof"></div>}
       </div>
     )) || <h1>Loading...</h1>
   );
