@@ -29,8 +29,15 @@ const Messenger = () => {
   const [confirm, setConfirm] = useState("");
   const [errors, setErrors] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const [memberFilter, setMemberFilter] = useState(false);
+  const [greenButton, setGreenButton] = useState(false);
 
   const navigate = useNavigate();
+
+  function handleMemberFilter() {
+    setMemberFilter(true);
+    setAddMenuToggle(true);
+  }
 
   function handleBioText(e) {
     let val = e.currentTarget.value;
@@ -275,6 +282,7 @@ const Messenger = () => {
     if (addMenuToggle) {
       setAddMenuToggle(false);
       setGroupAddMode(false);
+      setMemberFilter(false);
     } else {
       setAddMenuToggle(true);
     }
@@ -363,7 +371,7 @@ const Messenger = () => {
   function handleProfile(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
     console.log(val);
-    setPage(null);
+    // setPage(null);
     setMessage("");
     setActiveElement(null);
     setProfile(val);
@@ -475,6 +483,16 @@ const Messenger = () => {
   }, [page]);
 
   useEffect(() => {
+    if (newGroup) {
+      if (newGroup.message !== "" && newGroup.groupName !== "") {
+        setGreenButton(true);
+      } else {
+        setGreenButton(false);
+      }
+    }
+  }, [newGroup]);
+
+  useEffect(() => {
     let div = document.querySelector(".messagemasterwrapper");
     if (div !== null) {
       const isNotScrolling =
@@ -506,7 +524,12 @@ const Messenger = () => {
         .then((response) => response.json())
         .then((response) => {
           let result = Object.keys(response).map((key) => [key, response[key]]);
-          console.log(result[0][1]);
+          console.log(
+            result[0][1].filter(
+              (chat) => chat._id === "66c271cb3498c290fc100122",
+            )[0].users,
+          );
+
           if (
             result[0][1].toString() === "You are not signed in." ||
             result[0][1].toString() === "Invalid authentication token"
@@ -828,6 +851,7 @@ const Messenger = () => {
       setPage(val);
       setBioEdit(false);
       setPassEdit(false);
+      setMemberFilter(false);
     }
 
     // console.log(await val);
@@ -946,6 +970,7 @@ const Messenger = () => {
     if (groupAddMode) {
       setGroupAddMode(false);
       setAddMenuToggle(false);
+      setMemberFilter(false);
       // e.currentTarget.classList.add("borderless");
     } else {
       setGroupAddMode(true);
@@ -968,6 +993,7 @@ const Messenger = () => {
       setProfile(null);
       setBioEdit(false);
       setPassEdit(false);
+      setMemberFilter(false);
       // console.log(users);
       setNewGroup({
         users: [],
@@ -1169,6 +1195,16 @@ const Messenger = () => {
                     : ele[1].username.toLowerCase().startsWith(search) &&
                       ele[1].username.length >= search.length,
                 )
+                .filter((ele) =>
+                  memberFilter
+                    ? Object.keys(
+                        chats
+                          .filter((chat) => chat._id === page)[0]
+                          .users.filter((user) => user._id === ele[1]._id),
+                      ).length > 0
+                    : true,
+                )
+                // we are here
                 .map((ele) => {
                   return (
                     <div className="wrap" key={ele[1]._id}>
@@ -1261,6 +1297,8 @@ const Messenger = () => {
                             : ele.users[0]._id === id
                               ? "@" + ele.users[1].username
                               : "@" + ele.users[0].username}
+                        </h3>
+                        <h3 className="highlight" onClick={handleMemberFilter}>
                           {ele.groupName && ele.users.length > 1
                             ? ele.users.length + " members"
                             : ele.groupName
@@ -1646,7 +1684,10 @@ const Messenger = () => {
                                   ? ele.users[1].displayName
                                   : ele.users[0].displayName}
                             </h3>
-                            <p>
+                            <p
+                              className={ele.groupName ? "highlight" : ""}
+                              onClick={ele.groupName ? handleMemberFilter : ""}
+                            >
                               {ele.groupName
                                 ? ele.users.length > 1
                                   ? ele.users.length + " members"
@@ -1924,8 +1965,12 @@ const Messenger = () => {
                     );
                   })}
               </div>
-              <button type="submit" onClick={newChat}>
-                Submit!
+              <button
+                type="submit"
+                className={greenButton ? "green" : "grey"}
+                onClick={newChat}
+              >
+                {greenButton ? "Submit!" : "Invalid"}
               </button>
             </div>
           )) || <div className="imgcontainer"></div>}

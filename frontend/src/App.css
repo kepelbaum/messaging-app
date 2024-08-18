@@ -24,6 +24,24 @@
 .dispchange {
 }
 
+.highlight {
+  cursor: pointer;
+}
+
+.highlight:hover {
+  font-weight: bold;
+  color: navy;
+}
+
+.green {
+  background-color: green;
+  color: white;
+}
+
+.grey {
+  background-color: dimgray;
+}
+
 .biotext {
   width: 30vw;
   height: 100px;
