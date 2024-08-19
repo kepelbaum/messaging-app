@@ -37,6 +37,7 @@ const Messenger = () => {
   function handleMemberFilter() {
     setMemberFilter(true);
     setAddMenuToggle(true);
+    setGroupAddMode(false);
   }
 
   function handleBioText(e) {
@@ -590,6 +591,10 @@ const Messenger = () => {
     if (favorites) {
       setFavorites(false);
     }
+    setGroupAddMode(false);
+    setAddMenuToggle(false);
+    setActiveElement(null);
+    setMemberFilter(false);
   }
 
   function handleImg() {
@@ -796,7 +801,7 @@ const Messenger = () => {
       })
         .then((response) => response.json())
         .then((response) => {
-          if (response.result === "Settings updated") {
+          if (response.message === "Settings updated") {
             setFriends(newFriends.concat(val));
           } else {
             throw new Error(Object.entries(response));
@@ -819,7 +824,7 @@ const Messenger = () => {
       })
         .then((response) => response.json())
         .then((response) => {
-          if (response.result === "Settings updated") {
+          if (response.message === "Settings updated") {
             setFriends(newFriends);
           } else {
             throw new Error(Object.entries(response));
@@ -833,6 +838,10 @@ const Messenger = () => {
     if (!favorites) {
       setFavorites(true);
     }
+    setGroupAddMode(false);
+    setActiveElement(null);
+    setMemberFilter(false);
+    setAddMenuToggle(false);
   }
 
   function showChat(e) {
@@ -970,6 +979,7 @@ const Messenger = () => {
     } else {
       setGroupAddMode(true);
       setAddMenuToggle(true);
+      setMemberFilter(false);
     }
   }
 
@@ -1002,11 +1012,58 @@ const Messenger = () => {
     (chats && token && user && users && (
       <div className="body">
         <div className="left">
-          <img src="./assets/log-out.svg" onClick={logoutAndMove}></img>
+          <svg
+            onClick={logoutAndMove}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="feather feather-log-out"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
           {/* <p>Logged in as:</p>
           <p>{user.substring(9, user.length - 1)}</p> */}
-          <h1 onClick={untoggleFav}>UNFAV</h1>
-          <h1 onClick={toggleFav}>FAV</h1>
+          <svg
+            onClick={untoggleFav}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="feather feather-users"
+          >
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <svg
+            onClick={toggleFav}
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="feather feather-star"
+          >
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
           <div
             className="avatar whiteborder"
             style={{
@@ -1025,10 +1082,79 @@ const Messenger = () => {
               <h2>{addMenuToggle ? "Users" : "Chats"}</h2>
               <div className="row">
                 <div>
-                  {!addMenuToggle && !newGroup && <h1 onClick={addMenu}>+</h1>}
-                  {addMenuToggle && !newGroup && <h1 onClick={addMenu}>-</h1>}
+                  {!addMenuToggle && !newGroup && (
+                    <svg
+                      onClick={addMenu}
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-user-plus"
+                    >
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="8.5" cy="7" r="4"></circle>
+                      <line x1="20" y1="8" x2="20" y2="14"></line>
+                      <line x1="23" y1="11" x2="17" y2="11"></line>
+                    </svg>
+                  )}
+                  {addMenuToggle && !newGroup && (
+                    <svg
+                      onClick={addMenu}
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-user"
+                    >
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                  )}
                 </div>
-                <h2 onClick={makeNewGroup}>{newGroup ? "X" : "NG"}</h2>
+                {/* <h2 onClick={makeNewGroup}>{newGroup ? "X" : "NG"}</h2> */}
+                {newGroup ? (
+                  <svg
+                    onClick={makeNewGroup}
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="feather feather-user-x"
+                  >
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="8.5" cy="7" r="4"></circle>
+                    <line x1="18" y1="8" x2="23" y2="13"></line>
+                    <line x1="23" y1="8" x2="18" y2="13"></line>
+                  </svg>
+                ) : (
+                  <svg
+                    onClick={makeNewGroup}
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="currentColor"
+                      d="M19 17v2H7v-2s0-4 6-4s6 4 6 4m-3-9a3 3 0 1 0-3 3a3 3 0 0 0 3-3m3.2 5.06A5.6 5.6 0 0 1 21 17v2h3v-2s0-3.45-4.8-3.94M18 5a2.9 2.9 0 0 0-.89.14a5 5 0 0 1 0 5.72A2.9 2.9 0 0 0 18 11a3 3 0 0 0 0-6M8 10H5V7H3v3H0v2h3v3h2v-3h3Z"
+                    />
+                  </svg>
+                )}
               </div>
             </div>
             <div className="chatmenubot">
@@ -1108,7 +1234,34 @@ const Messenger = () => {
                       key={ele._id}
                     >
                       <h5 onClick={handleFav} className="favicon" val={ele._id}>
-                        {friends.includes(ele._id) ? "U" : "*"}
+                        {friends.includes(ele._id) ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 2048 2048"
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M1609 992q-125 0-234 44t-192 122t-133 186t-56 235l-610 469l248-794L0 768h784L1024 0l240 768h784l-313 240q-31-7-62-11t-64-5m-9 160q93 0 174 35t142 96t96 142t36 175q0 93-35 174t-96 142t-142 96t-175 36q-93 0-174-35t-142-96t-96-142t-36-175q0-93 35-174t96-142t142-96t175-36m-320 448q0 66 25 124t69 101t102 69t124 26q47 0 92-13t84-40l-443-443q-26 39-39 84t-14 92m587 176q26-39 39-84t14-92q0-66-25-124t-69-101t-102-69t-124-26q-47 0-92 13t-84 40z"
+                            />
+                          </svg>
+                        ) : (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="feather feather-star"
+                          >
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                          </svg>
+                        )}
                       </h5>
                       <div
                         className="avatar chatavatar"
@@ -1654,14 +1807,18 @@ const Messenger = () => {
                           ? users.filter(
                               (ele) => dummyChat === ele[1]._id,
                             )[0][1].avatar
-                          : chats.filter((ele) => ele._id === page)[0].groupName
-                            ? chats.filter((ele) => ele._id === page)[0].avatar
+                          : !chats.filter((ele) => ele._id === page)[0]
+                            ? ""
                             : chats.filter((ele) => ele._id === page)[0]
-                                  .users[0]._id === id
+                                  .groupName
                               ? chats.filter((ele) => ele._id === page)[0]
-                                  .users[1].avatar
+                                  .avatar
                               : chats.filter((ele) => ele._id === page)[0]
-                                  .users[0].avatar) +
+                                    .users[0]._id === id
+                                ? chats.filter((ele) => ele._id === page)[0]
+                                    .users[1].avatar
+                                : chats.filter((ele) => ele._id === page)[0]
+                                    .users[0].avatar) +
                         '")',
                     }}
                   ></div>
@@ -1969,7 +2126,26 @@ const Messenger = () => {
               </button>
             </div>
           )) || <div className="imgcontainer"></div>}
-        {profile && <div onClick={closeProf} className="closeprof"></div>}
+        {profile && (
+          <div onClick={closeProf} className="closeprof">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="red"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-x-square"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+            </svg>
+          </div>
+        )}
       </div>
     )) || <h1>Loading...</h1>
   );
