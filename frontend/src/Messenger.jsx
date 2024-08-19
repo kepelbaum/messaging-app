@@ -1002,7 +1002,7 @@ const Messenger = () => {
     (chats && token && user && users && (
       <div className="body">
         <div className="left">
-          <p onClick={logoutAndMove}>Logout</p>
+          <img src="./assets/log-out.svg" onClick={logoutAndMove}></img>
           {/* <p>Logged in as:</p>
           <p>{user.substring(9, user.length - 1)}</p> */}
           <h1 onClick={untoggleFav}>UNFAV</h1>
