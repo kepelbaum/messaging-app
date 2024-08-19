@@ -76,7 +76,7 @@ app.use(async (req, res, next) => {
 app.use("/users", routes.user);
 app.use("/messages", routes.message);
 app.use("/chats", routes.chat);
-app.use(express.static(_dirname + "/assets"));
+app.use(express.static(__dirname + "/assets"));
 
 app.get("/", verifyToken, (req, res) => {
   jwt.verify(req.token, "secretkey", (err, authData) => {
