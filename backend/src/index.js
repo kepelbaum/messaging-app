@@ -343,7 +343,7 @@ const createUsersWithMessages = async () => {
     background:
       "https://plus.unsplash.com/premium_photo-1682048358672-1c5c6c9ed2ae?q=80&w=2664&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     avatar:
-      "https://plus.unsplash.com/premium_photo-1668024966086-bd66ba04262f?q=80&w=2692&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://res.cloudinary.com/dxbkraqxl/image/upload/v1724025873/premium_photo-1668024966086-bd66ba04262f_wnb5be.jpg",
   });
 
   const chat3 = new models.Chat({

@@ -524,11 +524,7 @@ const Messenger = () => {
         .then((response) => response.json())
         .then((response) => {
           let result = Object.keys(response).map((key) => [key, response[key]]);
-          console.log(
-            result[0][1].filter(
-              (chat) => chat._id === "66c271cb3498c290fc100122",
-            )[0].users,
-          );
+          console.log(result[0][1]);
 
           if (
             result[0][1].toString() === "You are not signed in." ||
@@ -842,7 +838,6 @@ const Messenger = () => {
   function showChat(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
     let ifprof = e.target.attributes.getNamedItem("ifprof");
-    console.log(ifprof);
     if (!ifprof) {
       setDummyChat(null);
       setMessage("");
@@ -1013,7 +1008,7 @@ const Messenger = () => {
           <h1 onClick={untoggleFav}>UNFAV</h1>
           <h1 onClick={toggleFav}>FAV</h1>
           <div
-            className="avatar"
+            className="avatar whiteborder"
             style={{
               backgroundImage:
                 'url("' +
