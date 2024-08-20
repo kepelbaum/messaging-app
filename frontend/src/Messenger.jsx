@@ -1081,7 +1081,9 @@ const Messenger = () => {
             style={{
               backgroundImage:
                 'url("' +
-                users.filter((ele) => ele[1]._id === id)[0][1].avatar +
+                (users.filter((ele) => ele[1]._id === id)[0]
+                  ? users.filter((ele) => ele[1]._id === id)[0][1].avatar
+                  : "") +
                 '")',
             }}
             onClick={handleProfile}
