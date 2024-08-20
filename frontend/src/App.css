@@ -49,6 +49,10 @@
   display: none !important;
 }
 
+.styleaslink {
+  cursor: pointer;
+}
+
 .cat {
   width: 400px;
   height: 400px;

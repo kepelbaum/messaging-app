@@ -10,30 +10,30 @@ const Login = () => {
   const [pass, setPass] = useState("");
   const [errors, setErrors] = useState(null);
 
-  //   function logAsAdmin() {
-  //     fetch("https://messaging-app-production-6dff.up.railway.app/login", {
-  //       mode: "cors",
-  //       method: "POST",
-  //       body: JSON.stringify({
-  //         username: "admin",
-  //         password: "admin",
-  //       }),
-  //       headers: {
-  //         "Content-type": "application/json; charset=UTF-8",
-  //       },
-  //     })
-  //       .then((response) => response.json())
-  //       .then((response) => {
-  //         if (response.result) {
-  //           setErrors(response.result);
-  //         } else {
-  //           setToken(response.token);
-  //           localStorage.setItem("token", response.token);
-  //           movePage("/");
-  //         }
-  //       })
-  //       .catch((error) => console.error(error));
-  //   }
+  function logAsGuest() {
+    fetch("https://messaging-app-production-6dff.up.railway.app/login", {
+      mode: "cors",
+      method: "POST",
+      body: JSON.stringify({
+        username: "guest",
+        password: "guest",
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.result) {
+          setErrors(response.result);
+        } else {
+          setToken(response.token);
+          localStorage.setItem("token", response.token);
+          movePage("/");
+        }
+      })
+      .catch((error) => console.error(error));
+  }
 
   function handleUser(e) {
     setName(e.target.value);
@@ -123,6 +123,13 @@ const Login = () => {
               Don't have an account? Sign up{" "}
               <span className="visiblelink">
                 <Link to={"/sign-up"}>here.</Link>
+              </span>
+            </span>
+            <br></br>
+            <span>
+              Or use a{" "}
+              <span className="styleaslink" onClick={logAsGuest}>
+                <Link>guest account.</Link>
               </span>
             </span>
           </div>
