@@ -29,7 +29,7 @@ const Login = () => {
         } else {
           setToken(response.token);
           localStorage.setItem("token", response.token);
-          movePage("/");
+          movePage("/app");
         }
       })
       .catch((error) => console.error(error));
