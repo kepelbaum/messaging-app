@@ -63,7 +63,6 @@ const Messenger = () => {
   function passSubmit() {
     let pass = password;
     let conf = confirm;
-    console.log(password === confirm);
     if (password.length > 4 && pass === conf) {
       fetch(
         "https://messaging-app-production-6dff.up.railway.app/users/password",
@@ -106,7 +105,6 @@ const Messenger = () => {
   function bioSubmit(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
     let dname = e.currentTarget.attributes.getNamedItem("dname").value;
-    console.log(val, dname.value);
     if (val === "group") {
       fetch(
         "https://messaging-app-production-6dff.up.railway.app/chats/" + profile,
@@ -373,7 +371,7 @@ const Messenger = () => {
 
   function handleProfile(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
-    console.log(val);
+    // console.log(val);
     // setPage(null);
     setMessage("");
     setActiveElement(null);
@@ -537,7 +535,7 @@ const Messenger = () => {
         .then((response) => response.json())
         .then((response) => {
           let result = Object.keys(response).map((key) => [key, response[key]]);
-          console.log(result[0][1]);
+          // console.log(result[0][1]);
 
           if (
             result[0][1].toString() === "You are not signed in." ||
@@ -615,7 +613,7 @@ const Messenger = () => {
 
   function handleAvatar(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
-    console.log(val);
+    // console.log(val);
     if (val) {
       document.getElementById("avatar").click();
     }
@@ -623,7 +621,7 @@ const Messenger = () => {
 
   function handleBackground(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
-    console.log(val);
+    // console.log(val);
     if (val) {
       document.getElementById("background").click();
     }
@@ -768,7 +766,7 @@ const Messenger = () => {
     } else {
       const formData = new FormData();
       formData.append("image", e.currentTarget.files[0]);
-      console.log(formData.getAll("image"), dummyChat);
+      // console.log(formData.getAll("image"), dummyChat);
       fetch(
         "https://messaging-app-production-6dff.up.railway.app/chats/" +
           dummyChat,

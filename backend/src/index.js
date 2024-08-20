@@ -16,7 +16,7 @@ cloudinary.config({
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
-const eraseDatabaseOnSync = true;
+const eraseDatabaseOnSync = false;
 
 const app = express();
 
