@@ -601,6 +601,10 @@ const Messenger = () => {
     if (favorites) {
       setFavorites(false);
     }
+    if (!newGroup) {
+      setAddMenuToggle(false);
+      setGroupAddMode(false);
+    }
     setActiveElement(null);
     setMemberFilter(false);
   }
@@ -848,6 +852,10 @@ const Messenger = () => {
     }
     setActiveElement(null);
     setMemberFilter(false);
+    if (!newGroup) {
+      setAddMenuToggle(false);
+      setGroupAddMode(false);
+    }
   }
 
   function showChat(e) {
