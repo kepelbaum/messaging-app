@@ -16,7 +16,7 @@ cloudinary.config({
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
-const eraseDatabaseOnSync = false;
+const eraseDatabaseOnSync = true;
 
 const app = express();
 
@@ -299,14 +299,14 @@ const createUsersWithMessages = async () => {
   });
 
   const message2 = new models.Chatmessage({
-    text: "Hey there",
-    user: user3.id,
+    text: "Hey",
+    user: user12.id,
     date: Date.now() - 150000000,
   });
 
   const message3 = new models.Chatmessage({
     text: "You there?",
-    user: user3.id,
+    user: user12.id,
     date: Date.now() - 3000,
   });
 
@@ -330,16 +330,16 @@ const createUsersWithMessages = async () => {
   });
 
   const chat1 = new models.Chat({
-    users: [user1, user2],
+    users: [user1, user2, user12],
     lastMessage: message1,
     messages: [message1],
   });
 
   const chat2 = new models.Chat({
-    users: [user3, user2],
+    users: [user12, user2],
     lastMessage: message5,
     messages: [message2, message3, message5, message6],
-    groupName: "Utopia",
+    groupName: "Lorem",
     bio: "Lorem ipsum",
     background:
       "https://plus.unsplash.com/premium_photo-1682048358672-1c5c6c9ed2ae?q=80&w=2664&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -348,10 +348,10 @@ const createUsersWithMessages = async () => {
   });
 
   const chat3 = new models.Chat({
-    users: [user1, user2, user3],
+    users: [user1, user2, user3, user12],
     lastMessage: message4,
     messages: [message4],
-    groupName: "Asylum",
+    groupName: "Ipsum",
     avatar:
       "https://plus.unsplash.com/premium_photo-1661962637716-e29cb0ac15c1?q=80&w=2669&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     background:
@@ -359,8 +359,9 @@ const createUsersWithMessages = async () => {
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
   });
 
-  user1.chats = [chat1, chat2, chat3];
+  user1.chats = [chat1, chat3];
   user2.chats = [chat1, chat2, chat3];
+  user12.chats = [chat1, chat2, chat3];
   user3.chats = [chat3];
 
   await message1.save();
@@ -385,4 +386,5 @@ const createUsersWithMessages = async () => {
   await user9.save();
   await user10.save();
   await user11.save();
+  await user12.save();
 };
