@@ -28,7 +28,9 @@ const Login = () => {
           setErrors(response.result);
         } else {
           setToken(response.token);
+          setId(response.id);
           localStorage.setItem("token", response.token);
+          localStorage.setItem("id", response.id);
           movePage("/app");
         }
       })
