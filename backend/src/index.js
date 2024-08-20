@@ -16,7 +16,7 @@ cloudinary.config({
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
-const eraseDatabaseOnSync = false;
+const eraseDatabaseOnSync = true;
 
 const app = express();
 
@@ -330,8 +330,7 @@ const createUsersWithMessages = async () => {
   });
 
   const chat1 = new models.Chat({
-    users: [user1, user2, user12],
-    lastMessage: message1,
+    users: [user2, user12],
     messages: [message1],
   });
 
@@ -359,7 +358,7 @@ const createUsersWithMessages = async () => {
     bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
   });
 
-  user1.chats = [chat1, chat3];
+  user1.chats = [chat3];
   user2.chats = [chat1, chat2, chat3];
   user12.chats = [chat1, chat2, chat3];
   user3.chats = [chat3];
