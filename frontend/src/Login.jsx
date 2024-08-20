@@ -76,7 +76,7 @@ const Login = () => {
 
   return (
     (!token && (
-      <div className="wrapper big">
+      <div>
         {/* <div className="header">
           <h3>Blog API</h3>
           <ul>
@@ -98,13 +98,22 @@ const Login = () => {
             )}
           </ul>
         </div> */}
-        <div>
+        <div className="login">
+          <h1>Messaging App</h1>
+          <img
+            className="cat"
+            src="https://st5.depositphotos.com/46060006/64700/v/450/depositphotos_647007102-stock-illustration-cat-simple-vector-black-image.jpg"
+          ></img>
           <h2>{errors}</h2>
           <div className="form">
             <label htmlFor="username">Username (lowercase)</label>
+            <br></br>
             <input type="text" id="username" onChange={handleUser}></input>
+            <br></br>
             <label htmlFor="password">Password</label>
+            <br></br>
             <input type="password" id="password" onChange={handlePass}></input>
+            <br></br>
             <button type="submit" onClick={handleSubmit}>
               Submit
             </button>

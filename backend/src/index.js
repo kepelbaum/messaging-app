@@ -300,13 +300,13 @@ const createUsersWithMessages = async () => {
 
   const message2 = new models.Chatmessage({
     text: "Hey there",
-    user: user1.id,
+    user: user3.id,
     date: Date.now() - 150000000,
   });
 
   const message3 = new models.Chatmessage({
     text: "You there?",
-    user: user1.id,
+    user: user3.id,
     date: Date.now() - 3000,
   });
 
@@ -336,7 +336,7 @@ const createUsersWithMessages = async () => {
   });
 
   const chat2 = new models.Chat({
-    users: [user1, user2],
+    users: [user3, user2],
     lastMessage: message5,
     messages: [message2, message3, message5, message6],
     groupName: "Utopia",

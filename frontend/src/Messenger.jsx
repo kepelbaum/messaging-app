@@ -178,6 +178,7 @@ const Messenger = () => {
     setActiveElement(null);
     setMessage("");
     setUpForDeletion(e.currentTarget.attributes.getNamedItem("val").value);
+    setGroupAddMode(false);
   }
 
   function logoutAndMove() {
@@ -267,6 +268,7 @@ const Messenger = () => {
         if (response.result === "Left the chat") {
           setPage(null);
           movePage("/app");
+          setMemberFilter(false);
         } else {
           throw new Error(Object.entries(response));
         }
@@ -438,45 +440,55 @@ const Messenger = () => {
     let interval = seconds / 31536000;
 
     if (interval > 1) {
-      if (seconds < 31536000 * 2 && seconds > 31535999) {
-        return Math.floor(interval) + " year ago";
-      } else {
-        return Math.floor(interval) + " years ago";
-      }
+      // if (seconds < 31536000 * 2 && seconds > 31535999) {
+      //   return Math.floor(interval) + " year ago";
+      // } else {
+      //   return Math.floor(interval) + " years ago";
+      // }
+      return Math.floor(interval) + " y";
     }
     interval = seconds / 2592000;
     if (interval > 1) {
-      if (seconds < 2592000 * 2 && seconds > 2591999) {
-        return Math.floor(interval) + " month ago";
-      } else {
-        return Math.floor(interval) + " months ago";
-      }
+      // if (seconds < 2592000 * 2 && seconds > 2591999) {
+      //   return Math.floor(interval) + " month ago";
+      // } else {
+      //   return Math.floor(interval) + " months ago";
+      // }
+      return Math.floor(interval) + " mo";
     }
     interval = seconds / 86400;
     if (interval > 1) {
-      if (seconds < 86400 * 2 && seconds > 86399) {
-        return Math.floor(interval) + " day ago";
-      } else {
-        return Math.floor(interval) + " days ago";
-      }
+      // if (seconds < 86400 * 2 && seconds > 86399) {
+      //   return Math.floor(interval) + " day ago";
+      // } else {
+      //   return Math.floor(interval) + " days ago";
+      // }
+      return Math.floor(interval) + " d";
     }
     interval = seconds / 3600;
     if (interval > 1) {
+      // if (seconds < 7200 && seconds > 3599) {
+      //   return Math.floor(interval) + " hour ago";
+      // } else {
+      //   return Math.floor(interval) + " hours ago";
+      // }
       if (seconds < 7200 && seconds > 3599) {
-        return Math.floor(interval) + " hour ago";
+        return Math.floor(interval) + " hr";
       } else {
-        return Math.floor(interval) + " hours ago";
+        return Math.floor(interval) + " hrs";
       }
     }
     interval = seconds / 60;
     if (interval > 1) {
-      if (seconds < 120 && seconds > 59) {
-        return Math.floor(interval) + " minute ago";
-      } else {
-        return Math.floor(interval) + " minutes ago";
-      }
+      // if (seconds < 120 && seconds > 59) {
+      //   return Math.floor(interval) + " minute ago";
+      // } else {
+      //   return Math.floor(interval) + " minutes ago";
+      // }
+      return Math.floor(interval) + " m";
     }
-    return Math.floor(seconds) + " seconds ago";
+    // return Math.floor(seconds) + " seconds ago";
+    return Math.floor(seconds) + " s";
   }
 
   useEffect(() => {
@@ -1233,7 +1245,11 @@ const Messenger = () => {
                       val={ele._id}
                       key={ele._id}
                     >
-                      <h5 onClick={handleFav} className="favicon" val={ele._id}>
+                      <div
+                        onClick={handleFav}
+                        className="favicon"
+                        val={ele._id}
+                      >
                         {friends.includes(ele._id) ? (
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -1262,7 +1278,7 @@ const Messenger = () => {
                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                           </svg>
                         )}
-                      </h5>
+                      </div>
                       <div
                         className="avatar chatavatar"
                         onClick={handleProfile}
@@ -1299,14 +1315,14 @@ const Messenger = () => {
                                 return new Date(b.date - a.date);
                               })
                               .reverse()[0]
-                              .text.substring(0, 17) + "..."
+                              .text.substring(0, 13) + "..."
                           : []
                               .concat(ele.messages)
                               .sort((a, b) => {
                                 return new Date(b.date - a.date);
                               })
                               .reverse()[0]
-                              .text.substring(0, 20)}
+                              .text.substring(0, 16)}
                       </div>
                       <div className="ago">
                         {timeSince(
@@ -1871,9 +1887,12 @@ const Messenger = () => {
                     .map((ele) => {
                       return (
                         <div className="topbuttons" key="topbuttons">
-                          <button onClick={toggleGroupMode}>
-                            {groupAddMode ? "-" : "+"}
-                          </button>
+                          {!upForDeletion && (
+                            <button onClick={toggleGroupMode}>
+                              {groupAddMode ? "-" : "+"}
+                            </button>
+                          )}
+
                           {ele._id === upForDeletion && (
                             <div className="grouped">
                               <h3>Are you sure you want to leave this chat?</h3>
@@ -1939,8 +1958,12 @@ const Messenger = () => {
                                       Are you sure you want to delete this
                                       message?
                                     </h3>{" "}
-                                    <button onClick={handleDelete}>Yes</button>
-                                    <button onClick={undelete}>No</button>
+                                    <div className="yesorno">
+                                      <button onClick={handleDelete}>
+                                        Yes
+                                      </button>
+                                      <button onClick={undelete}>No</button>
+                                    </div>
                                   </div>
                                 )}
                                 {elem.user._id !== id && (
@@ -1988,23 +2011,59 @@ const Messenger = () => {
                                 {elem.user._id === id && (
                                   <div className="editdelwrapper">
                                     {!elem.img ? (
-                                      <div
-                                        className="edit"
-                                        onClick={handleEdit}
-                                        val={elem._id}
-                                        text={elem.text}
-                                      >
-                                        Edit
+                                      <div className="div">
+                                        <svg
+                                          className="edit"
+                                          onClick={handleEdit}
+                                          val={elem._id}
+                                          text={elem.text}
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="24"
+                                          height="24"
+                                          viewBox="0 0 24 24"
+                                          fill="none"
+                                          stroke="currentColor"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          className="feather feather-edit"
+                                        >
+                                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                        </svg>
                                       </div>
                                     ) : (
                                       ""
                                     )}
-                                    <div
-                                      className="delete"
-                                      onClick={areyousure}
-                                      val={elem._id}
-                                    >
-                                      Delete
+                                    <div className="div">
+                                      <svg
+                                        className="delete"
+                                        onClick={areyousure}
+                                        val={elem._id}
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="feather feather-x"
+                                      >
+                                        <line
+                                          x1="18"
+                                          y1="6"
+                                          x2="6"
+                                          y2="18"
+                                        ></line>
+                                        <line
+                                          x1="6"
+                                          y1="6"
+                                          x2="18"
+                                          y2="18"
+                                        ></line>
+                                      </svg>
                                     </div>
                                   </div>
                                 )}
@@ -2031,10 +2090,12 @@ const Messenger = () => {
                     id="entermessage"
                     placeholder="Enter message here..."
                   ></textarea>
-                  <button onClick={handleImg}>Img</button>
-                  <button className="enterbutton" onClick={handleDummySubmit}>
-                    Enter
-                  </button>
+                  <div className="smallgap">
+                    <button onClick={handleImg}>Img</button>
+                    <button className="enterbutton" onClick={handleDummySubmit}>
+                      Enter
+                    </button>
+                  </div>
                 </div>
               )}
               {page &&
@@ -2051,10 +2112,15 @@ const Messenger = () => {
                           id="entermessage"
                           placeholder="Enter message here..."
                         ></textarea>
-                        <button onClick={handleImg}>Img</button>
-                        <button className="enterbutton" onClick={handleSubmit}>
-                          Enter
-                        </button>
+                        <div className="smallgap">
+                          <button onClick={handleImg}>Img</button>
+                          <button
+                            className="enterbutton"
+                            onClick={handleSubmit}
+                          >
+                            Enter
+                          </button>
+                        </div>
                       </div>
                     );
                   })}

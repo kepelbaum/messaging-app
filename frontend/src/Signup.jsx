@@ -83,7 +83,12 @@ const Signup = ({}) => {
 
   return (
     (!token && (
-      <div className="wrapper big">
+      <div className="login">
+        <h2>New Account</h2>
+        <img
+          className="cat"
+          src="https://st5.depositphotos.com/46060006/64700/v/450/depositphotos_647007102-stock-illustration-cat-simple-vector-black-image.jpg"
+        ></img>
         {/* <div className="header">
           <h3>Blog API</h3>
           <ul>
