@@ -31,8 +31,16 @@ const Messenger = () => {
   const [displayName, setDisplayName] = useState("");
   const [memberFilter, setMemberFilter] = useState(false);
   const [greenButton, setGreenButton] = useState(false);
+  const [collapse, setCollapse] = useState("right");
 
   const navigate = useNavigate();
+
+  function collapseLeft() {
+    setCollapse("left");
+  }
+  function collapseRight() {
+    setCollapse("right");
+  }
 
   function handleMemberFilter() {
     setMemberFilter(true);
@@ -376,6 +384,7 @@ const Messenger = () => {
     setMessage("");
     setActiveElement(null);
     setProfile(val);
+    setCollapse("left");
   }
 
   function handleDummySubmit() {
@@ -607,6 +616,7 @@ const Messenger = () => {
     }
     setActiveElement(null);
     setMemberFilter(false);
+    setCollapse("right");
   }
 
   function handleImg() {
@@ -855,6 +865,7 @@ const Messenger = () => {
     if (!newGroup) {
       setAddMenuToggle(false);
       setGroupAddMode(false);
+      setCollapse("right");
     }
   }
 
@@ -862,6 +873,7 @@ const Messenger = () => {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
     let ifprof = e.target.attributes.getNamedItem("ifprof");
     if (!ifprof) {
+      setCollapse("left");
       setDummyChat(null);
       setMessage("");
       setActiveElement(null);
@@ -1013,6 +1025,7 @@ const Messenger = () => {
       setBioEdit(false);
       setPassEdit(false);
       setMemberFilter(false);
+      setCollapse("left");
       // console.log(users);
       setNewGroup({
         users: [],
@@ -1092,8 +1105,34 @@ const Messenger = () => {
             val={id}
           ></div>
         </div>
-        <div className="mid">
+        <div
+          className={
+            collapse === "right"
+              ? "mid"
+              : page || dummyChat || profile || newGroup
+                ? "mid collapse"
+                : "mid"
+          }
+        >
           <div className="chatmenu">
+            <div className="collleft">
+              <svg
+                onClick={collapseLeft}
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="feather feather-chevrons-right"
+              >
+                <polyline points="13 17 18 12 13 7"></polyline>
+                <polyline points="6 17 11 12 6 7"></polyline>
+              </svg>
+            </div>
             <div className="chatmenutop">
               <h2>{addMenuToggle ? "Users" : "Chats"}</h2>
               <div className="row">
@@ -1407,7 +1446,12 @@ const Messenger = () => {
             .map((ele) => {
               //"background-image: url(" + ele.background + ");"
               return (
-                <div className="profile" key={ele._id}>
+                <div
+                  className={
+                    collapse === "right" ? "profile collapse" : "profile"
+                  }
+                  key={ele._id}
+                >
                   <div
                     className="profilebackground"
                     onClick={handleBackground}
@@ -1557,7 +1601,12 @@ const Messenger = () => {
               .map((ele) => {
                 //"background-image: url(" + ele.background + ");"
                 return (
-                  <div className="profile" key={ele[1]._id}>
+                  <div
+                    className={
+                      collapse === "right" ? "profile collapse" : "profile"
+                    }
+                    key={ele[1]._id}
+                  >
                     <div
                       className="profilebackground"
                       onClick={handleBackground}
@@ -1688,7 +1737,12 @@ const Messenger = () => {
               .filter((ele) => ele[1]._id === profile)
               .map((ele) => {
                 return (
-                  <div className="profile" key={ele._id}>
+                  <div
+                    className={
+                      collapse === "right" ? "profile collapse" : "profile"
+                    }
+                    key={ele._id}
+                  >
                     <div
                       className="profilebackground"
                       onClick={handleBackground}
@@ -1813,9 +1867,31 @@ const Messenger = () => {
                 );
               })) ||
           ((page || dummyChat) && (
-            <div className="messagebox">
+            <div
+              className={
+                collapse === "right" ? "messagebox collapse" : "messagebox"
+              }
+            >
               <div className="chatinfotop">
                 <div className="grouped">
+                  <div className="collright">
+                    <svg
+                      onClick={collapseRight}
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-chevrons-left"
+                    >
+                      <polyline points="11 17 6 12 11 7"></polyline>
+                      <polyline points="18 17 13 12 18 7"></polyline>
+                    </svg>
+                  </div>
                   <div
                     className="avatar"
                     onClick={handleProfile}
@@ -2138,7 +2214,29 @@ const Messenger = () => {
             </div>
           )) ||
           (newGroup && users && (
-            <div className="newgroup">
+            <div
+              className={
+                collapse === "right" ? "newgroup collapse" : "newgroup"
+              }
+            >
+              <div className="ngright">
+                <svg
+                  onClick={collapseRight}
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="feather feather-chevrons-left"
+                >
+                  <polyline points="11 17 6 12 11 7"></polyline>
+                  <polyline points="18 17 13 12 18 7"></polyline>
+                </svg>
+              </div>
               <h2>Create New Group</h2>
               <label htmlFor="groupname">Group Name:</label>
               <input
@@ -2213,6 +2311,30 @@ const Messenger = () => {
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
               <line x1="9" y1="9" x2="15" y2="15"></line>
               <line x1="15" y1="9" x2="9" y2="15"></line>
+            </svg>
+          </div>
+        )}
+        {profile && (
+          <div
+            className={
+              collapse === "right" ? "profcollright collapse" : "profcollright"
+            }
+          >
+            <svg
+              onClick={collapseRight}
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-chevrons-left"
+            >
+              <polyline points="11 17 6 12 11 7"></polyline>
+              <polyline points="18 17 13 12 18 7"></polyline>
             </svg>
           </div>
         )}
