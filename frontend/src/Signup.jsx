@@ -110,7 +110,13 @@ const Signup = ({}) => {
             })}
           <div className="form">
             <label htmlFor="username">Username (lowercase)</label>
-            <input type="text" id="username" onChange={handleUser}></input>
+            <input
+              type="text"
+              id="username"
+              onChange={handleUser}
+              minLength={1}
+              maxLength={13}
+            ></input>
             <label htmlFor="displayname">
               Display Name {" (can be changed later)"}{" "}
             </label>

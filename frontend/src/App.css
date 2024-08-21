@@ -179,9 +179,11 @@ button {
 }
 
 .groupinfo {
+  word-wrap: break-word;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  max-width: 30vw;
 }
 
 .chatmenu {
@@ -274,8 +276,8 @@ button {
 
 .profcollright {
   position: absolute;
-  left: 16vw;
-  top: 2vh;
+  left: 50px;
+  top: 50px;
   width: 30px;
   height: 30px;
   background-color: white;
@@ -471,8 +473,8 @@ svg {
 }
 
 .avatar {
-  width: 80px;
-  height: 80px;
+  min-width: 80px;
+  min-height: 80px;
   border-radius: 50%;
   border: 3px solid black;
   background-color: white;
@@ -579,12 +581,12 @@ svg {
   .imgcontainer,
   .newgroup {
     height: 95vh;
-    width: 85vw;
+    width: 100vw;
     grid-area: 1 / 2 / 2 / 3;
   }
   .profile {
     height: 95vh;
-    width: 85vw;
+    width: 100vw;
   }
 
   .bigavatar.avatar {
@@ -620,5 +622,9 @@ svg {
   }
   .newgroup input {
     max-width: 200px;
+  }
+  .avatar {
+    min-width: 50px;
+    min-height: 50px;
   }
 }

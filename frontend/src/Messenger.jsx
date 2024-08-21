@@ -1115,24 +1115,26 @@ const Messenger = () => {
           }
         >
           <div className="chatmenu">
-            <div className="collleft">
-              <svg
-                onClick={collapseLeft}
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-chevrons-right"
-              >
-                <polyline points="13 17 18 12 13 7"></polyline>
-                <polyline points="6 17 11 12 6 7"></polyline>
-              </svg>
-            </div>
+            {(profile || page || newGroup || dummyChat) && (
+              <div className="collleft">
+                <svg
+                  onClick={collapseLeft}
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="feather feather-chevrons-right"
+                >
+                  <polyline points="13 17 18 12 13 7"></polyline>
+                  <polyline points="6 17 11 12 6 7"></polyline>
+                </svg>
+              </div>
+            )}
             <div className="chatmenutop">
               <h2>{addMenuToggle ? "Users" : "Chats"}</h2>
               <div className="row">
@@ -1340,11 +1342,23 @@ const Messenger = () => {
                       ></div>
                       <div className="chatinfo">
                         <h3>
-                          {ele.groupName
+                          {(ele.groupName
                             ? ele.groupName
                             : ele.users[0]._id === id
                               ? ele.users[1].displayName
-                              : ele.users[0].displayName}
+                              : ele.users[0].displayName
+                          ).length > 13
+                            ? (ele.groupName
+                                ? ele.groupName
+                                : ele.users[0]._id === id
+                                  ? ele.users[1].displayName
+                                  : ele.users[0].displayName
+                              ).substring(0, 9) + "..."
+                            : ele.groupName
+                              ? ele.groupName
+                              : ele.users[0]._id === id
+                                ? ele.users[1].displayName
+                                : ele.users[0].displayName}
                         </h3>
                         {[]
                           .concat(ele.messages)
@@ -1926,11 +1940,23 @@ const Messenger = () => {
                         return (
                           <div className="groupinfo" key={ele._id}>
                             <h3>
-                              {ele.groupName
+                              {(ele.groupName
                                 ? ele.groupName
                                 : ele.users[0]._id === id
                                   ? ele.users[1].displayName
-                                  : ele.users[0].displayName}
+                                  : ele.users[0].displayName
+                              ).length > 13
+                                ? (ele.groupName
+                                    ? ele.groupName
+                                    : ele.users[0]._id === id
+                                      ? ele.users[1].displayName
+                                      : ele.users[0].displayName
+                                  ).substring(0, 9) + "..."
+                                : ele.groupName
+                                  ? ele.groupName
+                                  : ele.users[0]._id === id
+                                    ? ele.users[1].displayName
+                                    : ele.users[0].displayName}
                             </h3>
                             <p
                               className={ele.groupName ? "highlight" : ""}
