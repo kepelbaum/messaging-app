@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "./App.jsx";
 
@@ -9,6 +9,12 @@ const Login = () => {
   const [name, setName] = useState("");
   const [pass, setPass] = useState("");
   const [errors, setErrors] = useState(null);
+
+  useEffect(() => {
+    if (token) {
+      setTimeout(movePage("/app", 1000));
+    }
+  }, [token]);
 
   function logAsGuest() {
     fetch("https://messaging-app-production-6dff.up.railway.app/login", {

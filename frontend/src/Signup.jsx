@@ -31,6 +31,12 @@ const Signup = ({}) => {
     setDisp(e.target.value);
   }
 
+  useEffect(() => {
+    if (token) {
+      setTimeout(movePage("/app", 1000));
+    }
+  }, [token]);
+
   function handleSubmit() {
     fetch("https://messaging-app-production-6dff.up.railway.app/users", {
       mode: "cors",

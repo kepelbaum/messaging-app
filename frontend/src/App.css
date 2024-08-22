@@ -82,11 +82,12 @@
   justify-content: center;
   align-items: center;
   text-align: center;
+  max-height: 20vh;
 }
 
 .biodiv p,
 .xmargin p {
-  width: 80vw;
+  width: 70vw;
   height: 500px;
   word-wrap: break-word;
 }
@@ -345,7 +346,9 @@ button {
   gap: 50px;
 }
 
-.messagedeletediv {
+.buttonsmobile {
+  display: flex;
+  gap: 20px;
 }
 
 .row {
@@ -514,8 +517,6 @@ svg {
 
 .whiteborder {
   border-color: white;
-  height: 40px;
-  width: 40px;
 }
 
 .login {
@@ -571,17 +572,17 @@ svg {
   top: 2vh; */
 }
 
-@media only screen and (max-width: 32100px) {
+@media only screen and (max-width: 2100px) {
   .mid .avatar {
     width: 60px;
     height: 60px;
   }
 }
 
-@media only screen and (max-width: 31000px) {
+@media only screen and (max-width: 1000px) {
   .whiteborder.avatar {
-    width: 40px;
-    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
   }
   .cat {
     width: 300px;
@@ -589,7 +590,7 @@ svg {
   }
 }
 
-@media only screen and (max-width: 3700px) {
+@media only screen and (max-width: 702px) {
   .left {
     width: 100vw;
     height: 5vh;
@@ -741,8 +742,8 @@ svg {
     font-weight: bold;
     font-size: 15px;
   }
-  .buttonsmobile {
-    display: flex;
-    gap: 20px;
+  .biodiv p,
+  .xmargin p {
+    width: 80vw;
   }
 }
