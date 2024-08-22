@@ -1429,7 +1429,6 @@ const Messenger = () => {
                       ).length > 0
                     : true,
                 )
-                // we are here
                 .map((ele) => {
                   return (
                     <div className="wrap" key={ele[1]._id}>
@@ -1562,6 +1561,31 @@ const Messenger = () => {
                       ""
                     )}
                   </div>
+                  <div onClick={closeProf} className="closeprof">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="48"
+                      height="48"
+                      viewBox="0 0 24 24"
+                      fill="red"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-x-square"
+                    >
+                      <rect
+                        x="3"
+                        y="3"
+                        width="18"
+                        height="18"
+                        rx="2"
+                        ry="2"
+                      ></rect>
+                      <line x1="9" y1="9" x2="15" y2="15"></line>
+                      <line x1="15" y1="9" x2="9" y2="15"></line>
+                    </svg>
+                  </div>
                   <div className="xmargin">
                     <h2>About Me</h2>
                     {bioEdit ? (
@@ -1679,6 +1703,31 @@ const Messenger = () => {
                     ) : (
                       ""
                     )}
+                    <div onClick={closeProf} className="closeprof">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="48"
+                        height="48"
+                        viewBox="0 0 24 24"
+                        fill="red"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="feather feather-x-square"
+                      >
+                        <rect
+                          x="3"
+                          y="3"
+                          width="18"
+                          height="18"
+                          rx="2"
+                          ry="2"
+                        ></rect>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                      </svg>
+                    </div>
                     <div className="xmargin">
                       {!passEdit && <h2>About Me</h2>}
                       {errors && <h2>{errors}</h2>}
@@ -1816,6 +1865,31 @@ const Messenger = () => {
                     ) : (
                       ""
                     )}
+                    <div onClick={closeProf} className="closeprof">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="48"
+                        height="48"
+                        viewBox="0 0 24 24"
+                        fill="red"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="feather feather-x-square"
+                      >
+                        <rect
+                          x="3"
+                          y="3"
+                          width="18"
+                          height="18"
+                          rx="2"
+                          ry="2"
+                        ></rect>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                      </svg>
+                    </div>
                     <div className="xmargin">
                       {!passEdit && <h2>About Me</h2>}
                       {errors && <h2>{errors}</h2>}
@@ -2329,26 +2403,6 @@ const Messenger = () => {
               </button>
             </div>
           )) || <div className="imgcontainer"></div>}
-        {profile && (
-          <div onClick={closeProf} className="closeprof">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="red"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="feather feather-x-square"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="9" y1="9" x2="15" y2="15"></line>
-              <line x1="15" y1="9" x2="9" y2="15"></line>
-            </svg>
-          </div>
-        )}
         {profile && (
           <div
             className={
