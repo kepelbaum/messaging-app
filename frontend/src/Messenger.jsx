@@ -33,6 +33,8 @@ const Messenger = () => {
   const [greenButton, setGreenButton] = useState(false);
   const [collapse, setCollapse] = useState("right");
 
+  function doNothing() {}
+
   const navigate = useNavigate();
 
   function collapseLeft() {
@@ -873,7 +875,6 @@ const Messenger = () => {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
     let ifprof = e.target.attributes.getNamedItem("ifprof");
     if (!ifprof) {
-      setCollapse("left");
       setDummyChat(null);
       setMessage("");
       setActiveElement(null);
@@ -882,6 +883,7 @@ const Messenger = () => {
       setBioEdit(false);
       setPassEdit(false);
       setMemberFilter(false);
+      setCollapse("left");
     }
 
     // console.log(await val);
@@ -936,6 +938,7 @@ const Messenger = () => {
   function addToGroup(e) {
     let val = e.currentTarget.attributes.getNamedItem("val").value;
     if (e.currentTarget.textContent === "Chat") {
+      setCollapse("left");
       let findChat = chats.filter(
         (ele) =>
           !ele.groupName &&
@@ -1006,6 +1009,7 @@ const Messenger = () => {
       setGroupAddMode(true);
       setAddMenuToggle(true);
       setMemberFilter(false);
+      setCollapse("right");
     }
   }
 
@@ -1535,6 +1539,7 @@ const Messenger = () => {
                     </div>
                     {profile === id || ele.groupName ? (
                       <button
+                        className="biobutton"
                         onClick={editBio}
                         val={
                           ele.groupName
@@ -1656,6 +1661,7 @@ const Messenger = () => {
                       </div>
                       {profile === id ? (
                         <button
+                          className="biobutton"
                           onClick={editBio}
                           dname={ele[1].displayName}
                           val={ele[1].bio ? ele[1].bio : ""}
@@ -1792,6 +1798,7 @@ const Messenger = () => {
                       </div>
                       {profile === id ? (
                         <button
+                          className="biobutton"
                           onClick={editBio}
                           val={ele[1].bio ? ele[1].bio : ""}
                           dname={ele[1].displayName}
@@ -1892,15 +1899,15 @@ const Messenger = () => {
                     <svg
                       onClick={collapseRight}
                       xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
+                      width="48"
+                      height="48"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="feather feather-chevrons-left"
+                      className="feather feather-chevrons-left collrightsvg"
                     >
                       <polyline points="11 17 6 12 11 7"></polyline>
                       <polyline points="18 17 13 12 18 7"></polyline>
@@ -1960,7 +1967,9 @@ const Messenger = () => {
                             </h3>
                             <p
                               className={ele.groupName ? "highlight" : ""}
-                              onClick={ele.groupName ? handleMemberFilter : ""}
+                              onClick={
+                                ele.groupName ? handleMemberFilter : doNothing
+                              }
                             >
                               {ele.groupName
                                 ? ele.users.length > 1
@@ -2249,15 +2258,15 @@ const Messenger = () => {
                 <svg
                   onClick={collapseRight}
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="48"
+                  height="48"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="feather feather-chevrons-left"
+                  className="feather feather-chevrons-left collrightsvg"
                 >
                   <polyline points="11 17 6 12 11 7"></polyline>
                   <polyline points="18 17 13 12 18 7"></polyline>
@@ -2349,8 +2358,8 @@ const Messenger = () => {
             <svg
               onClick={collapseRight}
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
+              width="48"
+              height="48"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
