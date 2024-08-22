@@ -307,6 +307,7 @@ const Messenger = () => {
     } else {
       setMessage(e.currentTarget.attributes.getNamedItem("text").value);
       setActiveElement(val);
+      setUpForDeletion(null);
     }
   }
 
@@ -1124,8 +1125,8 @@ const Messenger = () => {
                 <svg
                   onClick={collapseLeft}
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="48"
+                  height="48"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -2083,10 +2084,16 @@ const Messenger = () => {
                           )}
 
                           {ele._id === upForDeletion && (
-                            <div className="grouped">
+                            <div className="chatdeletediv">
                               <h3>Are you sure you want to leave this chat?</h3>
-                              <button onClick={handleLeave}>Yes</button>
-                              <button onClick={undelete}>No</button>
+                              <div className="buttonsmobile">
+                                <button className="yes" onClick={handleLeave}>
+                                  Yes
+                                </button>
+                                <button className="no" onClick={undelete}>
+                                  No
+                                </button>
+                              </div>
                             </div>
                           )}
                           {ele._id !== upForDeletion && (
@@ -2142,16 +2149,21 @@ const Messenger = () => {
                                 }
                               >
                                 {elem._id === upForDeletion && (
-                                  <div className="deletiondiv">
+                                  <div className="messagedeletediv">
                                     <h3>
                                       Are you sure you want to delete this
                                       message?
                                     </h3>{" "}
                                     <div className="yesorno">
-                                      <button onClick={handleDelete}>
+                                      <button
+                                        className="yes"
+                                        onClick={handleDelete}
+                                      >
                                         Yes
                                       </button>
-                                      <button onClick={undelete}>No</button>
+                                      <button className="no" onClick={undelete}>
+                                        No
+                                      </button>
                                     </div>
                                   </div>
                                 )}
@@ -2415,13 +2427,14 @@ const Messenger = () => {
               width="48"
               height="48"
               viewBox="0 0 24 24"
-              fill="none"
+              fill="white"
               stroke="currentColor"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
               className="feather feather-chevrons-left"
             >
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
               <polyline points="11 17 6 12 11 7"></polyline>
               <polyline points="18 17 13 12 18 7"></polyline>
             </svg>
