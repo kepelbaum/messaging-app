@@ -1503,13 +1503,43 @@ const Messenger = () => {
                         }}
                       ></div>
                       <div className="groupinfo">
-                        <h2>
+                        <h2 className="nonmobile">
                           {!bioEdit &&
                             (ele.groupName
                               ? ele.groupName
                               : ele.users[0]._id === id
                                 ? ele.users[1].displayName
                                 : ele.users[0].displayName)}
+                          {bioEdit && (
+                            <textarea
+                              value={displayName}
+                              onChange={handleDisp}
+                              className="dispchange"
+                              val="group"
+                              minLength={1}
+                              maxLength={50}
+                            ></textarea>
+                          )}
+                        </h2>
+                        <h2 className="mobile">
+                          {!bioEdit &&
+                          (ele.groupName
+                            ? ele.groupName
+                            : ele.users[0]._id === id
+                              ? ele.users[1].displayName
+                              : ele.users[0].displayName
+                          ).length <= 13
+                            ? ele.groupName
+                              ? ele.groupName
+                              : ele.users[0]._id === id
+                                ? ele.users[1].displayName
+                                : ele.users[0].displayName
+                            : (ele.groupName
+                                ? ele.groupName
+                                : ele.users[0]._id === id
+                                  ? ele.users[1].displayName
+                                  : ele.users[0].displayName
+                              ).substring(0, 9) + "..."}
                           {bioEdit && (
                             <textarea
                               value={displayName}
@@ -1670,7 +1700,16 @@ const Messenger = () => {
                           }}
                         ></div>
                         <div className="groupinfo">
-                          {!bioEdit && <h2>{ele[1].displayName}</h2>}
+                          {!bioEdit && (
+                            <h2 className="nonmobile">{ele[1].displayName}</h2>
+                          )}
+                          {!bioEdit && (
+                            <h2 className="mobile">
+                              {ele[1].displayName.length <= 13
+                                ? ele[1].displayName
+                                : ele[1].displayName.substring(0, 9) + "..."}
+                            </h2>
+                          )}
                           {bioEdit && (
                             <textarea
                               value={displayName}
@@ -1832,7 +1871,16 @@ const Messenger = () => {
                           }}
                         ></div>
                         <div className="groupinfo">
-                          {!bioEdit && <h2>{ele[1].displayName}</h2>}
+                          {!bioEdit && (
+                            <h2 className="nonmobile">{ele[1].displayName}</h2>
+                          )}
+                          {!bioEdit && (
+                            <h2 className="mobile">
+                              {ele[1].displayName.length <= 13
+                                ? ele[1].displayName
+                                : ele[1].displayName.substring(0, 9) + "..."}
+                            </h2>
+                          )}
                           {bioEdit && (
                             <textarea
                               className="dispchange"
