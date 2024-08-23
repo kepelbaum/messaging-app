@@ -97,6 +97,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 5vw;
+  gap: 10px;
 }
 
 button {
@@ -330,9 +331,8 @@ button {
 
 #entermessage {
   width: 60vw;
-  height: 60px;
+  height: 100%;
   display: flex;
-  vertical-align: center;
   margin: auto;
 }
 
@@ -592,7 +592,8 @@ svg {
     max-height: 50vh;
   }
   .xmargin p {
-    height: 15vh;
+    height: 30vh;
+    width: 80%;
   }
   .bigavatar.avatar {
     width: 75px;
@@ -639,6 +640,26 @@ svg {
     background-color: red;
     color: white;
     font-weight: bold;
+  }
+  .mobile {
+    display: block !important;
+  }
+  .nonmobile {
+    display: none;
+  }
+  .biobutton {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  h2 {
+    font-size: 20px;
+  }
+  .smallgap {
+    gap: 10px;
+    margin: 0 10px;
   }
 }
 
@@ -718,16 +739,7 @@ svg {
     max-width: 50px;
     max-height: 50px;
   }
-  .smallgap {
-    gap: 10px;
-  }
-  .biobutton {
-    width: 70px;
-    height: 70px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+
   .groupedtogether {
     align-items: center;
     justify-content: center;
@@ -760,18 +772,15 @@ svg {
 
   .biodiv p,
   .xmargin p {
-    width: min(80vw, calc(95vw - 320px));
+    width: 80%;
     height: 35vh;
+    word-wrap: break-word;
+    overflow-y: auto;
   }
   .xmargin {
     max-height: 60vh;
   }
-  .mobile {
-    display: block !important;
-  }
-  .nonmobile {
-    display: none;
-  }
+
   .biodiv textarea {
     min-width: 250px;
     min-height: 20vh;

@@ -1522,24 +1522,25 @@ const Messenger = () => {
                           )}
                         </h2>
                         <h2 className="mobile">
-                          {!bioEdit &&
-                          (ele.groupName
-                            ? ele.groupName
-                            : ele.users[0]._id === id
-                              ? ele.users[1].displayName
-                              : ele.users[0].displayName
-                          ).length <= 13
-                            ? ele.groupName
-                              ? ele.groupName
-                              : ele.users[0]._id === id
-                                ? ele.users[1].displayName
-                                : ele.users[0].displayName
-                            : (ele.groupName
+                          {!bioEdit
+                            ? (ele.groupName
                                 ? ele.groupName
                                 : ele.users[0]._id === id
                                   ? ele.users[1].displayName
                                   : ele.users[0].displayName
-                              ).substring(0, 9) + "..."}
+                              ).length <= 13
+                              ? ele.groupName
+                                ? ele.groupName
+                                : ele.users[0]._id === id
+                                  ? ele.users[1].displayName
+                                  : ele.users[0].displayName
+                              : (ele.groupName
+                                  ? ele.groupName
+                                  : ele.users[0]._id === id
+                                    ? ele.users[1].displayName
+                                    : ele.users[0].displayName
+                                ).substring(0, 9) + "..."
+                            : ""}
                           {bioEdit && (
                             <textarea
                               value={displayName}
