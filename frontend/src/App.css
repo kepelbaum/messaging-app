@@ -14,8 +14,8 @@
 .mid textarea,
 .profile textarea,
 .newgroup textarea {
-  color: black !important;
-  background-color: white !important;
+  color: black;
+  background-color: white;
 }
 
 .hidden {
