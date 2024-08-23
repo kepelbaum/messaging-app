@@ -17,13 +17,9 @@ const Login = () => {
   }, [token]);
 
   function logAsGuest() {
-    fetch("https://messaging-app-production-6dff.up.railway.app/login", {
+    fetch("https://messaging-app-production-6dff.up.railway.app/guest", {
       mode: "cors",
       method: "POST",
-      body: JSON.stringify({
-        username: "guest",
-        password: "guest",
-      }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },

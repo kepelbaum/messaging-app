@@ -1442,8 +1442,18 @@ const Messenger = () => {
                         val={ele[1]._id}
                       ></div>
                       <div className="chatinfo">
-                        <h3>{ele[1].displayName}</h3>
-                        {<p>{"@" + ele[1].username}</p>}
+                        <h3>
+                          {ele[1].displayName.length > 13
+                            ? ele[1].displayName.substring(0, 9) + "..."
+                            : ele[1].displayName}
+                        </h3>
+                        {
+                          <p>
+                            {ele[1].username.length > 12
+                              ? "@" + ele[1].username.substring(0, 8) + "..."
+                              : "@" + ele[1].username}
+                          </p>
+                        }
                       </div>
                       <div className="chatbutton">
                         <button onClick={addToGroup} val={ele[1]._id}>

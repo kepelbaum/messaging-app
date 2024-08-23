@@ -126,6 +126,27 @@ app.post("/login", async (req, res, next) => {
   }
 });
 
+app.post("/guest", async (req, res, next) => {
+  const guest = await models.Messenger.findOne({
+    username: user.username,
+  });
+
+  const user = {
+    username: "guest",
+    password: guest.password,
+  };
+  if (guest && user) {
+    jwt.sign({ user }, "secretkey", { expiresIn: "10h" }, (err, token) => {
+      res.json({
+        token,
+        id: guest._id,
+      });
+    });
+  } else {
+    res.json({ result: "Guess error login" });
+  }
+});
+
 app.get("*", function (req, res, next) {
   const error = new Error(`${req.ip} tried to access ${req.originalUrl}`);
 

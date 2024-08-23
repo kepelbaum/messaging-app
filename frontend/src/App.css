@@ -248,7 +248,7 @@ button {
 .wrap {
   border-bottom: 1px solid black;
   display: grid;
-  grid-template-columns: 1fr 7fr 10fr 3fr 2fr;
+  grid-template-columns: 1fr 6fr 11fr 3fr 2fr;
   /* justify-content: space-between;
   align-items: center; */
   justify-items: start;
