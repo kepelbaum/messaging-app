@@ -137,16 +137,6 @@ const Login = () => {
               </span>
             </span>
           </div>
-          {/* <div className="margin">
-            <span>
-              Or try an{" "}
-              <span className="visiblelink">
-                <span className="link" onClick={logAsAdmin}>
-                  existing account.
-                </span>
-              </span>
-            </span>
-          </div> */}
         </div>
       </div>
     )) || <h1>You already logged in.</h1>

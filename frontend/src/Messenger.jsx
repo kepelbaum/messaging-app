@@ -2473,7 +2473,11 @@ const Messenger = () => {
                 {greenButton ? "Submit!" : "Invalid"}
               </button>
             </div>
-          )) || <div className="imgcontainer"></div>}
+          )) || (
+            <div className="imgcontainer">
+              <img src="https://st5.depositphotos.com/46060006/64700/v/450/depositphotos_647007102-stock-illustration-cat-simple-vector-black-image.jpg"></img>
+            </div>
+          )}
         {profile && (
           <div
             className={
