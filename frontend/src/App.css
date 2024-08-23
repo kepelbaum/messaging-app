@@ -81,11 +81,18 @@
   align-items: center;
 }
 
-.changepass {
+.changepass,
+.biobutton {
   width: 200px;
   height: 40px;
-  align-self: start;
+}
+
+.biobutton {
   margin-left: 5vw;
+}
+
+.changepass {
+  margin-right: 5vw;
 }
 
 .biodiv,
@@ -107,11 +114,11 @@
 }
 
 .profilegroup {
-  display: flex;
+  /* display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: center; */
   padding: 10px 5vw;
-  gap: 10px;
+  /* gap: 10px; */
 }
 
 button {
@@ -496,6 +503,11 @@ svg {
   display: none;
 }
 
+.profbuttons {
+  display: flex;
+  justify-content: space-between;
+}
+
 .chatinfo {
   /* position: absolute;
   top: 25%;
@@ -679,13 +691,13 @@ svg {
   .nonmobile {
     display: none;
   }
-  .biobutton {
+  /* .biobutton {
     width: 70px;
     height: 70px;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+  } */
   h2 {
     font-size: 20px;
   }
@@ -696,6 +708,21 @@ svg {
   .avatar {
     min-width: 50px;
     min-height: 50px;
+  }
+  .imgcontainer img {
+    max-width: 300px;
+    max-height: 300px;
+  }
+  .profbuttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .biobutton,
+  .changepass {
+    margin: 0;
   }
 }
 
@@ -775,13 +802,11 @@ svg {
     max-height: 50px;
   }
 
-  .groupedtogether {
+  /* .groupedtogether {
     align-items: center;
     justify-content: center;
-  }
-  .changepass {
-    align-self: center;
-  }
+  } */
+
   .profilebackground {
     min-height: 30vh;
   }
@@ -808,7 +833,7 @@ svg {
   .biodiv p,
   .xmargin p {
     width: 80%;
-    height: 30vh;
+    height: 25vh;
     word-wrap: break-word;
     overflow-y: auto;
   }

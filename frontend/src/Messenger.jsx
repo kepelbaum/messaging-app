@@ -1578,6 +1578,8 @@ const Messenger = () => {
                         </h3>
                       </div>
                     </div>
+                  </div>
+                  <div className="profbuttons">
                     {profile === id || ele.groupName ? (
                       <button
                         className="biobutton"
@@ -1734,6 +1736,8 @@ const Messenger = () => {
                           <h3>{"@" + ele[1].username}</h3>
                         </div>
                       </div>
+                    </div>
+                    <div className="profbuttons">
                       {profile === id ? (
                         <button
                           className="biobutton"
@@ -1746,14 +1750,14 @@ const Messenger = () => {
                       ) : (
                         ""
                       )}
+                      {profile === id ? (
+                        <button className="changepass" onClick={togglePass}>
+                          {passEdit ? "Cancel" : "Change Password"}
+                        </button>
+                      ) : (
+                        ""
+                      )}
                     </div>
-                    {profile === id ? (
-                      <button className="changepass" onClick={togglePass}>
-                        {passEdit ? "Cancel" : "Change Password"}
-                      </button>
-                    ) : (
-                      ""
-                    )}
                     <div onClick={closeProf} className="closeprof">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -1905,6 +1909,8 @@ const Messenger = () => {
                           <h3>{"@" + ele[1].username}</h3>
                         </div>
                       </div>
+                    </div>
+                    <div className="profbuttons">
                       {profile === id ? (
                         <button
                           className="biobutton"
@@ -1917,14 +1923,14 @@ const Messenger = () => {
                       ) : (
                         ""
                       )}
+                      {profile === id ? (
+                        <button className="changepass" onClick={togglePass}>
+                          {passEdit ? "Cancel" : "Change Password"}
+                        </button>
+                      ) : (
+                        ""
+                      )}
                     </div>
-                    {profile === id ? (
-                      <button className="changepass" onClick={togglePass}>
-                        {passEdit ? "Cancel" : "Change Password"}
-                      </button>
-                    ) : (
-                      ""
-                    )}
                     <div onClick={closeProf} className="closeprof">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -2037,7 +2043,7 @@ const Messenger = () => {
                       height="48"
                       viewBox="0 0 24 24"
                       fill="none"
-                      stroke="currentColor"
+                      stroke="black"
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
