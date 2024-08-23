@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-.login button,
+/* .login button,
 .messagebox button,
 .mid button,
 .profile button,
@@ -16,7 +16,7 @@
 .newgroup textarea {
   color: black;
   background-color: white;
-}
+} */
 
 .hidden {
   display: none !important;
