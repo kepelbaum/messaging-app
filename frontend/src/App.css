@@ -100,10 +100,10 @@
 }
 
 .xmargin p {
-  width: 70vw;
+  width: 60vw;
   height: 15vh;
   word-wrap: break-word;
-  overflow-y: auto;
+  overflow: auto;
 }
 
 .profilegroup {
