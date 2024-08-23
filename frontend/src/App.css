@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+button {
+  color: black;
+  background-color: white;
+}
+
 .hidden {
   display: none !important;
 }
@@ -545,6 +550,7 @@ svg {
   justify-content: center;
   align-items: center;
   padding-bottom: 10px;
+  gap: 5px;
 }
 
 .bigavatar {
