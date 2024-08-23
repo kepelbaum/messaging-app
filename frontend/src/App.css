@@ -5,7 +5,15 @@
 }
 
 .login button,
-.messagebox button {
+.messagebox button,
+.mid button,
+.profile button,
+.newgroup button,
+.login textarea,
+.messagebox textarea,
+.mid textarea,
+.profile textarea,
+.newgroup textarea {
   color: black;
   background-color: white;
 }
