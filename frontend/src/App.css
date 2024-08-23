@@ -808,7 +808,7 @@ svg {
   .biodiv p,
   .xmargin p {
     width: 80%;
-    height: 35vh;
+    height: 30vh;
     word-wrap: break-word;
     overflow-y: auto;
   }
