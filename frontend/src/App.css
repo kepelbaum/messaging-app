@@ -4,7 +4,8 @@
   box-sizing: border-box;
 }
 
-button {
+.login button,
+.messagebox button {
   color: black;
   background-color: white;
 }
