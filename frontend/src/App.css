@@ -773,6 +773,9 @@ svg {
   .groupinfo {
     font-size: 15px;
   }
+  .messagebox .groupinfo {
+    margin-left: -30px;
+  }
   .cat {
     width: 200px;
     height: 200px;
@@ -869,5 +872,8 @@ svg {
   }
   .login {
     font-size: 15px;
+  }
+  .grouped {
+    gap: 50px;
   }
 }
