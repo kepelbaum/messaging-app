@@ -728,7 +728,7 @@ svg {
     margin: 0;
   }
   .topbuttons button {
-    width: 70px;
+    width: 60px;
     height: 50px;
     display: flex;
     justify-content: center;
@@ -737,7 +737,7 @@ svg {
   }
 }
 
-@media only screen and (max-width: 702px) {
+@media only screen and (max-width: 730px) {
   .left {
     width: 100vw;
     height: 5vh;
