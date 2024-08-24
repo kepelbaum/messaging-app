@@ -727,9 +727,14 @@ svg {
   .changepass {
     margin: 0;
   }
+
+  .topbuttons {
+    flex-direction: column;
+    gap: 10px;
+  }
   .topbuttons button {
-    width: 60px;
-    height: 50px;
+    width: 45px;
+    height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -737,7 +742,7 @@ svg {
   }
 }
 
-@media only screen and (max-width: 730px) {
+@media only screen and (max-width: 702px) {
   .left {
     width: 100vw;
     height: 5vh;

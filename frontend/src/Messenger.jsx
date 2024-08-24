@@ -2163,7 +2163,7 @@ const Messenger = () => {
                           )}
                           {ele._id !== upForDeletion && (
                             <button onClick={areyousurechat} val={ele._id}>
-                              Leave Chat
+                              Leave
                             </button>
                           )}
                         </div>
