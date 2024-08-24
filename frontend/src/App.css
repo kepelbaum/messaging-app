@@ -719,10 +719,21 @@ svg {
     align-items: center;
     gap: 10px;
   }
+  .grouped {
+    gap: 20px;
+  }
 
   .biobutton,
   .changepass {
     margin: 0;
+  }
+  .topbuttons button {
+    width: 70px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
   }
 }
 
