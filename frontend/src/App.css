@@ -99,7 +99,7 @@
 .xmargin {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 10px;
   justify-content: center;
   align-items: center;
   text-align: center;
