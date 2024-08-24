@@ -843,7 +843,7 @@ svg {
 
   .biodiv textarea {
     min-width: 250px;
-    min-height: 20vh;
+    min-height: 10vh;
   }
   .chatdeletediv button {
     height: 50px;
