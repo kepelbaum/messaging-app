@@ -729,7 +729,7 @@ svg {
   }
 
   .topbuttons {
-    flex-direction: column;
+    /* flex-direction: column; */
     gap: 10px;
   }
   .topbuttons button {
@@ -805,7 +805,7 @@ svg {
   }
 
   .topbuttons {
-    gap: 10px;
+    gap: 5px;
     flex-direction: column;
   }
   .topbuttons button {
