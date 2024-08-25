@@ -508,6 +508,10 @@ svg {
   justify-content: space-between;
 }
 
+.biodiv textarea {
+  max-height: 5vh;
+}
+
 .chatinfo {
   /* position: absolute;
   top: 25%;
