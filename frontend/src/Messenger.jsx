@@ -1425,7 +1425,9 @@ const Messenger = () => {
                   memberFilter
                     ? Object.keys(
                         chats
-                          .filter((chat) => chat._id === page)[0]
+                          .filter((chat) =>
+                            page ? chat._id === page : profile === chat._id,
+                          )[0]
                           .users.filter((user) => user._id === ele[1]._id),
                       ).length > 0
                     : true,
