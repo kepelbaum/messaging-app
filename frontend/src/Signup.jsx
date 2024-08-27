@@ -136,6 +136,13 @@ const Signup = ({}) => {
             </button>
           </div>
         </div>
+        <span>
+          ...or go back to the{" "}
+          <span className="styleaslink">
+            <Link to={"/"}>login</Link>
+          </span>{" "}
+          page.
+        </span>
       </div>
     )) || <h1>You already logged in.</h1>
   );

@@ -578,7 +578,7 @@ svg {
 }
 .signup .form,
 .signup .login {
-  gap: 7px;
+  gap: 5px;
 }
 
 .bigavatar {
