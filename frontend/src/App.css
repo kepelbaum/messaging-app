@@ -27,8 +27,8 @@
 }
 
 .cat {
-  width: 400px;
-  height: 400px;
+  width: 350px;
+  height: 350px;
 }
 
 .body {
@@ -566,6 +566,7 @@ svg {
 .login h1 {
   z-index: 2;
   text-align: center;
+  font-size: 2.7em;
 }
 
 .form,
@@ -575,6 +576,9 @@ svg {
   justify-content: center;
   align-items: center;
   padding-bottom: 10px;
+}
+.signup,
+.form {
   gap: 5px;
 }
 

@@ -89,7 +89,7 @@ const Signup = ({}) => {
 
   return (
     (!token && (
-      <div className="login">
+      <div className="login signup">
         <h2>New Account</h2>
         <img
           className="cat"
