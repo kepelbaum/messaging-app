@@ -173,7 +173,7 @@ button {
 
 .newgroup {
   height: 100vh;
-  width: 80vw;
+  width: min(80vw, calc(95vw - 320px));
   position: relative;
   display: flex;
   flex-direction: column;
