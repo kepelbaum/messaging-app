@@ -358,9 +358,10 @@ button {
 
 #entermessage {
   width: 60vw;
-  height: 100%;
+  height: 70%;
   display: flex;
   margin: auto;
+  margin: 0 10px;
 }
 
 .grouped,
