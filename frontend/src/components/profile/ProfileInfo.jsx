@@ -3,7 +3,7 @@
 import { useContext } from "react";
 import { MainContext } from "../../Messenger";
 
-function GroupInfo({ ele }) {
+function ProfileInfo({ ele }) {
   const { bioEdit, id, displayName, setDisplayName, handleMemberFilter } =
     useContext(MainContext);
 
@@ -93,4 +93,4 @@ function GroupInfo({ ele }) {
     </div>
   );
 }
-export default GroupInfo;
+export default ProfileInfo;
