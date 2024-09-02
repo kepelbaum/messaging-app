@@ -38,7 +38,7 @@ function makeNewGroup() {
       setCollapse("left");
       setNewGroup({
         users: [],
-        groupName: null,
+        groupName: "",
         message: "",
       });
     }
