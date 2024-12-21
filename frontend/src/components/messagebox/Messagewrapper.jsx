@@ -123,7 +123,7 @@ function MessageWrapper({ undelete, ele, elem, index }) {
           ></div>
         )}
         <div>
-          <div className={elem.img ? "imgmessage" : "azure"}>
+          <div className={`azure ${elem.img ? "imgmessage" : ""}`}>
             <h4>{elem.user.displayName}</h4>
             {!elem.img && <p className="textmessage">{elem.text}</p>}
             {elem.img && <img src={elem.img}></img>}

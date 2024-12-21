@@ -47,9 +47,6 @@
   cursor: pointer;
 }
 
-.dispchange {
-}
-
 .highlight {
   cursor: pointer;
 }
@@ -214,7 +211,7 @@ button {
 }
 
 .chatmenu {
-  height: 15%;
+  height: 15vh;
   width: 100%;
   border-bottom: 1px solid black;
   display: flex;
@@ -226,6 +223,7 @@ button {
   position: sticky;
   top: 0;
   left: 0;
+  z-index: 10;
 }
 
 .chatmenutop {
@@ -263,7 +261,7 @@ button {
 
 .overflowdiv {
   overflow-y: scroll;
-  height: 85%;
+  height: 85vh;
 }
 
 .wrap {
@@ -477,11 +475,11 @@ svg {
 }
 
 .azure {
-  background-color: azure;
-  border: 1px solid azure;
-  border-radius: 15%;
-  padding: 10px 20px;
+  background-color: rgb(220, 255, 255);
+  border-radius: 18px;
+  padding: 8px 12px;
   max-width: 50vw;
+  margin: 2px 0;
 }
 
 .imgmessage {
@@ -492,6 +490,7 @@ svg {
   max-width: 50vw;
   max-height: 50vh;
   object-fit: cover;
+  border-radius: 12px;
 }
 
 .smallgap {
@@ -883,5 +882,8 @@ svg {
   }
   .grouped {
     gap: 50px;
+  }
+  .overflowdiv {
+    height: 80vh;
   }
 }
