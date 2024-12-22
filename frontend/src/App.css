@@ -220,7 +220,7 @@ button {
   gap: 20px;
   padding-left: 5%;
   padding-right: 5%;
-  position: sticky;
+  /* position: sticky; */
   top: 0;
   left: 0;
   z-index: 10;
