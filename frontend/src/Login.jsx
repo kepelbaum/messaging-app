@@ -81,27 +81,6 @@ const Login = () => {
   return (
     (!token && (
       <div>
-        {/* <div className="header">
-          <h3>Blog API</h3>
-          <ul>
-            <Link to={"/"}>
-              <li>Posts</li>
-            </Link>
-            <Link to={"/users"}>
-              <li>Users</li>
-            </Link>
-            {!token && (
-              <Link to={"/login"}>
-                <li>Login</li>
-              </Link>
-            )}
-            {token && (
-              <Link to={"/"}>
-                <li onClick={logout}>Logout</li>
-              </Link>
-            )}
-          </ul>
-        </div> */}
         <div className="login">
           <h1>Messaging App</h1>
           <img
