@@ -26,9 +26,16 @@
   cursor: pointer;
 }
 
+/* .cat {
+    width: 350px;
+    height: 350px;
+  } */
+
 .cat {
-  width: 350px;
-  height: 350px;
+  width: auto;
+  height: auto;
+  max-height: 30dvh;
+  max-width: 80%;
 }
 
 .body {
@@ -636,10 +643,10 @@ svg {
     min-width: 40px;
     min-height: 40px;
   }
-  .cat {
+  /* .cat {
     width: 300px;
     height: 300px;
-  }
+  } */
   .xmargin {
     max-height: 50dvh;
   }
@@ -784,10 +791,10 @@ svg {
   .messagebox .groupinfo {
     margin-left: -30px;
   }
-  .cat {
+  /* .cat {
     width: 200px;
     height: 200px;
-  }
+  } */
   h1 {
     font-size: 60%;
   }
