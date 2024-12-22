@@ -564,20 +564,23 @@ svg {
 
 .login {
   width: 100dvw;
-  height: 100dvh;
-  font-size: 20px;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2dvh;
+  box-sizing: border-box;
   background-color: white;
   color: black;
 }
-
 .login h1 {
   z-index: 2;
   text-align: center;
   font-size: 2.7em;
 }
 
-.form,
-.login {
+.form {
   display: flex;
   flex-direction: column;
   justify-content: center;
