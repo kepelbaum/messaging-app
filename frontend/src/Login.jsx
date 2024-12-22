@@ -102,7 +102,7 @@ const Login = () => {
             )}
           </ul>
         </div> */}
-        <div className="login mainlogin">
+        <div className="login">
           <h1>Messaging App</h1>
           <img
             className="cat"
