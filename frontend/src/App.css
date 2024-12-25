@@ -187,7 +187,26 @@ button {
 .chatbutton {
   position: absolute;
   left: 70%;
-  top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chatbutton button {
+  padding: 6px 12px;
+  font-size: 0.9em;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.chatbutton button.red {
+  background-color: #ff4d4d;
+  color: white;
+  border-color: #ff4d4d;
+}
+
+.chatbutton button.red:hover {
+  background-color: #ff3333;
 }
 
 .orange {
@@ -304,6 +323,7 @@ button {
   cursor: pointer;
   position: relative;
 }
+
 .chatinfotop {
   height: 10%;
   width: 100%;
@@ -353,8 +373,8 @@ button {
 }
 
 .wrap:hover {
-  background-color: blue;
-  color: white;
+  background-color: rgb(232, 240, 254);
+  color: black;
 }
 
 .messagebox {
@@ -571,6 +591,22 @@ svg {
   background-size: cover;
   background-repeat: no-repeat;
   cursor: pointer;
+}
+
+.favicon {
+  display: flex;
+  align-items: center;
+}
+
+.favicon svg {
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+
+.favicon:hover svg {
+  transform: scale(1.1);
+  color: #ffd700;
 }
 
 .form input {

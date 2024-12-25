@@ -98,6 +98,7 @@ function ChatList() {
   }
 
   function handleFav(e) {
+    e.stopPropagation();
     let val = e.currentTarget.attributes.getNamedItem("val").value;
     let newFriends = [...friends];
     if (!friends.includes(val)) {
