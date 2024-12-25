@@ -2,10 +2,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  -webkit-tap-highlight-color: transparent;
 }
 
 /* .login button,
@@ -131,6 +127,10 @@
 
 button {
   border: 1px solid black !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .red {
