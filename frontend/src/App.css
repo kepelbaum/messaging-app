@@ -127,10 +127,14 @@
 
 button {
   border: 1px solid black !important;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  -webkit-tap-highlight-color: transparent;
+}
+
+.login button {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  background-color: white !important;
+  color: black !important;
 }
 
 .red {
