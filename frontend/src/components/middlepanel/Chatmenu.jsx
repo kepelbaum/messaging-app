@@ -10,12 +10,14 @@ function Chatmenu() {
 
   return (
     <div className="chatmenu">
-      <CollapseLeftSvg />
       <div className="chatmenutop">
         <h2>{addMenuToggle ? "Users" : "Chats"}</h2>
         <div className="row">
-          <AddMenu />
-          <MakeNewGroup />
+          <div className="button-group">
+            <AddMenu />
+            <MakeNewGroup />
+          </div>
+          <CollapseLeftSvg />
         </div>
       </div>
       <SearchAndSelect />

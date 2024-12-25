@@ -262,9 +262,8 @@ button {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 20px;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding: 16px;
+  gap: 12px;
   /* position: sticky; */
   top: 0;
   left: 0;
@@ -276,7 +275,8 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 10%;
+  padding: 0 8px;
+  gap: 30px;
 }
 
 .searchbar {
@@ -294,6 +294,8 @@ button {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  gap: 12px;
+  padding-bottom: 8px;
 }
 
 .mid {
@@ -343,12 +345,13 @@ button {
 }
 
 .collleft {
-  display: flex;
+  /* display: flex;
   justify-content: flex-end;
   display: none;
   position: absolute;
   top: 0px;
-  right: 0px;
+  right: 0px; */
+  display: none;
 }
 
 .collright {
@@ -422,9 +425,16 @@ button {
 }
 
 .row {
+  /* margin-left: auto; */
   display: flex;
-  gap: 30px;
+  gap: 20px;
   align-items: center;
+  justify-content: flex-end;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
 }
 
 .newchatrow {
@@ -843,7 +853,7 @@ svg {
     top: 0;
     left: 0;
     width: 100%;
-    height: 95dvh;
+    height: 92dvh;
   }
 
   .left {
@@ -851,7 +861,7 @@ svg {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 5dvh;
+    height: 8dvh;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -904,6 +914,13 @@ svg {
   .collapse {
     display: none !important;
   }
+
+  .collleft {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+  }
+
   .newgroup input {
     max-width: 200px;
   }
@@ -945,10 +962,7 @@ svg {
     right: 0px;
     top: 0px;
   }
-  .row {
-    padding-right: 50px;
-    gap: 20px;
-  }
+
   .profile textarea {
     max-width: 50dvw;
   }
@@ -986,7 +1000,7 @@ svg {
     left: 0;
     right: 0;
     bottom: 5dvh;
-    height: 80dvh;
+    height: 77dvh;
     overflow-y: auto;
   }
 }
