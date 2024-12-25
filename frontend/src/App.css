@@ -945,10 +945,12 @@ svg {
     gap: 50px;
   }
   .overflowdiv {
+    position: absolute;
+    top: 15dvh;
+    left: 0;
+    right: 0;
+    bottom: 5dvh;
     height: 80dvh;
-    height: -webkit-fill-available;
-    padding-bottom: 7dvh;
-    -webkit-overflow-scrolling: touch;
     overflow-y: auto;
   }
 }
