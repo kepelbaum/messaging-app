@@ -790,6 +790,7 @@ svg {
     height: 95dvh;
     grid-area: 1 / 1 / 2 / 2;
     min-width: 100dvw;
+    height: -webkit-fill-available;
   }
   .messagebox,
   .newgroup {
@@ -915,5 +916,6 @@ svg {
   }
   .overflowdiv {
     height: 80dvh;
+    height: -webkit-fill-available;
   }
 }
