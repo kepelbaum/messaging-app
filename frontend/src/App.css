@@ -946,5 +946,6 @@ svg {
   .overflowdiv {
     height: 80dvh;
     height: -webkit-fill-available;
+    padding-bottom: 5dvh;
   }
 }
