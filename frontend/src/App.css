@@ -129,7 +129,8 @@ button {
   border: 1px solid black !important;
 }
 
-.login button {
+.login button,
+.login textarea {
   -webkit-appearance: none !important;
   -moz-appearance: none !important;
   appearance: none !important;
