@@ -72,6 +72,13 @@
   background-color: dimgray;
 }
 
+.newgroup button {
+  padding: 8px 24px;
+  border-radius: 4px;
+  min-width: 120px;
+  margin-top: 16px;
+}
+
 .biotext {
   width: 30dvw;
   height: 100px;
@@ -875,18 +882,22 @@ svg {
   }
   .messagebox,
   .newgroup {
-    height: 95dvh;
+    height: 92dvh;
     width: 100dvw;
     grid-area: 1 / 1 / 2 / 2;
     color: black;
     background-color: white;
   }
 
+  .newgroup {
+    padding-bottom: 20px;
+  }
+
   .imgcontainer {
     display: none;
   }
   .profile {
-    height: 95dvh;
+    height: 92dvh;
     width: 100dvw;
   }
   .groupinfo {
