@@ -3,21 +3,6 @@
   padding: 0;
   box-sizing: border-box;
 }
-
-/* .login button,
-.messagebox button,
-.mid button,
-.profile button,
-.newgroup button,
-.login textarea,
-.messagebox textarea,
-.mid textarea,
-.profile textarea,
-.newgroup textarea {
-  color: black;
-  background-color: white;
-} */
-
 .hidden {
   display: none !important;
 }
@@ -25,11 +10,6 @@
 .styleaslink {
   cursor: pointer;
 }
-
-/* .cat {
-    width: 350px;
-    height: 350px;
-  } */
 
 .cat {
   width: auto;
@@ -125,11 +105,7 @@
 }
 
 .profilegroup {
-  /* display: flex;
-  justify-content: space-between;
-  align-items: center; */
   padding: 10px 5dvw;
-  /* gap: 10px; */
 }
 
 button {
@@ -164,9 +140,6 @@ button {
 .groupedtogether {
   display: flex;
   gap: 20px;
-  /* position: absolute;
-  top: 15dvh;
-  left: 5dvw; */
 }
 
 .left {
@@ -179,16 +152,9 @@ button {
   justify-content: space-around;
   align-items: center;
   white-space: initial;
-  /* min-width: 50px; */
-  /* position: absolute;
-  bottom: 0px;
-  left: 0px; */
 }
 .ago {
   grid-area: 1 / 4 / 1 / 5;
-  /* position: absolute;
-    left: 65%;
-    top: 35%; */
 }
 
 .chatbutton {
@@ -327,8 +293,6 @@ button {
   border-bottom: 1px solid black;
   display: grid;
   grid-template-columns: 1fr 6fr 11fr 3fr 2fr;
-  /* justify-content: space-between;
-  align-items: center; */
   justify-items: start;
   align-items: center;
   height: 100px;
@@ -339,7 +303,6 @@ button {
 .chatinfotop {
   height: 10%;
   width: 100%;
-  /* position: sticky; */
   display: flex;
   gap: 10px;
   padding: 20px;
@@ -355,12 +318,6 @@ button {
 }
 
 .collleft {
-  /* display: flex;
-  justify-content: flex-end;
-  display: none;
-  position: absolute;
-  top: 0px;
-  right: 0px; */
   display: none;
 }
 
@@ -378,10 +335,6 @@ button {
   top: 20px;
   width: 30px;
   height: 30px;
-  /* background-color: white; */
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
   display: none;
 }
 
@@ -398,6 +351,7 @@ button {
   flex-direction: column;
   color: black;
   background-color: white;
+  overflow-x: hidden;
   /* min-width: 500px; */
   /* overflow: hidden; */
 }
@@ -411,8 +365,6 @@ button {
   gap: 2dvh;
   color: black;
   background-color: white;
-  /* padding: 0 10dvw; */
-  /* overflow: hidden; */
 }
 
 #entermessage {
@@ -463,19 +415,12 @@ button {
 }
 
 .messagemasterwrapper {
-  /* display: flex;
-  flex-direction: column;
-  justify-content: end; */
-  /* display: grid;
-  grid-template-rows: 1fr;
-  align-items: end; */
   width: 100%;
   height: 83%;
   overflow-y: scroll;
 }
 
 .topbuttons {
-  /* margin-left: 80%; */
   display: flex;
   gap: 30px;
 }
@@ -483,12 +428,6 @@ button {
 .messagewrapper {
   width: 100%;
 }
-
-/* .daywrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
 
 .border {
   border-top: 1px solid black;
@@ -676,9 +615,6 @@ svg {
 }
 
 .chatavatar {
-  /* position: absolute;
-  top: 5%;
-  left: 5%; */
   grid-area: 1 / 2 / 1 / 3;
 }
 
@@ -692,9 +628,6 @@ svg {
 }
 
 .favicon {
-  /* position: absolute;
-  left: 95%;
-  top: 40%; */
   grid-area: 1 / 5 / 1 / 6;
 }
 
@@ -703,9 +636,6 @@ svg {
 
 .ngright {
   display: none;
-  /* position: absolute;
-  left: 16dvw;
-  top: 2dvh; */
 }
 
 @media only screen and (max-width: 2100px) {
@@ -719,15 +649,32 @@ svg {
   }
 }
 
+@media only screen and (max-width: 1100px) {
+  .azure.imgmessage {
+    max-width: calc(100% - 40px);
+  }
+
+  .imgmessage img {
+    max-width: 100%;
+    max-height: 40dvh;
+  }
+
+  .azure {
+    max-width: 30dvw;
+  }
+
+  .message {
+    padding: 0 10px;
+    width: 96%;
+  }
+}
+
 @media only screen and (max-width: 1000px) {
   .whiteborder.avatar {
     min-width: 40px;
     min-height: 40px;
   }
-  /* .cat {
-    width: 300px;
-    height: 300px;
-  } */
+
   .xmargin {
     max-height: 50dvh;
   }
@@ -787,13 +734,7 @@ svg {
   .nonmobile {
     display: none;
   }
-  /* .biobutton {
-    width: 70px;
-    height: 70px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  } */
+
   h2 {
     font-size: 20px;
   }
@@ -825,7 +766,6 @@ svg {
   }
 
   .topbuttons {
-    /* flex-direction: column; */
     gap: 10px;
   }
   .topbuttons button {
@@ -839,18 +779,6 @@ svg {
 }
 
 @media only screen and (max-width: 702px) {
-  /* .left {
-    width: 100dvw;
-    height: 5dvh;
-    grid-area: 2 / 1 / 3 / 2;
-    flex-direction: row;
-  }
-  .mid {
-    height: 95dvh;
-    grid-area: 1 / 1 / 2 / 2;
-    min-width: 100dvw;
-    height: -webkit-fill-available;
-  } */
   .body {
     position: fixed;
     top: 0;
@@ -912,10 +840,7 @@ svg {
   .messagebox .groupinfo {
     margin-left: -30px;
   }
-  /* .cat {
-    width: 200px;
-    height: 200px;
-  } */
+
   h1 {
     font-size: 60%;
   }
@@ -928,11 +853,7 @@ svg {
   .ngright {
     display: block !important;
   }
-  /* .body {
-    display: grid;
-    grid-template-columns: 100dvw;
-    grid-template-rows: 95dvh 5dvh;
-  } */
+
   .collapse {
     display: none !important;
   }
@@ -963,11 +884,6 @@ svg {
     max-width: 50px;
     max-height: 50px;
   }
-
-  /* .groupedtogether {
-    align-items: center;
-    justify-content: center;
-  } */
 
   .profilebackground {
     min-height: 30dvh;
@@ -1033,5 +949,18 @@ svg {
   .searchbar,
   .select {
     padding: 6px;
+  }
+
+  .message {
+    max-width: 95%;
+  }
+
+  .azure.imgmessage {
+    max-width: 85dvw;
+  }
+
+  .imgmessage img {
+    max-width: 100%;
+    max-height: 40dvh;
   }
 }
