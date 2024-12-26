@@ -434,7 +434,7 @@ button {
 
 .button-group {
   display: flex;
-  gap: 12px;
+  gap: 20px;
 }
 
 .newchatrow {
@@ -1002,5 +1002,10 @@ svg {
     bottom: 5dvh;
     height: 77dvh;
     overflow-y: auto;
+  }
+
+  .searchbar,
+  .select {
+    padding: 6px;
   }
 }

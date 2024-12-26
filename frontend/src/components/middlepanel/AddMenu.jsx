@@ -54,10 +54,12 @@ function AddMenu() {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="feather feather-user"
+          className="feather feather-user-x"
         >
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="8.5" cy="7" r="4"></circle>
+          <line x1="18" y1="8" x2="23" y2="13"></line>
+          <line x1="23" y1="8" x2="18" y2="13"></line>
         </svg>
       )}
     </div>
