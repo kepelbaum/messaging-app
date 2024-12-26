@@ -880,8 +880,7 @@ svg {
     align-items: center;
     z-index: 100;
   }
-  .messagebox,
-  .newgroup {
+  .messagebox {
     height: 92dvh;
     width: 100dvw;
     grid-area: 1 / 1 / 2 / 2;
@@ -890,7 +889,12 @@ svg {
   }
 
   .newgroup {
-    padding-bottom: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 92dvh;
+    width: 100%;
+    padding: 16px;
   }
 
   .imgcontainer {
