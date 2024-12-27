@@ -967,4 +967,27 @@ svg {
     max-width: 100%;
     max-height: 40dvh;
   }
+  .chatinfotop {
+    height: 12%;
+  }
+
+  .bottomsection {
+    height: 10%;
+  }
+
+  .messagemasterwrapper {
+    height: 78%;
+  }
+
+  .chatbutton {
+    position: relative;
+    left: auto;
+    display: flex;
+    align-items: center;
+  }
+
+  .chatbutton button {
+    padding: 4px 8px;
+    font-size: 0.85em;
+  }
 }
