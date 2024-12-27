@@ -955,6 +955,10 @@ svg {
     max-width: 95%;
   }
 
+  .azure {
+    max-width: 65dvw;
+  }
+
   .azure.imgmessage {
     max-width: 85dvw;
   }
