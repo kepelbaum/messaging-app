@@ -540,7 +540,6 @@ svg {
   display: flex;
   justify-content: center;
   gap: 32px;
-  margin: 8px 0;
 }
 
 .profbuttons button {
