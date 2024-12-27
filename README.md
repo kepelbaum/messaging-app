@@ -33,8 +33,6 @@ Try it here: [Messaging App](https://ashen-eight.vercel.app/)
 6. Frontend: `cd frontend && npm run dev` for development or `npm run build` for production
 
 ## Future Improvements
-- Fix initial layout rendering issues on mobile (high priority)
-- UI graphics overhaul (medium priority)
-- Enhanced group chat permissions (minimal priority - not currently planned)
+- Enhanced group chat permissions/further design overhaul (minimal priority - not currently planned)
 
 Feel free to contribute or report issues!
