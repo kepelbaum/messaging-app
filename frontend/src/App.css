@@ -972,7 +972,7 @@ svg {
     max-height: 40dvh;
   }
   .chatinfotop {
-    height: 12%;
+    height: 15%;
   }
 
   .bottomsection {
@@ -980,7 +980,7 @@ svg {
   }
 
   .messagemasterwrapper {
-    height: 78%;
+    height: 75%;
   }
 
   .chatbutton {
