@@ -776,6 +776,10 @@ svg {
     align-items: center;
     font-size: 15px;
   }
+
+  #firstmessage {
+    width: 300px;
+  }
 }
 
 @media only screen and (max-width: 702px) {
