@@ -982,4 +982,15 @@ svg {
   .messagemasterwrapper {
     height: 75%;
   }
+
+  .messagedeletediv {
+    height: auto;
+    min-height: 20dvh;
+    padding: 20px;
+  }
+
+  .messagedeletediv h3 {
+    font-size: 16px;
+    text-align: center;
+  }
 }
