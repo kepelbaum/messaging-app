@@ -60,8 +60,8 @@
 }
 
 .biotext {
-  width: 30dvw;
-  height: 100px;
+  min-height: 120px;
+  width: 35dvw;
 }
 
 .passwordwrapper {
@@ -72,10 +72,24 @@
   align-items: center;
 }
 
-.changepass,
-.biobutton {
+.passwordwrapper input {
+  height: 20px;
   width: 200px;
-  height: 40px;
+}
+
+.biobutton,
+.changepass {
+  width: 140px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 8px;
+  line-height: 1;
+  font-size: 13px;
+  white-space: nowrap;
+  margin: 0;
 }
 
 .biobutton {
@@ -91,15 +105,25 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
-  text-align: center;
-  max-height: 40dvh;
+}
+
+.biodiv {
+  height: auto;
+  padding-bottom: 10px;
+}
+
+.xmargin {
+  height: calc(62dvh - 50px);
+  max-height: none;
+  overflow-y: auto;
+  padding: 8px 0;
 }
 
 .xmargin p {
-  width: 60dvw;
-  height: 15dvh;
+  width: 50dvw;
+  /* height: 15dvh; */
   word-wrap: break-word;
   overflow: auto;
 }
@@ -514,11 +538,13 @@ svg {
 
 .profbuttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 32px;
+  margin: 8px 0;
 }
 
-.biodiv textarea {
-  max-height: 5dvh;
+.profbuttons button {
+  font-size: 14px;
 }
 
 .chatinfo {
@@ -647,6 +673,15 @@ svg {
     width: 100px;
     height: 100px;
   }
+
+  .passwordwrapper {
+    gap: 15px;
+  }
+
+  .passwordwrapper input {
+    height: 30px;
+    width: 200px;
+  }
 }
 
 @media only screen and (max-width: 1100px) {
@@ -750,19 +785,19 @@ svg {
     max-width: 300px;
     max-height: 300px;
   }
-  .profbuttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
+
   .grouped {
     gap: 20px;
   }
 
+  .profbuttons {
+    gap: 24px;
+  }
+
   .biobutton,
   .changepass {
-    margin: 0;
+    width: 140px !important;
+    font-size: 13px !important;
   }
 
   .topbuttons {
@@ -779,6 +814,11 @@ svg {
 
   #firstmessage {
     width: 300px;
+  }
+
+  .biodiv textarea {
+    min-width: 250px;
+    min-height: 20dvh;
   }
 }
 
@@ -916,18 +956,13 @@ svg {
   .biodiv p,
   .xmargin p {
     width: 80%;
-    height: 20dvh;
     word-wrap: break-word;
     overflow-y: auto;
   }
   .xmargin {
-    max-height: 60dvh;
+    height: calc(54dvh - 60px);
   }
 
-  .biodiv textarea {
-    min-width: 250px;
-    min-height: 10dvh;
-  }
   .chatdeletediv button {
     height: 50px;
     width: 70px;
@@ -992,5 +1027,23 @@ svg {
   .messagedeletediv h3 {
     font-size: 16px;
     text-align: center;
+  }
+
+  .mobile h2 {
+    max-width: 90vw;
+  }
+
+  .profbuttons {
+    gap: 16px;
+  }
+
+  .biobutton,
+  .changepass {
+    width: 120px;
+    font-size: 12px;
+  }
+
+  .biotext {
+    width: 80vw;
   }
 }
