@@ -982,16 +982,4 @@ svg {
   .messagemasterwrapper {
     height: 75%;
   }
-
-  .chatbutton {
-    position: relative;
-    left: auto;
-    display: flex;
-    align-items: center;
-  }
-
-  .chatbutton button {
-    padding: 4px 8px;
-    font-size: 0.85em;
-  }
 }
